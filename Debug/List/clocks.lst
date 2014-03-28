@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       21/Mar/2014  15:50:40 #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       28/Mar/2014  12:10:49 #
 # Copyright 1996-2013 IAR Systems AB.                                         #
 #                                                                             #
 #    __rt_version  =  3                                                       #
@@ -10,24 +10,28 @@
 #    __pic         =  no                                                      #
 #    __core        =  430X                                                    #
 #    __data_model  =  small                                                   #
-#    Source file   =  K:\ece306\Projects\Project5\clocks.c                    #
-#    Command line  =  K:\ece306\Projects\Project5\clocks.c -lC                #
-#                     K:\ece306\Projects\Project5\Debug\List\ -o              #
-#                     K:\ece306\Projects\Project5\Debug\Obj\ --no_cse         #
-#                     --no_unroll --no_inline --no_code_motion --no_tbaa      #
-#                     --debug -D__MSP430FR5739__ -e --double=32               #
-#                     --dlib_config "C:\Program Files (x86)\IAR               #
-#                     Systems\Embedded Workbench                              #
+#    Source file   =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
+#                     er\clocks.c                                             #
+#    Command line  =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
+#                     er\clocks.c -lC C:\Users\Christopher\Documents\GitHub\e #
+#                     ce306-linefollower\Debug\List\ -o                       #
+#                     C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
+#                     er\Debug\Obj\ --no_cse --no_unroll --no_inline          #
+#                     --no_code_motion --no_tbaa --debug -D__MSP430FR5739__   #
+#                     -e --double=32 --dlib_config "C:\Program Files          #
+#                     (x86)\IAR Systems\Embedded Workbench                    #
 #                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
 #                     --data_model=small -Ol --multiplier=32                  #
 #                     --multiplier_location=4C0 --hw_workaround=CPU40         #
-#    List file     =  K:\ece306\Projects\Project5\Debug\List\clocks.lst       #
-#    Object file   =  K:\ece306\Projects\Project5\Debug\Obj\clocks.r43        #
+#    List file     =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
+#                     er\Debug\List\clocks.lst                                #
+#    Object file   =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
+#                     er\Debug\Obj\clocks.r43                                 #
 #                                                                             #
 #                                                                             #
 ###############################################################################
 
-K:\ece306\Projects\Project5\clocks.c
+C:\Users\Christopher\Documents\GitHub\ece306-linefollower\clocks.c
       1          //******************************************************************************
       2          //
       3          //  Description: This file contains the Clock Initialization 

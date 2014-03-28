@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       21/Mar/2014  15:50:54 #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       28/Mar/2014  12:10:51 #
 # Copyright 1996-2013 IAR Systems AB.                                         #
 #                                                                             #
 #    __rt_version  =  3                                                       #
@@ -10,24 +10,28 @@
 #    __pic         =  no                                                      #
 #    __core        =  430X                                                    #
 #    __data_model  =  small                                                   #
-#    Source file   =  K:\ece306\Projects\Project5\switch.c                    #
-#    Command line  =  K:\ece306\Projects\Project5\switch.c -lC                #
-#                     K:\ece306\Projects\Project5\Debug\List\ -o              #
-#                     K:\ece306\Projects\Project5\Debug\Obj\ --no_cse         #
-#                     --no_unroll --no_inline --no_code_motion --no_tbaa      #
-#                     --debug -D__MSP430FR5739__ -e --double=32               #
-#                     --dlib_config "C:\Program Files (x86)\IAR               #
-#                     Systems\Embedded Workbench                              #
+#    Source file   =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
+#                     er\switch.c                                             #
+#    Command line  =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
+#                     er\switch.c -lC C:\Users\Christopher\Documents\GitHub\e #
+#                     ce306-linefollower\Debug\List\ -o                       #
+#                     C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
+#                     er\Debug\Obj\ --no_cse --no_unroll --no_inline          #
+#                     --no_code_motion --no_tbaa --debug -D__MSP430FR5739__   #
+#                     -e --double=32 --dlib_config "C:\Program Files          #
+#                     (x86)\IAR Systems\Embedded Workbench                    #
 #                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
 #                     --data_model=small -Ol --multiplier=32                  #
 #                     --multiplier_location=4C0 --hw_workaround=CPU40         #
-#    List file     =  K:\ece306\Projects\Project5\Debug\List\switch.lst       #
-#    Object file   =  K:\ece306\Projects\Project5\Debug\Obj\switch.r43        #
+#    List file     =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
+#                     er\Debug\List\switch.lst                                #
+#    Object file   =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
+#                     er\Debug\Obj\switch.r43                                 #
 #                                                                             #
 #                                                                             #
 ###############################################################################
 
-K:\ece306\Projects\Project5\switch.c
+C:\Users\Christopher\Documents\GitHub\ece306-linefollower\switch.c
       1          /******************************************************************************
       2          Switch Configurations
       3          

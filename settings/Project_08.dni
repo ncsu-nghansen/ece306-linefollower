@@ -1,5 +1,5 @@
 [DebugChecksum]
-Checksum=651925070
+Checksum=1165261968
 [Stack]
 FillEnabled=0
 OverflowWarningsEnabled=1
@@ -25,13 +25,6 @@ State Storage=0
 ShowArgs=0
 [Disassembly]
 MixedMode=1
-[Log file]
-LoggingEnabled=_ 0
-LogFile=_ ""
-Category=_ 0
-[TermIOLog]
-LoggingEnabled=_ 0
-LogFile=_ ""
 [Breakpoints]
 Count=0
 [FET]
@@ -52,6 +45,13 @@ SP=0
 SR=0
 all registers=0
 File name=
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
 [Aliases]
 A0=_ "D:\NCSU\Current\Software Tools\Code Master\Homework_01\timersB2.c" ""
 Count=1

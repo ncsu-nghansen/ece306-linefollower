@@ -1,0 +1,1646 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       06/Jan/2014  22:27:44 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\gps.c                                #
+#    Command line  =  "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\gps.c" -lC                           #
+#                     "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\Debug\List\" -o                      #
+#                     "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\Debug\Obj\" --no_cse --no_unroll     #
+#                     --no_inline --no_code_motion --no_tbaa --debug          #
+#                     -D__MSP430FR5739__ -e --double=32 --dlib_config         #
+#                     "C:\Program Files (x86)\IAR Systems\Embedded Workbench  #
+#                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\Debug\List\gps.lst                   #
+#    Object file   =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\Debug\Obj\gps.r43                    #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\Jim\NCSU\Current\Software Tools\Code Master\Homework_01\gps.c
+      1          
+      2          // GPS_PWRCNTL:
+      3          // The input level is 1.8V level direct hardware connection to the internal
+      4          // Finite State Machine. The RTC clock must be on and state for this control to
+      5          // be functional. Minimum on pulse duration is two RTC ticks, about 63us.
+      6          // Minimum inter-pulse interval is one second. Minimum off duration is two RTC
+      7          // ticks, about 63us. See Figure below give a guideline for pulse waveform.
+      8          // A critical item to avoid is contact bounce if a mechanical switch is used.
+      9          // If you are using a mechanical switch, we recommend a 150K pull down resistor.
+     10          
+     11          // GPS_PWRCHK:
+     12          // This is an output that indicates the state of the GPS. Low is hibernate and
+     13          // high is active. You should monitor Wake-up to know the state of the GPS.
+     14          
+     15          
+     16          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x200
+   \   union <unnamed> _A_PAIN_L
+   \                     _A_PAIN_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x202
+   \   union <unnamed> _A_PAOUT_L
+   \                     _A_PAOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x322
+   \   union <unnamed> _A_PJOUT_L
+   \                     _A_PJOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5fa
+   \   union <unnamed> _A_UCA1IE_L
+   \                     _A_UCA1IE_L:
+   \   000000                DS8 2
+     17          #include  "my_macros.h"
+     18          #include  "functions.h"
+     19          //------------------------------------------------------------------------------
+     20          extern volatile unsigned char control_state[CNTL_STATE_INDEX];
+     21          extern volatile unsigned char current_character;
+     22          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     23          unsigned char NMEA_BUF[LARGE_RING_SIZE];         // NEMA String Buffer
+   \                     NMEA_BUF:
+   \   000000                DS8 78
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     24          unsigned int gps_index;
+   \                     gps_index:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     25          unsigned volatile char message_type;
+   \                     message_type:
+   \   000000                DS8 1
+     26          
+     27          extern char display_line_1[17];
+     28          extern char display_line_2[17];
+     29          
+     30          extern volatile unsigned char USB_Char_Tx[LARGE_RING_SIZE];// USB Character
+     31          extern volatile unsigned int usb_tx_ring_wr;
+     32          extern unsigned int usb_tx_ring_rd;
+     33          
+     34          extern volatile unsigned char GPS_Char_Rx[SMALL_RING_SIZE];// USB Character
+     35          extern volatile unsigned int gps_rx_ring_wr;
+     36          extern unsigned int gps_rx_ring_rd;
+     37          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     38          unsigned char correct_message;
+   \                     correct_message:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     39          volatile unsigned char message_selection;
+   \                     message_selection:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     40          unsigned int onlyonce;
+   \                     onlyonce:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     41          unsigned char fix_quality;
+   \                     fix_quality:
+   \   000000                DS8 1
+     42          
+     43          extern unsigned int gps_resetting;
+     44          extern unsigned int gps_2b_reset;
+     45          extern unsigned int reset_gps_time;
+     46          extern volatile int time_pass_by;
+     47          
+     48          //-----------------------------------------------------------------------------------------------------
+     49          // GPS Initialization
+
+   \                                 In  segment CODE, align 2
+     50          void gps_system_init(void){
+   \                     gps_system_init:
+     51          //  int i, taking_time;
+     52          //  char time1, time2;
+     53            time_pass_by = 0;
+   \   000000   8243....     MOV.W   #0x0, &time_pass_by
+     54          
+     55            P3OUT |= TEST_PROBE;                   // Set TEST_SIG HIGH
+   \   000004   F2D22202     BIS.B   #0x8, &0x222
+     56            P1OUT &= ~GPS_RESET;                 // GPS_RESET = GPS in Reset;
+   \   000008   E2C30202     BIC.B   #0x2, &0x202
+     57            time_pass_by = 0;
+   \   00000C   8243....     MOV.W   #0x0, &time_pass_by
+     58            while (time_pass_by <= 200);
+   \                     ??gps_system_init_0:
+   \   000010   B290C900.... CMP.W   #0xc9, &time_pass_by
+   \   000016   FC3B         JL      ??gps_system_init_0
+     59            time_pass_by = 0;
+   \   000018   8243....     MOV.W   #0x0, &time_pass_by
+     60            P1OUT |= GPS_RESET;                  // GPS_RESET = GPS on Reset;
+   \   00001C   E2D30202     BIS.B   #0x2, &0x202
+     61            while (time_pass_by <= 200);
+   \                     ??gps_system_init_1:
+   \   000020   B290C900.... CMP.W   #0xc9, &time_pass_by
+   \   000026   FC3B         JL      ??gps_system_init_1
+     62            gps_wakeup();
+   \   000028   ........     CALLA   #gps_wakeup
+   \   00002C   093C         JMP     ??gps_system_init_4
+     63          
+     64            while(!(P1IN & GPS_PWRCHK)){
+     65              if (!(P1IN & GPS_PWRCHK)){
+   \                     ??gps_system_init_3:
+   \   00002E   F2B20002     BIT.B   #0x8, &0x200
+   \   000032   062C         JC      ??gps_system_init_4
+     66                while (time_pass_by <= 210);
+   \                     ??gps_system_init_2:
+   \   000034   B290D300.... CMP.W   #0xd3, &time_pass_by
+   \   00003A   FC3B         JL      ??gps_system_init_2
+     67                gps_wakeup();
+   \   00003C   ........     CALLA   #gps_wakeup
+     68              }
+     69            }
+   \                     ??gps_system_init_4:
+   \   000040   F2B20002     BIT.B   #0x8, &0x200
+   \   000044   F42B         JNC     ??gps_system_init_3
+     70            P3OUT ^= TEST_PROBE;                  // Set TEST_SIG HIGH
+   \   000046   F2E22202     XOR.B   #0x8, &0x222
+     71          
+     72          //  gps_resetting = 0x01;
+     73          //  gps_2b_reset = 0x01;
+     74          }
+   \   00004A   1001         RETA
+   \   00004C                REQUIRE _A_PBOUT_L
+   \   00004C                REQUIRE _A_PAOUT_L
+   \   00004C                REQUIRE _A_PAIN_L
+     75          //-----------------------------------------------------------------------------------------------------
+     76          
+     77          
+     78          //-----------------------------------------------------------------------------------------------------
+     79          // GPS Wake-up
+
+   \                                 In  segment CODE, align 2
+     80          void gps_wakeup(void){
+   \                     gps_wakeup:
+     81            int kick_out = 1;
+   \   000000   1F43         MOV.W   #0x1, R15
+     82            time_pass_by = 0;
+   \   000002   8243....     MOV.W   #0x0, &time_pass_by
+     83            while (time_pass_by <= 10);
+   \                     ??gps_wakeup_0:
+   \   000006   B2900B00.... CMP.W   #0xb, &time_pass_by
+   \   00000C   FC3B         JL      ??gps_wakeup_0
+     84            P3OUT |= GPS_PWRCNTL;                // GPS_PWRCNTL = GPS_ON;
+   \   00000E   E2D22202     BIS.B   #0x4, &0x222
+     85            time_pass_by = 0;
+   \   000012   8243....     MOV.W   #0x0, &time_pass_by
+   \   000016   043C         JMP     ??gps_wakeup_2
+     86            while ((time_pass_by <= 20) & kick_out){
+     87              if (P1IN & GPS_PWRCHK){
+   \                     ??gps_wakeup_1:
+   \   000018   F2B20002     BIT.B   #0x8, &0x200
+   \   00001C   0128         JNC     ??gps_wakeup_2
+     88                kick_out = 0;
+   \   00001E   0F43         MOV.W   #0x0, R15
+     89              }
+     90            }
+   \                     ??gps_wakeup_2:
+   \   000020   B2901500.... CMP.W   #0x15, &time_pass_by
+   \   000026   0234         JGE     ??gps_wakeup_3
+   \   000028   5E43         MOV.B   #0x1, R14
+   \   00002A   013C         JMP     ??gps_wakeup_4
+   \                     ??gps_wakeup_3:
+   \   00002C   4E43         MOV.B   #0x0, R14
+   \                     ??gps_wakeup_4:
+   \   00002E   0D12         PUSH.W  R13
+   \   000030   C14F0000     MOV.B   R15, 0(SP)
+   \   000034   3D41         POP.W   R13
+   \   000036   5DF3         AND.B   #0x1, R13
+   \   000038   4EBD         BIT.B   R13, R14
+   \   00003A   EE23         JNE     ??gps_wakeup_1
+     91            P3OUT &= ~GPS_PWRCNTL;              // GPS_PWRCNTL = GPS_Off;
+   \   00003C   E2C22202     BIC.B   #0x4, &0x222
+     92          
+     93          }
+   \   000040   1001         RETA
+   \   000042                REQUIRE _A_PBOUT_L
+   \   000042                REQUIRE _A_PAIN_L
+     94          //-----------------------------------------------------------------------------------------------------
+     95          
+     96          
+     97          /*
+     98          //-----------------------------------------------------------------------------------------------------
+     99          // GPS Initialization
+    100          void gps_system_init(void){
+    101          //  int i;
+    102          //  for (i=0; i<0x7FFF; i++){
+    103          //    GPS_RESET = GPS_OFF;
+    104          //  }
+    105            P3OUT |= GPS_PWRCNTL;           //  GPS_PWRCNTL = GPS_ON;
+    106            while (!(P1OUT & GPS_PWRCHK));
+    107            P3OUT &= ~GPS_PWRCNTL;         //  GPS_PWRCNTL = GPS_OFF;
+    108          //  GPS_RESET = GPS_ON;
+    109          }
+    110          //-----------------------------------------------------------------------------------------------------
+    111          */
+    112          
+    113          //-----------------------------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+    114          void gps_meassage_type(void){
+   \                     gps_meassage_type:
+    115          // $GPGGA
+    116            message_type = GARBAGE;
+   \   000000   C243....     MOV.B   #0x0, &message_type
+    117            if (NMEA_BUF[0] == '$'){
+   \   000004   F2902400.... CMP.B   #0x24, &NMEA_BUF
+   \   00000A   3220         JNE     ??gps_meassage_type_0
+    118              if (NMEA_BUF[1] == 'G'){
+   \   00000C   F2904700.... CMP.B   #0x47, &NMEA_BUF + 1
+   \   000012   2E20         JNE     ??gps_meassage_type_0
+    119                if (NMEA_BUF[2] == 'P'){
+   \   000014   F2905000.... CMP.B   #0x50, &NMEA_BUF + 2
+   \   00001A   2A20         JNE     ??gps_meassage_type_0
+    120          //        if (NMEA_BUF[3] == 'G'){
+    121          //          if (NMEA_BUF[4] == 'S'){
+    122          //            if (NMEA_BUF[5] == 'A'){
+    123          //              message_type = GPGSA;
+    124          //            }
+    125          //          }
+    126          //        }
+    127                  if (NMEA_BUF[3] == 'G'){
+   \   00001C   F2904700.... CMP.B   #0x47, &NMEA_BUF + 3
+   \   000022   1120         JNE     ??gps_meassage_type_1
+    128                    if (NMEA_BUF[4] == 'G'){
+   \   000024   F2904700.... CMP.B   #0x47, &NMEA_BUF + 4
+   \   00002A   0D20         JNE     ??gps_meassage_type_1
+    129                      if (NMEA_BUF[5] == 'A'){
+   \   00002C   F2904100.... CMP.B   #0x41, &NMEA_BUF + 5
+   \   000032   0920         JNE     ??gps_meassage_type_1
+    130                        if(control_state[0] & GPGGA_filter){
+   \   000034   E2B3....     BIT.B   #0x2, &control_state
+   \   000038   0628         JNC     ??gps_meassage_type_1
+    131                          message_type = GPGGA;
+   \   00003A   E243....     MOV.B   #0x2, &message_type
+    132                          correct_message = 1;
+   \   00003E   D243....     MOV.B   #0x1, &correct_message
+    133                          PJOUT ^= LED1;
+   \   000042   92E32203     XOR.W   #0x1, &0x322
+    134                        }
+    135                      }
+    136                    }
+    137                  }
+    138                  if (NMEA_BUF[3] == 'R'){
+   \                     ??gps_meassage_type_1:
+   \   000046   F2905200.... CMP.B   #0x52, &NMEA_BUF + 3
+   \   00004C   1120         JNE     ??gps_meassage_type_0
+    139                    if (NMEA_BUF[4] == 'M'){
+   \   00004E   F2904D00.... CMP.B   #0x4d, &NMEA_BUF + 4
+   \   000054   0D20         JNE     ??gps_meassage_type_0
+    140                      if (NMEA_BUF[5] == 'C'){
+   \   000056   F2904300.... CMP.B   #0x43, &NMEA_BUF + 5
+   \   00005C   0920         JNE     ??gps_meassage_type_0
+    141                        if(control_state[0] & GPRMC_filter){
+   \   00005E   E2B2....     BIT.B   #0x4, &control_state
+   \   000062   0628         JNC     ??gps_meassage_type_0
+    142                          message_type = GPRMC;
+   \   000064   D243....     MOV.B   #0x1, &message_type
+    143                          correct_message = 1;
+   \   000068   D243....     MOV.B   #0x1, &correct_message
+    144                          PJOUT ^= LED1;
+   \   00006C   92E32203     XOR.W   #0x1, &0x322
+    145                        }
+    146                      }
+    147                    }
+    148                  }
+    149                }
+    150              }
+    151            }
+    152          }
+   \                     ??gps_meassage_type_0:
+   \   000070   1001         RETA
+   \   000072                REQUIRE _A_PJOUT_L
+    153          //-----------------------------------------------------------------------------------------------------
+    154          
+    155          //-----------------------------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+    156          char count_commas(void){
+   \                     count_commas:
+    157            int i;
+    158            char comma_count;
+    159            comma_count = 0;
+   \   000000   4E43         MOV.B   #0x0, R14
+    160            for(i=0;i<=44;i++){
+   \   000002   0F43         MOV.W   #0x0, R15
+   \   000004   013C         JMP     ??count_commas_1
+   \                     ??count_commas_0:
+   \   000006   1F53         ADD.W   #0x1, R15
+   \                     ??count_commas_1:
+   \   000008   3F902D00     CMP.W   #0x2d, R15
+   \   00000C   0B34         JGE     ??count_commas_2
+    161              if(USB_Char_Tx[i] == 0x2C){
+   \   00000E   FF902C00.... CMP.B   #0x2c, USB_Char_Tx(R15)
+   \   000014   F823         JNE     ??count_commas_0
+    162                comma_count++;
+   \   000016   5E53         ADD.B   #0x1, R14
+    163                if(comma_count == 6){
+   \   000018   7E900600     CMP.B   #0x6, R14
+   \   00001C   F423         JNE     ??count_commas_0
+    164                  return USB_Char_Tx[i+1];
+   \   00001E   5C4F....     MOV.B   USB_Char_Tx + 1(R15), R12
+   \   000022   1001         RETA
+    165                }
+    166              }
+    167            }
+    168            return 0;
+   \                     ??count_commas_2:
+   \   000024   4C43         MOV.B   #0x0, R12
+   \   000026   1001         RETA
+    169          }
+    170          //-----------------------------------------------------------------------------------------------------
+    171          
+    172          
+    173          //-----------------------------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+    174          void GPS_process_simple(void){
+   \                     GPS_process_simple:
+    175          //  int i;
+    176            onlyonce = 0;
+   \   000000   8243....     MOV.W   #0x0, &onlyonce
+   \   000004   0E3C         JMP     ??GPS_process_simple_1
+    177            while(gps_rx_ring_wr != gps_rx_ring_rd){      //look for a character to arrive
+    178              outchar(GPS_Char_Rx[gps_rx_ring_rd++]);
+   \                     ??GPS_process_simple_0:
+   \   000006   1F42....     MOV.W   &gps_rx_ring_rd, R15
+   \   00000A   5C4F....     MOV.B   GPS_Char_Rx(R15), R12
+   \   00000E   9253....     ADD.W   #0x1, &gps_rx_ring_rd
+   \   000012   ........     CALLA   #outchar
+    179              if(gps_rx_ring_rd == SMALL_RING_SIZE){
+   \   000016   B2902000.... CMP.W   #0x20, &gps_rx_ring_rd
+   \   00001C   0220         JNE     ??GPS_process_simple_1
+    180                gps_rx_ring_rd = 0;
+   \   00001E   8243....     MOV.W   #0x0, &gps_rx_ring_rd
+    181              }
+    182            }
+   \                     ??GPS_process_simple_1:
+   \   000022   9292........ CMP.W   &gps_rx_ring_rd, &gps_rx_ring_wr
+   \   000028   EE23         JNE     ??GPS_process_simple_0
+    183          }
+   \   00002A   1001         RETA
+    184          //-----------------------------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+    185          void GPS_clean_buffer(void){
+   \                     GPS_clean_buffer:
+    186            int i;
+    187            UCA1IE &= ~UCRXIE;                    // Disable RX interrupt
+   \   000000   92C3FA05     BIC.W   #0x1, &0x5fa
+    188            for (i=0; i<SMALL_RING_SIZE; i++){
+   \   000004   0F43         MOV.W   #0x0, R15
+   \   000006   033C         JMP     ??GPS_clean_buffer_1
+    189              GPS_Char_Rx[i] = 0;
+   \                     ??GPS_clean_buffer_0:
+   \   000008   CF43....     MOV.B   #0x0, GPS_Char_Rx(R15)
+    190            }
+   \   00000C   1F53         ADD.W   #0x1, R15
+   \                     ??GPS_clean_buffer_1:
+   \   00000E   3F902000     CMP.W   #0x20, R15
+   \   000012   FA3B         JL      ??GPS_clean_buffer_0
+    191            gps_rx_ring_rd = 0;
+   \   000014   8243....     MOV.W   #0x0, &gps_rx_ring_rd
+    192            gps_rx_ring_wr = 0;
+   \   000018   8243....     MOV.W   #0x0, &gps_rx_ring_wr
+    193            UCA1IE |= UCRXIE;                    // Enable RX interrupt
+   \   00001C   92D3FA05     BIS.W   #0x1, &0x5fa
+    194          }
+   \   000020   1001         RETA
+   \   000022                REQUIRE _A_UCA1IE_L
+    195          //-----------------------------------------------------------------------------------------------------
+    196          //-----------------------------------------------------------------------------------------------------
+    197          
+    198          
+    199          //-----------------------------------------------------------------------------------------------------
+    200          // GPS_SIMPLE           (0x01)  //
+    201          // GPGGA_filter         (0x02)  //
+    202          // GPRMC_filter         (0x04)  //
+
+   \                                 In  segment CODE, align 2
+    203          void GPS_process(void){
+   \                     GPS_process:
+    204            int i;
+    205          //  onlyonce = 0;
+    206            switch(control_state[0] & GPS_MASK){
+   \   000000   5E42....     MOV.B   &control_state, R14
+   \   000004   4E4E         MOV.B   R14, R14
+   \   000006   3EF00700     AND.W   #0x7, R14
+   \   00000A   4E83         SUB.B   #0x0, R14
+   \   00000C   D624         JEQ     ??GPS_process_7
+   \   00000E   5E83         SUB.B   #0x1, R14
+   \   000010   0724         JEQ     ??GPS_process_8
+   \   000012   5E83         SUB.B   #0x1, R14
+   \   000014   2324         JEQ     ??GPS_process_9
+   \   000016   6E83         SUB.B   #0x2, R14
+   \   000018   2124         JEQ     ??GPS_process_9
+   \   00001A   6E83         SUB.B   #0x2, R14
+   \   00001C   1F24         JEQ     ??GPS_process_9
+   \   00001E   1001         RETA
+    207              case 0x00:
+    208                break;
+    209              case 0x01:
+    210                onlyonce = 0;
+   \                     ??GPS_process_8:
+   \   000020   8243....     MOV.W   #0x0, &onlyonce
+   \   000024   163C         JMP     ??GPS_process_10
+    211                while(gps_rx_ring_wr != gps_rx_ring_rd){      //look for a character to arrive
+    212                  if(GPS_Char_Rx[gps_rx_ring_rd] == '$'){
+   \                     ??GPS_process_0:
+   \   000026   1F42....     MOV.W   &gps_rx_ring_rd, R15
+   \   00002A   FF902400.... CMP.B   #0x24, GPS_Char_Rx(R15)
+   \   000030   0220         JNE     ??GPS_process_11
+    213                    PJOUT ^= LED1;
+   \   000032   92E32203     XOR.W   #0x1, &0x322
+    214                  }
+    215                  outchar(GPS_Char_Rx[gps_rx_ring_rd++]);
+   \                     ??GPS_process_11:
+   \   000036   1F42....     MOV.W   &gps_rx_ring_rd, R15
+   \   00003A   5C4F....     MOV.B   GPS_Char_Rx(R15), R12
+   \   00003E   9253....     ADD.W   #0x1, &gps_rx_ring_rd
+   \   000042   ........     CALLA   #outchar
+    216                  if(gps_rx_ring_rd == SMALL_RING_SIZE){
+   \   000046   B2902000.... CMP.W   #0x20, &gps_rx_ring_rd
+   \   00004C   0220         JNE     ??GPS_process_10
+    217                    gps_rx_ring_rd = BEGINNING;
+   \   00004E   8243....     MOV.W   #0x0, &gps_rx_ring_rd
+    218                  }
+    219                }
+   \                     ??GPS_process_10:
+   \   000052   9292........ CMP.W   &gps_rx_ring_rd, &gps_rx_ring_wr
+   \   000058   E623         JNE     ??GPS_process_0
+    220                break;
+   \   00005A   1001         RETA
+    221              case 0x02:
+    222              case 0x04:
+    223              case 0x06:
+    224                if(gps_rx_ring_wr != gps_rx_ring_rd){      //look for a character to arrive
+   \                     ??GPS_process_9:
+   \   00005C   9292........ CMP.W   &gps_rx_ring_rd, &gps_rx_ring_wr
+   \   000062   3E24         JEQ     ??GPS_process_12
+    225                  if(GPS_Char_Rx[gps_rx_ring_rd] == '$'){
+   \   000064   1F42....     MOV.W   &gps_rx_ring_rd, R15
+   \   000068   FF902400.... CMP.B   #0x24, GPS_Char_Rx(R15)
+   \   00006E   1F20         JNE     ??GPS_process_13
+    226                    correct_message = 0;
+   \   000070   C243....     MOV.B   #0x0, &correct_message
+    227                    gps_index = BEGINNING;
+   \   000074   8243....     MOV.W   #0x0, &gps_index
+    228                    usb_tx_ring_wr = BEGINNING;
+   \   000078   8243....     MOV.W   #0x0, &usb_tx_ring_wr
+    229                    usb_tx_ring_rd = BEGINNING;
+   \   00007C   8243....     MOV.W   #0x0, &usb_tx_ring_rd
+    230                    message_type = GARBAGE;
+   \   000080   C243....     MOV.B   #0x0, &message_type
+    231                    for (i=0; i < LARGE_RING_SIZE; i++){
+   \   000084   0F43         MOV.W   #0x0, R15
+   \   000086   033C         JMP     ??GPS_process_14
+    232                      NMEA_BUF[i] = 0;
+   \                     ??GPS_process_1:
+   \   000088   CF43....     MOV.B   #0x0, NMEA_BUF(R15)
+    233                    }
+   \   00008C   1F53         ADD.W   #0x1, R15
+   \                     ??GPS_process_14:
+   \   00008E   3F904E00     CMP.W   #0x4e, R15
+   \   000092   FA3B         JL      ??GPS_process_1
+    234          //          outchar(0x0d);
+    235                    NMEA_BUF[gps_index++] = GPS_Char_Rx[gps_rx_ring_rd++];
+   \   000094   1F42....     MOV.W   &gps_rx_ring_rd, R15
+   \   000098   5E4F....     MOV.B   GPS_Char_Rx(R15), R14
+   \   00009C   9253....     ADD.W   #0x1, &gps_rx_ring_rd
+   \   0000A0   1F42....     MOV.W   &gps_index, R15
+   \   0000A4   CF4E....     MOV.B   R14, NMEA_BUF(R15)
+   \   0000A8   9253....     ADD.W   #0x1, &gps_index
+   \   0000AC   133C         JMP     ??GPS_process_15
+    236          //          PJOUT ^= LED1;
+    237                  }else{
+    238                    NMEA_BUF[gps_index++] = GPS_Char_Rx[gps_rx_ring_rd++];
+   \                     ??GPS_process_13:
+   \   0000AE   1F42....     MOV.W   &gps_rx_ring_rd, R15
+   \   0000B2   5E4F....     MOV.B   GPS_Char_Rx(R15), R14
+   \   0000B6   9253....     ADD.W   #0x1, &gps_rx_ring_rd
+   \   0000BA   1F42....     MOV.W   &gps_index, R15
+   \   0000BE   CF4E....     MOV.B   R14, NMEA_BUF(R15)
+   \   0000C2   9253....     ADD.W   #0x1, &gps_index
+    239                    if (gps_index >= LARGE_RING_SIZE ){
+   \   0000C6   B2904E00.... CMP.W   #0x4e, &gps_index
+   \   0000CC   0328         JNC     ??GPS_process_15
+    240                      gps_index = LARGE_RING_SIZE;
+   \   0000CE   B2404E00.... MOV.W   #0x4e, &gps_index
+    241                    }
+    242                  }
+    243                  if (gps_rx_ring_rd >= (SMALL_RING_SIZE)){
+   \                     ??GPS_process_15:
+   \   0000D4   B2902000.... CMP.W   #0x20, &gps_rx_ring_rd
+   \   0000DA   0228         JNC     ??GPS_process_12
+    244                    gps_rx_ring_rd = BEGINNING;           // Circular buffer back to beginning
+   \   0000DC   8243....     MOV.W   #0x0, &gps_rx_ring_rd
+    245                  }
+    246                }
+    247          
+    248                if (gps_index == 7){
+   \                     ??GPS_process_12:
+   \   0000E0   B2900700.... CMP.W   #0x7, &gps_index
+   \   0000E6   0C20         JNE     ??GPS_process_16
+    249                  gps_meassage_type();
+   \   0000E8   ........     CALLA   #gps_meassage_type
+    250                  onlyonce = 1;
+   \   0000EC   9243....     MOV.W   #0x1, &onlyonce
+    251          //        correct_message = 1;
+    252                  for (i = 0; i<=7; i++){
+   \   0000F0   0F43         MOV.W   #0x0, R15
+   \   0000F2   043C         JMP     ??GPS_process_17
+    253                    USB_Char_Tx[i] = NMEA_BUF[i];         // move characters to NMEA buffer
+   \                     ??GPS_process_2:
+   \   0000F4   DF4F........ MOV.B   NMEA_BUF(R15), USB_Char_Tx(R15)
+    254                  }
+   \   0000FA   1F53         ADD.W   #0x1, R15
+   \                     ??GPS_process_17:
+   \   0000FC   3F92         CMP.W   #0x8, R15
+   \   0000FE   FA3B         JL      ??GPS_process_2
+    255                }
+    256                
+    257                if (correct_message){
+   \                     ??GPS_process_16:
+   \   000100   C293....     CMP.B   #0x0, &correct_message
+   \   000104   5A24         JEQ     ??GPS_process_7
+    258                  if (usb_tx_ring_rd != gps_index){
+   \   000106   9292........ CMP.W   &gps_index, &usb_tx_ring_rd
+   \   00010C   0924         JEQ     ??GPS_process_18
+    259                    USB_Char_Tx[usb_tx_ring_rd] = NMEA_BUF[usb_tx_ring_rd];   //
+   \   00010E   1F42....     MOV.W   &usb_tx_ring_rd, R15
+   \   000112   1E42....     MOV.W   &usb_tx_ring_rd, R14
+   \   000116   DE4F........ MOV.B   NMEA_BUF(R15), USB_Char_Tx(R14)
+    260                    usb_tx_ring_rd++;
+   \   00011C   9253....     ADD.W   #0x1, &usb_tx_ring_rd
+    261                  }
+    262                  if (usb_tx_ring_rd != usb_tx_ring_wr){
+   \                     ??GPS_process_18:
+   \   000120   9292........ CMP.W   &usb_tx_ring_wr, &usb_tx_ring_rd
+   \   000126   0A24         JEQ     ??GPS_process_19
+    263                    outchar( USB_Char_Tx[usb_tx_ring_wr++]);
+   \   000128   1F42....     MOV.W   &usb_tx_ring_wr, R15
+   \   00012C   0E4F         MOV.W   R15, R14
+   \   00012E   1E53         ADD.W   #0x1, R14
+   \   000130   824E....     MOV.W   R14, &usb_tx_ring_wr
+   \   000134   5C4F....     MOV.B   USB_Char_Tx(R15), R12
+   \   000138   ........     CALLA   #outchar
+    264                  }
+    265                  
+    266                  if (gps_index == 18){
+   \                     ??GPS_process_19:
+   \   00013C   B2901200.... CMP.W   #0x12, &gps_index
+   \   000142   1820         JNE     ??GPS_process_20
+    267                    if ((USB_Char_Tx[gps_index] == 'V') || (USB_Char_Tx[gps_index] == ',')){
+   \   000144   1F42....     MOV.W   &gps_index, R15
+   \   000148   FF905600.... CMP.B   #0x56, USB_Char_Tx(R15)
+   \   00014E   0624         JEQ     ??GPS_process_21
+   \   000150   1F42....     MOV.W   &gps_index, R15
+   \   000154   FF902C00.... CMP.B   #0x2c, USB_Char_Tx(R15)
+   \   00015A   0C20         JNE     ??GPS_process_20
+    268                      lcd_out("  GPS Status   ",LCD_LINE_1);
+   \                     ??GPS_process_21:
+   \   00015C   7D408000     MOV.B   #0x80, R13
+   \   000160   3C40....     MOV.W   #`?<Constant "  GPS Status   ">`, R12
+   \   000164   ........     CALLA   #lcd_out
+    269                      lcd_out(" No Valid Data ",LCD_LINE_2);
+   \   000168   7D40C000     MOV.B   #0xc0, R13
+   \   00016C   3C40....     MOV.W   #`?<Constant " No Valid Data ">`, R12
+   \   000170   ........     CALLA   #lcd_out
+    270                    }
+    271                  }
+    272          
+    273                  if (gps_index == 44){
+   \                     ??GPS_process_20:
+   \   000174   B2902C00.... CMP.W   #0x2c, &gps_index
+   \   00017A   1F20         JNE     ??GPS_process_7
+    274                    if(onlyonce == 1){
+   \   00017C   9293....     CMP.W   #0x1, &onlyonce
+   \   000180   1C20         JNE     ??GPS_process_7
+    275                      onlyonce = 0;
+   \   000182   8243....     MOV.W   #0x0, &onlyonce
+    276                      switch (message_type){
+   \   000186   5E42....     MOV.B   &message_type, R14
+   \   00018A   5E83         SUB.B   #0x1, R14
+   \   00018C   0E24         JEQ     ??GPS_process_22
+   \   00018E   5E83         SUB.B   #0x1, R14
+   \   000190   1420         JNE     ??GPS_process_7
+    277                        case GPGGA:// GPGGA	
+    278                          fix_quality = count_commas();
+   \   000192   ........     CALLA   #count_commas
+   \   000196   C24C....     MOV.B   R12, &fix_quality
+    279                          if (fix_quality != '0'){
+   \   00019A   F2903000.... CMP.B   #0x30, &fix_quality
+   \   0001A0   0C24         JEQ     ??GPS_process_7
+    280                            LCD_gps_meassage_print(GPGGA_INDEX);
+   \   0001A2   3C401200     MOV.W   #0x12, R12
+   \   0001A6   ........     BRA     #LCD_gps_meassage_print
+    281                          }
+    282                          break;
+    283                        case GPRMC:// GPRMC
+    284                          if (USB_Char_Tx[18] == 'A'){
+   \                     ??GPS_process_22:
+   \   0001AA   F2904100.... CMP.B   #0x41, &USB_Char_Tx + 18
+   \   0001B0   0420         JNE     ??GPS_process_7
+    285                            LCD_gps_meassage_print(GPRMC_INDEX);
+   \   0001B2   3C401400     MOV.W   #0x14, R12
+   \   0001B6   ........     CALLA   #LCD_gps_meassage_print
+    286                          }
+    287                          break;
+    288                        default:
+    289                          break;
+    290                      }
+    291                    }
+    292                  }
+    293                } 
+    294                break;
+    295            }
+    296          }
+   \                     ??GPS_process_7:
+   \   0001BA   1001         RETA
+   \   0001BC                REQUIRE _A_PJOUT_L
+    297          //-----------------------------------------------------------------------------------------------------
+    298          //          outchar('*');
+
+   \                                 In  segment CODE, align 2
+    299          void LCD_gps_meassage_print(int nema_index){
+   \                     LCD_gps_meassage_print:
+   \   000000   1B15         PUSHM.W #0x2, R11
+   \   000002   0A4C         MOV.W   R12, R10
+    300            int i;
+    301            int temp_index;
+    302          //    PJOUT ^= LED1;
+    303              lcd_write(LCD_L1_C01, LCD_COMMAND);  // Move to line one
+   \   000004   4D43         MOV.B   #0x0, R13
+   \   000006   7C408000     MOV.B   #0x80, R12
+   \   00000A   ........     CALLA   #lcd_write
+    304              lcd_write('L', LCD_DATA);
+   \   00000E   5D43         MOV.B   #0x1, R13
+   \   000010   7C404C00     MOV.B   #0x4c, R12
+   \   000014   ........     CALLA   #lcd_write
+    305              lcd_write('a', LCD_DATA);
+   \   000018   5D43         MOV.B   #0x1, R13
+   \   00001A   7C406100     MOV.B   #0x61, R12
+   \   00001E   ........     CALLA   #lcd_write
+    306              lcd_write('t', LCD_DATA);
+   \   000022   5D43         MOV.B   #0x1, R13
+   \   000024   7C407400     MOV.B   #0x74, R12
+   \   000028   ........     CALLA   #lcd_write
+    307              lcd_write(' ', LCD_DATA);
+   \   00002C   5D43         MOV.B   #0x1, R13
+   \   00002E   7C402000     MOV.B   #0x20, R12
+   \   000032   ........     CALLA   #lcd_write
+    308              for(i=0; i<=10; i++){
+   \   000036   0B43         MOV.W   #0x0, R11
+   \   000038   083C         JMP     ??LCD_gps_meassage_print_2
+    309                lcd_write(NMEA_BUF[nema_index+i], LCD_DATA);
+   \                     ??LCD_gps_meassage_print_0:
+   \   00003A   5D43         MOV.B   #0x1, R13
+   \   00003C   0F4A         MOV.W   R10, R15
+   \   00003E   0F5B         ADD.W   R11, R15
+   \   000040   5C4F....     MOV.B   NMEA_BUF(R15), R12
+   \   000044   ........     CALLA   #lcd_write
+    310              }
+   \   000048   1B53         ADD.W   #0x1, R11
+   \                     ??LCD_gps_meassage_print_2:
+   \   00004A   3B900B00     CMP.W   #0xb, R11
+   \   00004E   F53B         JL      ??LCD_gps_meassage_print_0
+    311              temp_index = nema_index + 13;
+   \   000050   3A500D00     ADD.W   #0xd, R10
+    312              lcd_write(LCD_L2_C01, LCD_COMMAND);  // Move to line two
+   \   000054   4D43         MOV.B   #0x0, R13
+   \   000056   7C40C000     MOV.B   #0xc0, R12
+   \   00005A   ........     CALLA   #lcd_write
+    313              lcd_write('L', LCD_DATA);
+   \   00005E   5D43         MOV.B   #0x1, R13
+   \   000060   7C404C00     MOV.B   #0x4c, R12
+   \   000064   ........     CALLA   #lcd_write
+    314              lcd_write('o', LCD_DATA);
+   \   000068   5D43         MOV.B   #0x1, R13
+   \   00006A   7C406F00     MOV.B   #0x6f, R12
+   \   00006E   ........     CALLA   #lcd_write
+    315              lcd_write('n', LCD_DATA);
+   \   000072   5D43         MOV.B   #0x1, R13
+   \   000074   7C406E00     MOV.B   #0x6e, R12
+   \   000078   ........     CALLA   #lcd_write
+    316              lcd_write(' ', LCD_DATA);
+   \   00007C   5D43         MOV.B   #0x1, R13
+   \   00007E   7C402000     MOV.B   #0x20, R12
+   \   000082   ........     CALLA   #lcd_write
+    317              for(i=0; i<=10; i++){
+   \   000086   0B43         MOV.W   #0x0, R11
+   \   000088   083C         JMP     ??LCD_gps_meassage_print_3
+    318                lcd_write(NMEA_BUF[temp_index+i], LCD_DATA);
+   \                     ??LCD_gps_meassage_print_1:
+   \   00008A   5D43         MOV.B   #0x1, R13
+   \   00008C   0F4A         MOV.W   R10, R15
+   \   00008E   0F5B         ADD.W   R11, R15
+   \   000090   5C4F....     MOV.B   NMEA_BUF(R15), R12
+   \   000094   ........     CALLA   #lcd_write
+    319              }
+   \   000098   1B53         ADD.W   #0x1, R11
+   \                     ??LCD_gps_meassage_print_3:
+   \   00009A   3B900B00     CMP.W   #0xb, R11
+   \   00009E   F53B         JL      ??LCD_gps_meassage_print_1
+    320          }
+   \   0000A0   1A17         POPM.W  #0x2, R11
+   \   0000A2   1001         RETA
+    321          //-----------------------------------------------------------------------------------------------------
+    322          
+    323          //-----------------------------------------------------------------------------------------------------
+    324          //          outchar('*');
+
+   \                                 In  segment CODE, align 2
+    325          void VS_gps_meassage_print(int nema_index){
+   \                     VS_gps_meassage_print:
+   \   000000   1B15         PUSHM.W #0x2, R11
+   \   000002   0A4C         MOV.W   R12, R10
+    326            int i;
+    327            int temp_index;
+    328          //    PJOUT ^= LED1;
+    329              outchar('L');outchar('a');outchar('t');outchar(' ');
+   \   000004   7C404C00     MOV.B   #0x4c, R12
+   \   000008   ........     CALLA   #outchar
+   \   00000C   7C406100     MOV.B   #0x61, R12
+   \   000010   ........     CALLA   #outchar
+   \   000014   7C407400     MOV.B   #0x74, R12
+   \   000018   ........     CALLA   #outchar
+   \   00001C   7C402000     MOV.B   #0x20, R12
+   \   000020   ........     CALLA   #outchar
+    330              for(i=0; i<=10; i++){
+   \   000024   0B43         MOV.W   #0x0, R11
+   \   000026   073C         JMP     ??VS_gps_meassage_print_2
+    331                outchar(NMEA_BUF[nema_index+i]);
+   \                     ??VS_gps_meassage_print_0:
+   \   000028   0F4A         MOV.W   R10, R15
+   \   00002A   0F5B         ADD.W   R11, R15
+   \   00002C   5C4F....     MOV.B   NMEA_BUF(R15), R12
+   \   000030   ........     CALLA   #outchar
+    332              }
+   \   000034   1B53         ADD.W   #0x1, R11
+   \                     ??VS_gps_meassage_print_2:
+   \   000036   3B900B00     CMP.W   #0xb, R11
+   \   00003A   F63B         JL      ??VS_gps_meassage_print_0
+    333              outchar(' ');
+   \   00003C   7C402000     MOV.B   #0x20, R12
+   \   000040   ........     CALLA   #outchar
+    334              temp_index = nema_index + 13;
+   \   000044   3A500D00     ADD.W   #0xd, R10
+    335              outchar('L');outchar('o');outchar('n');outchar(' ');
+   \   000048   7C404C00     MOV.B   #0x4c, R12
+   \   00004C   ........     CALLA   #outchar
+   \   000050   7C406F00     MOV.B   #0x6f, R12
+   \   000054   ........     CALLA   #outchar
+   \   000058   7C406E00     MOV.B   #0x6e, R12
+   \   00005C   ........     CALLA   #outchar
+   \   000060   7C402000     MOV.B   #0x20, R12
+   \   000064   ........     CALLA   #outchar
+    336              for(i=0; i<=10; i++){
+   \   000068   0B43         MOV.W   #0x0, R11
+   \   00006A   073C         JMP     ??VS_gps_meassage_print_3
+    337                outchar(NMEA_BUF[temp_index+i]);
+   \                     ??VS_gps_meassage_print_1:
+   \   00006C   0F4A         MOV.W   R10, R15
+   \   00006E   0F5B         ADD.W   R11, R15
+   \   000070   5C4F....     MOV.B   NMEA_BUF(R15), R12
+   \   000074   ........     CALLA   #outchar
+    338              }
+   \   000078   1B53         ADD.W   #0x1, R11
+   \                     ??VS_gps_meassage_print_3:
+   \   00007A   3B900B00     CMP.W   #0xb, R11
+   \   00007E   F63B         JL      ??VS_gps_meassage_print_1
+    339          }
+   \   000080   1A17         POPM.W  #0x2, R11
+   \   000082   1001         RETA
+    340          //-----------------------------------------------------------------------------------------------------
+    341          
+
+   \                                 In  segment CODE, align 2
+    342          void GPS_test(void){
+   \                     GPS_test:
+   \   000000   0A12         PUSH.W  R10
+    343            char hold_character;
+    344            if (wait_for_character()){
+   \   000002   ........     CALLA   #wait_for_character
+   \   000006   0C93         CMP.W   #0x0, R12
+   \   000008   0324         JEQ     ??GPS_test_10
+    345              print_CR();
+   \   00000A   ........     CALLA   #print_CR
+    346              return;
+   \   00000E   943D         JMP     ??GPS_test_11
+    347            }
+    348            outchar(current_character);
+   \                     ??GPS_test_10:
+   \   000010   5C42....     MOV.B   &current_character, R12
+   \   000014   ........     CALLA   #outchar
+    349            switch (current_character) {
+   \   000018   5E42....     MOV.B   &current_character, R14
+   \   00001C   7E803000     SUB.B   #0x30, R14
+   \   000020   3324         JEQ     ??GPS_test_12
+   \   000022   5E83         SUB.B   #0x1, R14
+   \   000024   3424         JEQ     ??GPS_test_13
+   \   000026   7E801200     SUB.B   #0x12, R14
+   \   00002A   3624         JEQ     ??GPS_test_14
+   \   00002C   5E83         SUB.B   #0x1, R14
+   \   00002E   5B24         JEQ     ??GPS_test_15
+   \   000030   6E83         SUB.B   #0x2, R14
+   \   000032   6E24         JEQ     ??GPS_test_16
+   \   000034   7E800300     SUB.B   #0x3, R14
+   \   000038   B824         JEQ     ??GPS_test_17
+   \   00003A   7E800600     SUB.B   #0x6, R14
+   \   00003E   B824         JEQ     ??GPS_test_18
+   \   000040   5E83         SUB.B   #0x1, R14
+   \   000042   CF24         JEQ     ??GPS_test_19
+   \   000044   6E83         SUB.B   #0x2, R14
+   \   000046   E224         JEQ     ??GPS_test_20
+   \   000048   5E83         SUB.B   #0x1, R14
+   \   00004A   F524         JEQ     ??GPS_test_21
+   \   00004C   7E800300     SUB.B   #0x3, R14
+   \   000050   5625         JEQ     ??GPS_test_22
+   \   000052   5E83         SUB.B   #0x1, R14
+   \   000054   6D25         JEQ     ??GPS_test_23
+   \   000056   7E800C00     SUB.B   #0xc, R14
+   \   00005A   1E24         JEQ     ??GPS_test_14
+   \   00005C   5E83         SUB.B   #0x1, R14
+   \   00005E   4324         JEQ     ??GPS_test_15
+   \   000060   6E83         SUB.B   #0x2, R14
+   \   000062   5624         JEQ     ??GPS_test_16
+   \   000064   7E800300     SUB.B   #0x3, R14
+   \   000068   A024         JEQ     ??GPS_test_17
+   \   00006A   7E800600     SUB.B   #0x6, R14
+   \   00006E   A024         JEQ     ??GPS_test_18
+   \   000070   5E83         SUB.B   #0x1, R14
+   \   000072   B724         JEQ     ??GPS_test_19
+   \   000074   6E83         SUB.B   #0x2, R14
+   \   000076   CA24         JEQ     ??GPS_test_20
+   \   000078   5E83         SUB.B   #0x1, R14
+   \   00007A   DD24         JEQ     ??GPS_test_21
+   \   00007C   7E800300     SUB.B   #0x3, R14
+   \   000080   3E25         JEQ     ??GPS_test_22
+   \   000082   5E83         SUB.B   #0x1, R14
+   \   000084   5525         JEQ     ??GPS_test_23
+   \   000086   563D         JMP     ??GPS_test_1
+    350          /*
+    351              case 0x00:  // DEFAULT
+    352                break;
+    353              case 0x21:  // !
+    354                break;
+    355              case 0x22:  // "
+    356                break;
+    357              case 0x23:  // #
+    358                break;
+    359              case 0x24:  // $
+    360                break;
+    361              case 0x25:  // %
+    362                break;
+    363              case 0x26:  // &
+    364                break;
+    365              case 0x27:  // '
+    366                break;
+    367              case 0x28:  // (
+    368                break;
+    369              case 0x29:  // )
+    370                break;
+    371              case 0x2A:  // *
+    372                break;
+    373              case 0x2B:  // +
+    374                break;
+    375              case 0x2C:  // ,
+    376                break;
+    377              case 0x2D:  // -
+    378                break;
+    379              case 0x2E:  // .
+    380                break;
+    381              case 0x2F:  // /
+    382                break;
+    383              */
+    384              case 0x30:  // 0
+    385                control_state[0] &= ~GPS_SIMPLE;
+   \                     ??GPS_test_12:
+   \   000088   D2C3....     BIC.B   #0x1, &control_state
+    386          //      out_control_words();
+    387                break;
+   \   00008C   533D         JMP     ??GPS_test_1
+    388              case 0x31:  // 1
+    389                control_state[0] |= GPS_SIMPLE;
+   \                     ??GPS_test_13:
+   \   00008E   D2D3....     BIS.B   #0x1, &control_state
+    390                GPS_clean_buffer();
+   \   000092   ........     CALLA   #GPS_clean_buffer
+    391          //      out_control_words();
+    392                break;
+   \   000096   4E3D         JMP     ??GPS_test_1
+    393                /*
+    394              case 0x32:  // 2
+    395                break;
+    396              case 0x33:  // 3
+    397                break;
+    398              case 0x34:  // 4
+    399                break;
+    400               case 0x35: // 5
+    401                break;
+    402              case 0x36:  // 6
+    403                break;
+    404              case 0x39:  // 9
+    405                break;
+    406              case 0x3A:  // :
+    407                break;
+    408              case 0x3B:  // ;
+    409                break;
+    410              case 0x3c:  // <
+    411                break;
+    412              case 0x3D:  // =
+    413                break;
+    414              case 0x3e:  // >
+    415                break;
+    416              case 0x3F:  // ?
+    417                break;
+    418              case 0x40:  // @
+    419                break;
+    420              case 0x41:  // A
+    421              case 0x61:  // a
+    422                break;
+    423              case 0x42:  // B
+    424              case 0x62:  // b
+    425                break;
+    426                */
+    427              case 0x43:  // C
+    428              case 0x63:  // c
+    429                outchar('G');outchar('P');outchar('S');outchar(' ');outchar('O');
+   \                     ??GPS_test_14:
+   \   000098   7C404700     MOV.B   #0x47, R12
+   \   00009C   ........     CALLA   #outchar
+   \   0000A0   7C405000     MOV.B   #0x50, R12
+   \   0000A4   ........     CALLA   #outchar
+   \   0000A8   7C405300     MOV.B   #0x53, R12
+   \   0000AC   ........     CALLA   #outchar
+   \   0000B0   7C402000     MOV.B   #0x20, R12
+   \   0000B4   ........     CALLA   #outchar
+   \   0000B8   7C404F00     MOV.B   #0x4f, R12
+   \   0000BC   ........     CALLA   #outchar
+    430                if(P1IN & GPS_PWRCHK){
+   \   0000C0   F2B20002     BIT.B   #0x8, &0x200
+   \   0000C4   0528         JNC     ??GPS_test_24
+    431                  outchar('n');
+   \   0000C6   7C406E00     MOV.B   #0x6e, R12
+   \   0000CA   ........     CALLA   #outchar
+   \   0000CE   083C         JMP     ??GPS_test_25
+    432                }else{
+    433                  outchar('f');outchar('f');
+   \                     ??GPS_test_24:
+   \   0000D0   7C406600     MOV.B   #0x66, R12
+   \   0000D4   ........     CALLA   #outchar
+   \   0000D8   7C406600     MOV.B   #0x66, R12
+   \   0000DC   ........     CALLA   #outchar
+    434                }
+    435                print_CR();
+   \                     ??GPS_test_25:
+   \   0000E0   ........     CALLA   #print_CR
+    436                break;
+   \   0000E4   273D         JMP     ??GPS_test_1
+    437          
+    438              case 0x44:  // D
+    439              case 0x64:  // d
+    440                if (wait_for_character()){
+   \                     ??GPS_test_15:
+   \   0000E6   ........     CALLA   #wait_for_character
+   \   0000EA   0C93         CMP.W   #0x0, R12
+   \   0000EC   0324         JEQ     ??GPS_test_26
+    441                  print_CR();
+   \   0000EE   ........     CALLA   #print_CR
+    442                  return;
+   \   0000F2   223D         JMP     ??GPS_test_11
+    443                }
+    444                outchar(current_character);
+   \                     ??GPS_test_26:
+   \   0000F4   5C42....     MOV.B   &current_character, R12
+   \   0000F8   ........     CALLA   #outchar
+    445                if (current_character == 0x30){  // This set GPS to Simple off
+   \   0000FC   F2903000.... CMP.B   #0x30, &current_character
+   \   000102   0320         JNE     ??GPS_test_27
+    446                  control_state[0] &= ~GPS_SIMPLE;
+   \   000104   D2C3....     BIC.B   #0x1, &control_state
+   \   000108   153D         JMP     ??GPS_test_1
+    447                }else{
+    448                  control_state[0] |= GPS_SIMPLE;
+   \                     ??GPS_test_27:
+   \   00010A   D2D3....     BIS.B   #0x1, &control_state
+    449                }
+    450                break;
+   \   00010E   123D         JMP     ??GPS_test_1
+    451          /*
+    452              case 0x45:  // E
+    453              case 0x65:  // e
+    454                break;
+    455          */
+    456          // GPGCA                  1
+    457          // GPGSA                  2
+    458          // GPRMC                  3
+    459          // GPGCA_filter         (0x10)  //
+    460          // GPRMC_filter         (0x20)  //
+    461              case 0x46:  // F
+    462              case 0x66:  // f
+    463                if (wait_for_character()){
+   \                     ??GPS_test_16:
+   \   000110   ........     CALLA   #wait_for_character
+   \   000114   0C93         CMP.W   #0x0, R12
+   \   000116   0324         JEQ     ??GPS_test_28
+    464                  print_CR();
+   \   000118   ........     CALLA   #print_CR
+    465                  return;
+   \   00011C   0D3D         JMP     ??GPS_test_11
+    466                }
+    467                outchar(current_character);
+   \                     ??GPS_test_28:
+   \   00011E   5C42....     MOV.B   &current_character, R12
+   \   000122   ........     CALLA   #outchar
+    468                hold_character = current_character;
+   \   000126   5A42....     MOV.B   &current_character, R10
+    469                if (wait_for_character()){
+   \   00012A   ........     CALLA   #wait_for_character
+   \   00012E   0C93         CMP.W   #0x0, R12
+   \   000130   0324         JEQ     ??GPS_test_29
+    470                  print_CR();
+   \   000132   ........     CALLA   #print_CR
+    471                  return;
+   \   000136   003D         JMP     ??GPS_test_11
+    472                }
+    473                outchar(current_character);
+   \                     ??GPS_test_29:
+   \   000138   5C42....     MOV.B   &current_character, R12
+   \   00013C   ........     CALLA   #outchar
+    474                switch (hold_character & 0x0F){
+   \   000140   4A4A         MOV.B   R10, R10
+   \   000142   3AF00F00     AND.W   #0xf, R10
+   \   000146   4A83         SUB.B   #0x0, R10
+   \   000148   0524         JEQ     ??GPS_test_30
+   \   00014A   5A83         SUB.B   #0x1, R10
+   \   00014C   0C24         JEQ     ??GPS_test_31
+   \   00014E   5A83         SUB.B   #0x1, R10
+   \   000150   1B24         JEQ     ??GPS_test_32
+   \   000152   F03C         JMP     ??GPS_test_1
+    475                  case NO_FILTER:
+    476                    control_state[0] |= GPS_SIMPLE;
+   \                     ??GPS_test_30:
+   \   000154   D2D3....     BIS.B   #0x1, &control_state
+    477                    control_state[0] &= ~GPGGA_filter;
+   \   000158   E2C3....     BIC.B   #0x2, &control_state
+    478                    control_state[0] &= ~GPRMC_filter;
+   \   00015C   E2C2....     BIC.B   #0x4, &control_state
+    479                    GPS_clean_buffer();
+   \   000160   ........     CALLA   #GPS_clean_buffer
+    480                    break;
+   \   000164   E73C         JMP     ??GPS_test_1
+    481                  case GPRMC:
+    482                    if (current_character == 0x30){  // This turns filter 2 off
+   \                     ??GPS_test_31:
+   \   000166   F2903000.... CMP.B   #0x30, &current_character
+   \   00016C   0820         JNE     ??GPS_test_33
+    483                      control_state[0] &= ~GPRMC_filter;
+   \   00016E   E2C2....     BIC.B   #0x4, &control_state
+    484                      if(!(control_state[0] & GPGGA_filter)){
+   \   000172   E2B3....     BIT.B   #0x2, &control_state
+   \   000176   DE2C         JC      ??GPS_test_1
+    485                        control_state[0] |= GPS_SIMPLE;
+   \   000178   D2D3....     BIS.B   #0x1, &control_state
+   \   00017C   DB3C         JMP     ??GPS_test_1
+    486                      }
+    487                    }else{
+    488                      control_state[0] |= GPRMC_filter;
+   \                     ??GPS_test_33:
+   \   00017E   E2D2....     BIS.B   #0x4, &control_state
+    489                      control_state[0] &= ~GPS_SIMPLE;
+   \   000182   D2C3....     BIC.B   #0x1, &control_state
+    490                    }
+    491                    break;
+   \   000186   D63C         JMP     ??GPS_test_1
+    492                  case GPGGA:
+    493                    if (current_character == 0x30){  // This turns filter 1 off
+   \                     ??GPS_test_32:
+   \   000188   F2903000.... CMP.B   #0x30, &current_character
+   \   00018E   0820         JNE     ??GPS_test_34
+    494                      control_state[0] &= ~GPGGA_filter;
+   \   000190   E2C3....     BIC.B   #0x2, &control_state
+    495                      if(!(control_state[0] & GPRMC_filter)){
+   \   000194   E2B2....     BIT.B   #0x4, &control_state
+   \   000198   CD2C         JC      ??GPS_test_1
+    496                        control_state[0] |= GPS_SIMPLE;
+   \   00019A   D2D3....     BIS.B   #0x1, &control_state
+   \   00019E   CA3C         JMP     ??GPS_test_1
+    497                      }
+    498                    }else{
+    499                      control_state[0] |= GPGGA_filter;
+   \                     ??GPS_test_34:
+   \   0001A0   E2D3....     BIS.B   #0x2, &control_state
+    500                      control_state[0] &= ~GPS_SIMPLE;
+   \   0001A4   D2C3....     BIC.B   #0x1, &control_state
+    501                    }
+    502                    break;
+    503                  default:
+    504                    break;
+    505                  }
+    506                break;
+   \   0001A8   C53C         JMP     ??GPS_test_1
+    507          /*
+    508              case 0x47:  // G
+    509              case 0x67:  // g
+    510                break;
+    511              case 0x48:  // H
+    512              case 0x68:  // h
+    513                break;
+    514                */
+    515              case 0x49:  // I
+    516              case 0x69:  // i
+    517          //      GPS_clean_buffer();
+    518                gps_system_init();
+   \                     ??GPS_test_17:
+   \   0001AA   ........     CALLA   #gps_system_init
+    519                break;
+   \   0001AE   C23C         JMP     ??GPS_test_1
+    520                /*
+    521              case 0x4a:  // J
+    522              case 0x6a:  // j
+    523                break;
+    524              case 0x4B:  // K
+    525              case 0x6B:  // k
+    526                break;
+    527              case 0x4C:  // L
+    528              case 0x6C:  // l
+    529                break;
+    530              case 0x4D:  // M
+    531              case 0x6D:  // m
+    532                break;
+    533              case 0x4E:  // N
+    534              case 0x6E:  // n
+    535                break;
+    536                */
+    537              case 0x4F:  // O
+    538              case 0x6F:  // o
+    539                if (wait_for_character()){
+   \                     ??GPS_test_18:
+   \   0001B0   ........     CALLA   #wait_for_character
+   \   0001B4   0C93         CMP.W   #0x0, R12
+   \   0001B6   0324         JEQ     ??GPS_test_35
+    540                  print_CR();
+   \   0001B8   ........     CALLA   #print_CR
+    541                  return;
+   \   0001BC   BD3C         JMP     ??GPS_test_11
+    542                }
+    543                outchar(current_character);
+   \                     ??GPS_test_35:
+   \   0001BE   5C42....     MOV.B   &current_character, R12
+   \   0001C2   ........     CALLA   #outchar
+    544                if (current_character == 0x30){  // This turns LED off
+   \   0001C6   F2903000.... CMP.B   #0x30, &current_character
+   \   0001CC   0520         JNE     ??GPS_test_36
+    545                  control_state[0] &= ~GPS_ONOFF;
+   \   0001CE   F2C2....     BIC.B   #0x8, &control_state
+    546                  P1OUT &= ~GPS_RESET;
+   \   0001D2   E2C30202     BIC.B   #0x2, &0x202
+   \   0001D6   AE3C         JMP     ??GPS_test_1
+    547          //        out_control_words();
+    548                }else{
+    549                  control_state[0] |= GPS_ONOFF;
+   \                     ??GPS_test_36:
+   \   0001D8   F2D2....     BIS.B   #0x8, &control_state
+    550                  gps_system_init();
+   \   0001DC   ........     CALLA   #gps_system_init
+    551          //        out_control_words();
+    552                }
+    553               break;
+   \   0001E0   A93C         JMP     ??GPS_test_1
+    554              case 0x50:  // P
+    555              case 0x70:  // p
+    556                if (wait_for_character()){
+   \                     ??GPS_test_19:
+   \   0001E2   ........     CALLA   #wait_for_character
+   \   0001E6   0C93         CMP.W   #0x0, R12
+   \   0001E8   0324         JEQ     ??GPS_test_37
+    557                  print_CR();
+   \   0001EA   ........     CALLA   #print_CR
+    558                  return;
+   \   0001EE   A43C         JMP     ??GPS_test_11
+    559                }
+    560                outchar(current_character);
+   \                     ??GPS_test_37:
+   \   0001F0   5C42....     MOV.B   &current_character, R12
+   \   0001F4   ........     CALLA   #outchar
+    561                if (current_character == 0x30){  //
+   \   0001F8   F2903000.... CMP.B   #0x30, &current_character
+   \   0001FE   0320         JNE     ??GPS_test_38
+    562                  P3OUT &= ~GPS_PWRCNTL;
+   \   000200   E2C22202     BIC.B   #0x4, &0x222
+   \   000204   973C         JMP     ??GPS_test_1
+    563                }else{
+    564                  P3OUT |= GPS_PWRCNTL;
+   \                     ??GPS_test_38:
+   \   000206   E2D22202     BIS.B   #0x4, &0x222
+    565                }
+    566                break;
+   \   00020A   943C         JMP     ??GPS_test_1
+    567                /*
+    568              case 0x51:  // Q
+    569              case 0x71:  // q
+    570                break;
+    571                */
+    572              case 0x52:  // R
+    573              case 0x72:  // r
+    574                if (wait_for_character()){
+   \                     ??GPS_test_20:
+   \   00020C   ........     CALLA   #wait_for_character
+   \   000210   0C93         CMP.W   #0x0, R12
+   \   000212   0324         JEQ     ??GPS_test_39
+    575                  print_CR();
+   \   000214   ........     CALLA   #print_CR
+    576                  return;
+   \   000218   8F3C         JMP     ??GPS_test_11
+    577                }
+    578                outchar(current_character);
+   \                     ??GPS_test_39:
+   \   00021A   5C42....     MOV.B   &current_character, R12
+   \   00021E   ........     CALLA   #outchar
+    579                if (current_character == 0x30){  //
+   \   000222   F2903000.... CMP.B   #0x30, &current_character
+   \   000228   0320         JNE     ??GPS_test_40
+    580                  P1OUT &= ~GPS_RESET;
+   \   00022A   E2C30202     BIC.B   #0x2, &0x202
+   \   00022E   823C         JMP     ??GPS_test_1
+    581                }else{
+    582                  P1OUT |= GPS_RESET;
+   \                     ??GPS_test_40:
+   \   000230   E2D30202     BIS.B   #0x2, &0x202
+    583                }
+    584                break;
+   \   000234   7F3C         JMP     ??GPS_test_1
+    585              case 0x53:  // S
+    586              case 0x73:  // s
+    587                print_CR();
+   \                     ??GPS_test_21:
+   \   000236   ........     CALLA   #print_CR
+    588                /*outchar('G');outchar('P');outchar('S');*/outchar(' ');outchar('O');
+   \   00023A   7C402000     MOV.B   #0x20, R12
+   \   00023E   ........     CALLA   #outchar
+   \   000242   7C404F00     MOV.B   #0x4f, R12
+   \   000246   ........     CALLA   #outchar
+    589                if(P1IN & GPS_PWRCHK){
+   \   00024A   F2B20002     BIT.B   #0x8, &0x200
+   \   00024E   0528         JNC     ??GPS_test_41
+    590                  outchar('n');
+   \   000250   7C406E00     MOV.B   #0x6e, R12
+   \   000254   ........     CALLA   #outchar
+   \   000258   083C         JMP     ??GPS_test_42
+    591                }else{
+    592                  outchar('f');outchar('f');
+   \                     ??GPS_test_41:
+   \   00025A   7C406600     MOV.B   #0x66, R12
+   \   00025E   ........     CALLA   #outchar
+   \   000262   7C406600     MOV.B   #0x66, R12
+   \   000266   ........     CALLA   #outchar
+    593                }
+    594                print_CR();
+   \                     ??GPS_test_42:
+   \   00026A   ........     CALLA   #print_CR
+    595                if(P3OUT & GPS_PWRCNTL){
+   \   00026E   E2B22202     BIT.B   #0x4, &0x222
+   \   000272   1928         JNC     ??GPS_test_43
+    596                  outchar('S');outchar('t');outchar('a');outchar('r');outchar('t');outchar(' ');//outchar('G');outchar('P');outchar('S');
+   \   000274   7C405300     MOV.B   #0x53, R12
+   \   000278   ........     CALLA   #outchar
+   \   00027C   7C407400     MOV.B   #0x74, R12
+   \   000280   ........     CALLA   #outchar
+   \   000284   7C406100     MOV.B   #0x61, R12
+   \   000288   ........     CALLA   #outchar
+   \   00028C   7C407200     MOV.B   #0x72, R12
+   \   000290   ........     CALLA   #outchar
+   \   000294   7C407400     MOV.B   #0x74, R12
+   \   000298   ........     CALLA   #outchar
+   \   00029C   7C402000     MOV.B   #0x20, R12
+   \   0002A0   ........     CALLA   #outchar
+   \   0002A4   103C         JMP     ??GPS_test_44
+    597                }else{
+    598                  outchar('I');outchar('d');outchar('l');outchar('e');
+   \                     ??GPS_test_43:
+   \   0002A6   7C404900     MOV.B   #0x49, R12
+   \   0002AA   ........     CALLA   #outchar
+   \   0002AE   7C406400     MOV.B   #0x64, R12
+   \   0002B2   ........     CALLA   #outchar
+   \   0002B6   7C406C00     MOV.B   #0x6c, R12
+   \   0002BA   ........     CALLA   #outchar
+   \   0002BE   7C406500     MOV.B   #0x65, R12
+   \   0002C2   ........     CALLA   #outchar
+    599                }
+    600                print_CR();
+   \                     ??GPS_test_44:
+   \   0002C6   ........     CALLA   #print_CR
+    601                if(!(P1OUT & GPS_RESET)){
+   \   0002CA   E2B30202     BIT.B   #0x2, &0x202
+   \   0002CE   322C         JC      ??GPS_test_1
+    602                 /*outchar('G');outchar('P');outchar('S');outchar(' ');outchar('i');outchar('n');outchar(' ');*/outchar('R');outchar('e');outchar('s');outchar('e');outchar('t');print_CR();
+   \   0002D0   7C405200     MOV.B   #0x52, R12
+   \   0002D4   ........     CALLA   #outchar
+   \   0002D8   7C406500     MOV.B   #0x65, R12
+   \   0002DC   ........     CALLA   #outchar
+   \   0002E0   7C407300     MOV.B   #0x73, R12
+   \   0002E4   ........     CALLA   #outchar
+   \   0002E8   7C406500     MOV.B   #0x65, R12
+   \   0002EC   ........     CALLA   #outchar
+   \   0002F0   7C407400     MOV.B   #0x74, R12
+   \   0002F4   ........     CALLA   #outchar
+   \   0002F8   ........     CALLA   #print_CR
+    603                }
+    604                break;
+   \   0002FC   1B3C         JMP     ??GPS_test_1
+    605                /*
+    606              case 0x54:  // T
+    607              case 0x74:  // t
+    608                break;
+    609              case 0x55:  // U
+    610              case 0x75:  // u
+    611                break;
+    612          */
+    613              case 0x56:  // V
+    614              case 0x76:  // v
+    615                if (wait_for_character()){
+   \                     ??GPS_test_22:
+   \   0002FE   ........     CALLA   #wait_for_character
+   \   000302   0C93         CMP.W   #0x0, R12
+   \   000304   0324         JEQ     ??GPS_test_45
+    616                  print_CR();
+   \   000306   ........     CALLA   #print_CR
+    617                  return;
+   \   00030A   163C         JMP     ??GPS_test_11
+    618                }
+    619                outchar(current_character);
+   \                     ??GPS_test_45:
+   \   00030C   5C42....     MOV.B   &current_character, R12
+   \   000310   ........     CALLA   #outchar
+    620                if (current_character == 0x30){  //
+   \   000314   F2903000.... CMP.B   #0x30, &current_character
+   \   00031A   0520         JNE     ??GPS_test_46
+    621                  VS_gps_meassage_print(GPRMC_INDEX);
+   \   00031C   3C401400     MOV.W   #0x14, R12
+   \   000320   ........     CALLA   #VS_gps_meassage_print
+   \   000324   073C         JMP     ??GPS_test_1
+    622                }else{
+    623                  VS_gps_meassage_print(GPGGA_INDEX);
+   \                     ??GPS_test_46:
+   \   000326   3C401200     MOV.W   #0x12, R12
+   \   00032A   ........     CALLA   #VS_gps_meassage_print
+    624                }
+    625                break;
+   \   00032E   023C         JMP     ??GPS_test_1
+    626              case 0x57:  // W
+    627              case 0x77:  // w
+    628               gps_wakeup();
+   \                     ??GPS_test_23:
+   \   000330   ........     CALLA   #gps_wakeup
+    629                break;
+    630          /*
+    631              case 0x58:  // X
+    632              case 0x78:  // x
+    633                break;
+    634              case 0x59:  // Y
+    635              case 0x79:  // y
+    636                break;
+    637              case 0x5A:  // Z
+    638              case 0x7A:  // z
+    639                break;
+    640              case 0x5B:  // [
+    641                break;
+    642              case 0x5C:  //
+    643                break;
+    644              case 0x5D:  // ]
+    645                break;
+    646              case 0x5E:  // ^
+    647                break;
+    648              case 0x5F:  // _
+    649                break;
+    650              case 0x60:  // `
+    651                break;
+    652              case 0x7B:  // {
+    653                break;
+    654              case 0x7C:  // |
+    655                break;
+    656              case 0x7D:  // }
+    657                break;
+    658              case 0x7E:  // ~
+    659                break;
+    660              case 0x7F:  // del
+    661                break;
+    662                */
+    663              default:
+    664                break;
+    665              } // end of character determination Switch
+    666              current_character = 0x00;
+   \                     ??GPS_test_1:
+   \   000334   C243....     MOV.B   #0x0, &current_character
+    667          }
+   \                     ??GPS_test_11:
+   \   000338   3A41         POP.W   R10
+   \   00033A   1001         RETA
+   \   00033C                REQUIRE _A_PAIN_L
+   \   00033C                REQUIRE _A_PAOUT_L
+   \   00033C                REQUIRE _A_PBOUT_L
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "  GPS Status   ">`:
+   \   000000   202047505320 DC8 "  GPS Status   "
+   \            537461747573
+   \            20202000    
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant " No Valid Data ">`:
+   \   000000   204E6F205661 DC8 " No Valid Data "
+   \            6C6964204461
+   \            74612000    
+    668          //------------------------------------------------------------------------------
+    669          
+    670          
+    671          /*
+    672          //-----------------------------------------------------------------------------------------------------
+    673          // GPS Initialization
+    674          void gps_system_init(void){
+    675            int i, taking_time;
+    676            char time1, time2;
+    677            time_pass_by = 0;
+    678            taking_time = 1;
+    679            P1OUT |= GPS_RESET;                  // GPS_RESET = GPS on Reset;
+    680            P3OUT &= ~GPS_PWRCNTL;           //  GPS_PWRCNTL = GPS_Off;
+    681          //  GPS_RESET = GPS_OFF;
+    682          //  BNSPrintf(LCD,"\t  GPS   \n GPS_OFF");
+    683            while (taking_time){
+    684              time1 =  time_pass_by;
+    685              for (i=0; i<64; i++);
+    686              time2 =  time_pass_by;
+    687              if (time1 == time2){
+    688               taking_time = 0;
+    689              }
+    690            }
+    691            while (time_pass_by < time1+2);
+    692              P3OUT |= GPS_PWRCNTL;           //  GPS_PWRCNTL = GPS_ON;
+    693          //  GPS_RESET = GPS_ON;
+    694          //  BNSPrintf(LCD,"\t  GPS   \n GPS_ON ");
+    695          
+    696            while (taking_time){
+    697              time1 =  time_pass_by;
+    698              for (i=0; i<64; i++);
+    699              time2 =  time_pass_by;
+    700              if (time1 == time2){
+    701               taking_time = 0;
+    702              }
+    703            }
+    704            while (time_pass_by < time1+2);
+    705            P3OUT |= GPS_PWRCNTL;           //  GPS_PWRCNTL = GPS_ON;
+    706          //  GPS_PWRCNTL = GPS_ON;
+    707          //  BNSPrintf(LCD,"\t  GPS   \nGPS_PULS");
+    708          
+    709          //  BNSPrintf(LCD,"\t  GPS   \n RESET  ");
+    710            while (taking_time){
+    711              time1 =  time_pass_by;
+    712              for (i=0; i<64; i++);
+    713              time2 =  time_pass_by;
+    714              if (time1 == time2){
+    715               taking_time = 0;
+    716              }
+    717            }
+    718            while (time_pass_by < time1+4);
+    719          
+    720            while (taking_time){
+    721              time1 =  time_pass_by;
+    722              for (i=0; i<64; i++);
+    723              time2 =  time_pass_by;
+    724              if (time1 == time2){
+    725               taking_time = 0;
+    726              }
+    727            }
+    728            while (time_pass_by < time1+2);
+    729          
+    730            while (!(GPS_PWRCHK));
+    731            P3OUT &= ~GPS_PWRCNTL;           //  GPS_PWRCNTL = GPS_Off;
+    732          //  GPS_PWRCNTL = GPS_OFF;
+    733          
+    734          //  BNSPrintf(LCD,"\t  GPS   \nRUNNING");
+    735            while (taking_time){
+    736              time1 =  time_pass_by;
+    737              for (i=0; i<64; i++);
+    738              time2 =  time_pass_by;
+    739              if (time1 == time2){
+    740               taking_time = 0;
+    741              }
+    742            }
+    743            while (time_pass_by < time1+4);
+    744          
+    745          //  gps_resetting = 0x01;
+    746          //  gps_2b_reset = 0x01;
+    747          }
+    748          //-----------------------------------------------------------------------------------------------------
+    749          */
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   GPS_clean_buffer
+      4   GPS_process
+        4   -> LCD_gps_meassage_print
+        4   -> count_commas
+        4   -> gps_meassage_type
+        4   -> lcd_out
+        4   -> outchar
+      4   GPS_process_simple
+        4   -> outchar
+      6   GPS_test
+        6   -> GPS_clean_buffer
+        6   -> VS_gps_meassage_print
+        6   -> gps_system_init
+        6   -> gps_wakeup
+        6   -> outchar
+        6   -> print_CR
+        6   -> wait_for_character
+      8   LCD_gps_meassage_print
+        8   -> lcd_write
+      8   VS_gps_meassage_print
+        8   -> outchar
+      4   count_commas
+      4   gps_meassage_type
+      4   gps_system_init
+        4   -> gps_wakeup
+      4   gps_wakeup
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      16  ?<Constant "  GPS Status   ">
+      16  ?<Constant " No Valid Data ">
+      34  GPS_clean_buffer
+     444  GPS_process
+      44  GPS_process_simple
+     828  GPS_test
+     164  LCD_gps_meassage_print
+      78  NMEA_BUF
+     132  VS_gps_meassage_print
+       2  _A_PAIN_L
+       2  _A_PAOUT_L
+       2  _A_PBOUT_L
+       2  _A_PJOUT_L
+       2  _A_UCA1IE_L
+       1  correct_message
+      40  count_commas
+       1  fix_quality
+       2  gps_index
+     114  gps_meassage_type
+      76  gps_system_init
+      66  gps_wakeup
+       1  message_selection
+       1  message_type
+       2  onlyonce
+
+ 
+ 1 942 bytes in segment CODE
+    10 bytes in segment DATA16_AN
+    32 bytes in segment DATA16_C
+    86 bytes in segment DATA16_Z
+ 
+ 1 942 bytes of CODE  memory
+    32 bytes of CONST memory
+    86 bytes of DATA  memory (+ 10 bytes shared)
+
+Errors: none
+Warnings: none

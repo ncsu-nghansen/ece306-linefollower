@@ -1,0 +1,995 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       06/Jan/2014  22:27:45 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\menu.c                               #
+#    Command line  =  "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\menu.c" -lC                          #
+#                     "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\Debug\List\" -o                      #
+#                     "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\Debug\Obj\" --no_cse --no_unroll     #
+#                     --no_inline --no_code_motion --no_tbaa --debug          #
+#                     -D__MSP430FR5739__ -e --double=32 --dlib_config         #
+#                     "C:\Program Files (x86)\IAR Systems\Embedded Workbench  #
+#                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\Debug\List\menu.lst                  #
+#    Object file   =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\Debug\Obj\menu.r43                   #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\Jim\NCSU\Current\Software Tools\Code Master\Homework_01\menu.c
+      1          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x202
+   \   union <unnamed> _A_PAOUT_L
+   \                     _A_PAOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5da
+   \   union <unnamed> _A_UCA0IE_L
+   \                     _A_UCA0IE_L:
+   \   000000                DS8 2
+      2          #include  "my_macros.h"
+      3          #include  "functions.h"
+      4          //------------------------------------------------------------------------------
+      5          // Menu Program
+      6          
+      7          extern volatile unsigned char control_state[CNTL_STATE_INDEX];
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+      8          char build_date[12] = { __DATE__ };
+   \                     build_date:
+   \   000000                DS8 12
+   \   00000C                REQUIRE `?<Initializer for build_date>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+      9          char build_time[9] = { __TIME__ };
+   \                     build_time:
+   \   000000                DS8 9
+   \   000009                REQUIRE `?<Initializer for build_time>`
+     10          
+     11          extern volatile unsigned char USB_Char_Rx[SMALL_RING_SIZE];// USB Character
+     12          extern volatile unsigned int usb_rx_ring_wr;
+     13          extern unsigned int usb_rx_ring_rd;
+     14          
+     15          extern volatile unsigned char GPS_Char_Rx[SMALL_RING_SIZE];// USB Character
+     16          extern volatile unsigned int gps_rx_ring_wr;
+     17          extern unsigned int gps_rx_ring_rd;
+     18          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     19          volatile unsigned char current_character;
+   \                     current_character:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     20          volatile unsigned char character_time_out;
+   \                     character_time_out:
+   \   000000                DS8 1
+     21          
+     22          extern char display_line_1[17];
+     23          extern char display_line_2[17];
+     24          extern char *display_1;
+     25          extern char *display_2;
+     26          
+     27          extern volatile unsigned int ADC_Right_Detector;  // A00 ADC10INCH_0 - P1.0
+     28          extern volatile unsigned int ADC_Left_Detector;   // A01 ADC10INCH_1 - P1.1
+     29          extern volatile unsigned int ADC_Thumb;           // A03 ADC10INCH_3 - P1.3
+     30          extern volatile unsigned int ADC_Temp;            // A10 ADC10INCH_10 - Temperature diode from REF module
+     31          extern volatile unsigned int ADC_Bat;             // A11 ADC10INCH_11 - Internal
+     32          
+     33          //  0x2E:  // . interogation signal
+     34          
+     35          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     36          void menu(void){
+   \                     menu:
+     37            grab_a_character();
+   \   000000   ........     CALLA   #grab_a_character
+     38            if (current_character != 0x00){
+   \   000004   C293....     CMP.B   #0x0, &current_character
+   \   000008   1024         JEQ     ??menu_0
+     39              if (current_character == 0x2E){
+   \   00000A   F2902E00.... CMP.B   #0x2e, &current_character
+   \   000010   0C20         JNE     ??menu_0
+     40                outchar(current_character);
+   \   000012   5C42....     MOV.B   &current_character, R12
+   \   000016   ........     CALLA   #outchar
+     41                if (wait_for_character()){
+   \   00001A   ........     CALLA   #wait_for_character
+   \   00001E   0C93         CMP.W   #0x0, R12
+   \   000020   0224         JEQ     ??menu_1
+     42                  print_CR();
+   \   000022   ........     BRA     #print_CR
+     43                  return;
+     44                }
+     45                menu_program();
+   \                     ??menu_1:
+   \   000026   ........     CALLA   #menu_program
+     46              }
+     47            }
+     48          }
+   \                     ??menu_0:
+   \   00002A   1001         RETA
+     49          //------------------------------------------------------------------------------
+     50          
+     51          //------------------------------------------------------------------------------
+     52          // This function waits for a character to be entered. It will time out after 2
+     53          // seconds.
+
+   \                                 In  segment CODE, align 2
+     54          int wait_for_character(void){
+   \                     wait_for_character:
+     55          //  TBCCTL4 &= ~CCIE;                    // TBCCR4 interrupt disabled
+     56            character_time_out = 0;
+   \   000000   C243....     MOV.B   #0x0, &character_time_out
+     57            while(character_time_out <= 6){
+   \                     ??wait_for_character_0:
+   \   000004   F2900700.... CMP.B   #0x7, &character_time_out
+   \   00000A   172C         JC      ??wait_for_character_2
+     58          //  TBCCR4 = vote[0] + TBCCR4_INTERVAL;  // Add Offset to TBR
+     59          //  TBCCTL4 &= ~CCIFG;                   // TBCCR4 interrupt cleared
+     60          //  TBCCTL4 |= CCIE;                     // TBCCR4 interrupt enabled
+     61          
+     62              if (usb_rx_ring_rd != usb_rx_ring_wr){     // Character has arrived
+   \   00000C   9292........ CMP.W   &usb_rx_ring_wr, &usb_rx_ring_rd
+   \   000012   0D24         JEQ     ??wait_for_character_3
+     63                UCA0IE &= ~UCRXIE;                 // Disable USART0 RX interrupt
+   \   000014   92C3DA05     BIC.W   #0x1, &0x5da
+     64                current_character = USB_Char_Rx[usb_rx_ring_rd];
+   \   000018   1F42....     MOV.W   &usb_rx_ring_rd, R15
+   \   00001C   D24F........ MOV.B   USB_Char_Rx(R15), &current_character
+     65                increment_usb_rx_ring();
+   \   000022   ........     CALLA   #increment_usb_rx_ring
+     66                UCA0IE |= UCRXIE;                  // Enable USART0 RX interrupt
+   \   000026   92D3DA05     BIS.W   #0x1, &0x5da
+     67                return 0;
+   \   00002A   0C43         MOV.W   #0x0, R12
+   \   00002C   1001         RETA
+     68              }
+     69              for (int i = 0x10; i > 0; i--);      // Time for flag to set
+   \                     ??wait_for_character_3:
+   \   00002E   3F401000     MOV.W   #0x10, R15
+   \                     ??wait_for_character_1:
+   \   000032   1F93         CMP.W   #0x1, R15
+   \   000034   E73B         JL      ??wait_for_character_0
+   \   000036   3F53         ADD.W   #0xffff, R15
+   \   000038   FC3F         JMP     ??wait_for_character_1
+     70            }
+     71          //  TBCCTL4 &= ~CCIE;                    // TBCCR4 interrupt disabled
+     72            return 1;
+   \                     ??wait_for_character_2:
+   \   00003A   1C43         MOV.W   #0x1, R12
+   \   00003C   1001         RETA
+   \   00003E                REQUIRE _A_UCA0IE_L
+     73          }
+     74          //------------------------------------------------------------------------------
+     75          
+     76          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     77          void grab_a_character(void){
+   \                     grab_a_character:
+     78            if (usb_rx_ring_rd == usb_rx_ring_wr){   // If no character is avalable Return 0x00
+   \   000000   9292........ CMP.W   &usb_rx_ring_wr, &usb_rx_ring_rd
+   \   000006   0320         JNE     ??grab_a_character_0
+     79              current_character = NO_CHARACTER;
+   \   000008   C243....     MOV.B   #0x0, &current_character
+   \   00000C   1001         RETA
+     80            }else{
+     81              UCA0IE &= ~UCRXIE;                 // Disable USART0 RX interrupt
+   \                     ??grab_a_character_0:
+   \   00000E   92C3DA05     BIC.W   #0x1, &0x5da
+     82              current_character = USB_Char_Rx[usb_rx_ring_rd];
+   \   000012   1F42....     MOV.W   &usb_rx_ring_rd, R15
+   \   000016   D24F........ MOV.B   USB_Char_Rx(R15), &current_character
+     83              increment_usb_rx_ring();
+   \   00001C   ........     CALLA   #increment_usb_rx_ring
+     84              UCA0IE |= UCRXIE;                   // Enable USART0 RX interrupt
+   \   000020   92D3DA05     BIS.W   #0x1, &0x5da
+     85            }
+     86          }
+   \   000024   1001         RETA
+   \   000026                REQUIRE _A_UCA0IE_L
+     87          //------------------------------------------------------------------------------
+     88          
+     89          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     90          void increment_usb_rx_ring(void){
+   \                     increment_usb_rx_ring:
+     91            usb_rx_ring_rd++;
+   \   000000   9253....     ADD.W   #0x1, &usb_rx_ring_rd
+     92            if (usb_rx_ring_rd >= (SMALL_RING_SIZE)){
+   \   000004   B2902000.... CMP.W   #0x20, &usb_rx_ring_rd
+   \   00000A   0228         JNC     ??increment_usb_rx_ring_0
+     93              usb_rx_ring_rd = 0;
+   \   00000C   8243....     MOV.W   #0x0, &usb_rx_ring_rd
+     94            }
+     95          }
+   \                     ??increment_usb_rx_ring_0:
+   \   000010   1001         RETA
+     96          //------------------------------------------------------------------------------
+     97          
+     98          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     99          void increment_gps_rx_ring(void){
+   \                     increment_gps_rx_ring:
+    100            gps_rx_ring_rd++;
+   \   000000   9253....     ADD.W   #0x1, &gps_rx_ring_rd
+    101            if (gps_rx_ring_rd >= (SMALL_RING_SIZE)){
+   \   000004   B2902000.... CMP.W   #0x20, &gps_rx_ring_rd
+   \   00000A   0228         JNC     ??increment_gps_rx_ring_0
+    102              gps_rx_ring_rd = 0;
+   \   00000C   8243....     MOV.W   #0x0, &gps_rx_ring_rd
+    103            }
+    104          }
+   \                     ??increment_gps_rx_ring_0:
+   \   000010   1001         RETA
+    105          //------------------------------------------------------------------------------
+    106          /*
+    107          if (wait_for_character()){
+    108                  print_CR();
+    109                  return;
+    110                }
+    111                if (current_character == 0x30){
+    112          
+    113                }else{
+    114          
+    115                }
+    116          */
+    117          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+    118          void menu_program(void){
+   \                     menu_program:
+   \   000000   1B15         PUSHM.W #0x2, R11
+    119            int i, index;
+    120          //  unsigned int temporary_value;
+    121          //  int temp;
+    122            outchar(current_character);
+   \   000002   5C42....     MOV.B   &current_character, R12
+   \   000006   ........     CALLA   #outchar
+    123            outchar(0x20);
+   \   00000A   7C402000     MOV.B   #0x20, R12
+   \   00000E   ........     CALLA   #outchar
+    124            switch (current_character) {
+   \   000012   5E42....     MOV.B   &current_character, R14
+   \   000016   4E83         SUB.B   #0x0, R14
+   \   000018   3E25         JEQ     ??menu_program_7
+   \   00001A   7E802E00     SUB.B   #0x2e, R14
+   \   00001E   2B24         JEQ     ??menu_program_9
+   \   000020   7E801300     SUB.B   #0x13, R14
+   \   000024   4924         JEQ     ??menu_program_10
+   \   000026   5E83         SUB.B   #0x1, R14
+   \   000028   6C24         JEQ     ??menu_program_11
+   \   00002A   5E83         SUB.B   #0x1, R14
+   \   00002C   8424         JEQ     ??menu_program_12
+   \   00002E   5E83         SUB.B   #0x1, R14
+   \   000030   8524         JEQ     ??menu_program_13
+   \   000032   5E83         SUB.B   #0x1, R14
+   \   000034   0125         JEQ     ??menu_program_14
+   \   000036   6E83         SUB.B   #0x2, R14
+   \   000038   1425         JEQ     ??menu_program_15
+   \   00003A   7E800500     SUB.B   #0x5, R14
+   \   00003E   1425         JEQ     ??menu_program_16
+   \   000040   5E83         SUB.B   #0x1, R14
+   \   000042   1725         JEQ     ??menu_program_17
+   \   000044   7E800A00     SUB.B   #0xa, R14
+   \   000048   2425         JEQ     ??menu_program_18
+   \   00004A   7E800A00     SUB.B   #0xa, R14
+   \   00004E   3424         JEQ     ??menu_program_10
+   \   000050   5E83         SUB.B   #0x1, R14
+   \   000052   5724         JEQ     ??menu_program_11
+   \   000054   5E83         SUB.B   #0x1, R14
+   \   000056   6F24         JEQ     ??menu_program_12
+   \   000058   5E83         SUB.B   #0x1, R14
+   \   00005A   7024         JEQ     ??menu_program_13
+   \   00005C   5E83         SUB.B   #0x1, R14
+   \   00005E   EC24         JEQ     ??menu_program_14
+   \   000060   6E83         SUB.B   #0x2, R14
+   \   000062   FF24         JEQ     ??menu_program_15
+   \   000064   7E800500     SUB.B   #0x5, R14
+   \   000068   FF24         JEQ     ??menu_program_16
+   \   00006A   5E83         SUB.B   #0x1, R14
+   \   00006C   0225         JEQ     ??menu_program_17
+   \   00006E   7E800A00     SUB.B   #0xa, R14
+   \   000072   0F25         JEQ     ??menu_program_18
+   \   000074   103D         JMP     ??menu_program_7
+    125              case 0x00:  // DEFAULT
+    126                break;
+    127          /*
+    128              case 0x21:  // !
+    129                break;
+    130          //
+    131              case 0x22:  // "
+    132                break;
+    133          //
+    134              case 0x23:  // #
+    135                break;
+    136          //
+    137              case 0x24:  // $
+    138                break;
+    139          //
+    140              case 0x25:  // %
+    141                break;
+    142          //
+    143              case 0x26:  // &
+    144                break;
+    145          //
+    146              case 0x27:  // '
+    147                break;
+    148          //
+    149              case 0x28:  // (
+    150                break;
+    151          //
+    152              case 0x29:  // )
+    153                break;
+    154          //
+    155              case 0x2A:  // *
+    156                break;
+    157          //
+    158              case 0x2B:  // +
+    159                break;
+    160          //
+    161              case 0x2C:  // ,
+    162                break;
+    163          //
+    164              case 0x2D:  // -
+    165                break;
+    166          */
+    167              case 0x2E:  // .
+    168                outchar('I');outchar(0x27);outchar('m');outchar(0x20);outchar('H');outchar('e');outchar('r');outchar('e');
+   \                     ??menu_program_9:
+   \   000076   7C404900     MOV.B   #0x49, R12
+   \   00007A   ........     CALLA   #outchar
+   \   00007E   7C402700     MOV.B   #0x27, R12
+   \   000082   ........     CALLA   #outchar
+   \   000086   7C406D00     MOV.B   #0x6d, R12
+   \   00008A   ........     CALLA   #outchar
+   \   00008E   7C402000     MOV.B   #0x20, R12
+   \   000092   ........     CALLA   #outchar
+   \   000096   7C404800     MOV.B   #0x48, R12
+   \   00009A   ........     CALLA   #outchar
+   \   00009E   7C406500     MOV.B   #0x65, R12
+   \   0000A2   ........     CALLA   #outchar
+   \   0000A6   7C407200     MOV.B   #0x72, R12
+   \   0000AA   ........     CALLA   #outchar
+   \   0000AE   7C406500     MOV.B   #0x65, R12
+   \   0000B2   ........     CALLA   #outchar
+    169                break;
+   \   0000B6   EF3C         JMP     ??menu_program_7
+    170          /*
+    171              case 0x2F:  // /
+    172                break;
+    173          
+    174              case 0x30:  // 0
+    175                usleep10(0);
+    176                break;
+    177          //
+    178              case 0x31:  // 1
+    179                usleep10(1);
+    180                break;
+    181              case 0x32:  // 2
+    182                usleep10(2);
+    183                break;
+    184          //
+    185              case 0x33:  // 3
+    186                usleep10(3);
+    187                break;
+    188          //
+    189              case 0x34:  // 4
+    190                usleep10(4);
+    191                break;
+    192           //
+    193              case 0x35:  // 5
+    194                usleep10(5);
+    195                break;
+    196          //
+    197              case 0x36:  // 6
+    198                usleep10(6);
+    199                break;
+    200          //
+    201              case 0x37:  // 7
+    202                usleep10(7);
+    203                break;
+    204          //
+    205              case 0x38:  // 8
+    206                usleep10(8);
+    207                break;
+    208          //
+    209              case 0x39:  // 9
+    210                usleep10(9);
+    211                break;
+    212          
+    213              case 0x3A:  // :
+    214                break;
+    215          //
+    216              case 0x3B:  // ;
+    217                break;
+    218          //
+    219              case 0x3c:  // <
+    220                break;
+    221          //
+    222              case 0x3D:  // =
+    223                break;
+    224          //
+    225              case 0x3e:  // >
+    226                break;
+    227          //
+    228              case 0x3F:  // ?
+    229                break;
+    230          //
+    231              case 0x40:  // @
+    232                break;
+    233          */
+    234          // ADC_Right_Detector;  // A00 ADC10INCH_0 - P1.0
+    235          // ADC_Left_Detector;   // A01 ADC10INCH_1 - P1.1
+    236          // ADC_Thumb;           // A03 ADC10INCH_3 - P1.3
+    237          // ADC_Temp;            // A10 ADC10INCH_10 - Temperature diode from REF module
+    238          // ADC_Bat;             // A11 ADC10INCH_11 - Internal
+    239              case 0x41:  // A
+    240              case 0x61:  // a
+    241                outhex(ADC_Right_Detector);
+   \                     ??menu_program_10:
+   \   0000B8   1C42....     MOV.W   &ADC_Right_Detector, R12
+   \   0000BC   ........     CALLA   #outhex
+    242                outchar(SPACE);
+   \   0000C0   7C402000     MOV.B   #0x20, R12
+   \   0000C4   ........     CALLA   #outchar
+    243                outhex(ADC_Left_Detector);
+   \   0000C8   1C42....     MOV.W   &ADC_Left_Detector, R12
+   \   0000CC   ........     CALLA   #outhex
+    244                outchar(SPACE);
+   \   0000D0   7C402000     MOV.B   #0x20, R12
+   \   0000D4   ........     CALLA   #outchar
+    245                outhex(ADC_Thumb);
+   \   0000D8   1C42....     MOV.W   &ADC_Thumb, R12
+   \   0000DC   ........     CALLA   #outhex
+    246                outchar(SPACE);
+   \   0000E0   7C402000     MOV.B   #0x20, R12
+   \   0000E4   ........     CALLA   #outchar
+    247                outhex(ADC_Temp);
+   \   0000E8   1C42....     MOV.W   &ADC_Temp, R12
+   \   0000EC   ........     CALLA   #outhex
+    248                outchar(SPACE);
+   \   0000F0   7C402000     MOV.B   #0x20, R12
+   \   0000F4   ........     CALLA   #outchar
+    249                outhex(ADC_Bat);
+   \   0000F8   1C42....     MOV.W   &ADC_Bat, R12
+   \   0000FC   ........     CALLA   #outhex
+    250                break;
+   \   000100   CA3C         JMP     ??menu_program_7
+    251          //
+    252              case 0x42:  // B
+    253              case 0x62:  // b
+    254                for(i=0; i< (sizeof(build_date) - 1); i++) {
+   \                     ??menu_program_11:
+   \   000102   0B43         MOV.W   #0x0, R11
+   \   000104   053C         JMP     ??menu_program_19
+    255                  outchar(build_date[i]);
+   \                     ??menu_program_0:
+   \   000106   5C4B....     MOV.B   build_date(R11), R12
+   \   00010A   ........     CALLA   #outchar
+    256                }
+   \   00010E   1B53         ADD.W   #0x1, R11
+   \                     ??menu_program_19:
+   \   000110   3B900B00     CMP.W   #0xb, R11
+   \   000114   F82B         JNC     ??menu_program_0
+    257                outchar(0x20);
+   \   000116   7C402000     MOV.B   #0x20, R12
+   \   00011A   ........     CALLA   #outchar
+    258                for(i=0; i< (sizeof(build_time) - 1); i++) {
+   \   00011E   0B43         MOV.W   #0x0, R11
+   \   000120   053C         JMP     ??menu_program_20
+    259                  outchar(build_time[i]);
+   \                     ??menu_program_1:
+   \   000122   5C4B....     MOV.B   build_time(R11), R12
+   \   000126   ........     CALLA   #outchar
+    260                }
+   \   00012A   1B53         ADD.W   #0x1, R11
+   \                     ??menu_program_20:
+   \   00012C   3B92         CMP.W   #0x8, R11
+   \   00012E   F92B         JNC     ??menu_program_1
+    261                print_CR();
+   \   000130   ........     CALLA   #print_CR
+    262                break;
+   \   000134   B03C         JMP     ??menu_program_7
+    263          //
+    264              case 0x43:  // C Control Words
+    265              case 0x63:  // c Control Words
+    266                out_control_words();
+   \                     ??menu_program_12:
+   \   000136   ........     CALLA   #out_control_words
+    267                break;
+   \   00013A   AD3C         JMP     ??menu_program_7
+    268          //
+    269              case 0x44:  // D Display
+    270              case 0x64:  // d Display
+    271              if (wait_for_character()){
+   \                     ??menu_program_13:
+   \   00013C   ........     CALLA   #wait_for_character
+   \   000140   0C93         CMP.W   #0x0, R12
+   \   000142   0324         JEQ     ??menu_program_21
+    272                print_CR();
+   \   000144   ........     CALLA   #print_CR
+    273                return;
+   \   000148   AA3C         JMP     ??menu_program_22
+    274              }
+    275              outchar(current_character);
+   \                     ??menu_program_21:
+   \   00014A   5C42....     MOV.B   &current_character, R12
+   \   00014E   ........     CALLA   #outchar
+    276              index = 0;
+   \   000152   0A43         MOV.W   #0x0, R10
+    277              for(i=0; i<16; i++){
+   \   000154   0B43         MOV.W   #0x0, R11
+   \   000156   0B3C         JMP     ??menu_program_23
+    278          //      display_line_1[i] = 0x00;
+    279          //      display_line_2[i] = 0x00;
+    280                display_1[i] = 0x00;
+   \                     ??menu_program_2:
+   \   000158   1F42....     MOV.W   &display_1, R15
+   \   00015C   0F5B         ADD.W   R11, R15
+   \   00015E   CF430000     MOV.B   #0x0, 0(R15)
+    281                display_2[i] = 0x00;
+   \   000162   1F42....     MOV.W   &display_2, R15
+   \   000166   0F5B         ADD.W   R11, R15
+   \   000168   CF430000     MOV.B   #0x0, 0(R15)
+    282              }
+   \   00016C   1B53         ADD.W   #0x1, R11
+   \                     ??menu_program_23:
+   \   00016E   3B901000     CMP.W   #0x10, R11
+   \   000172   F23B         JL      ??menu_program_2
+    283              switch (current_character){
+   \   000174   5E42....     MOV.B   &current_character, R14
+   \   000178   7E803100     SUB.B   #0x31, R14
+   \   00017C   0324         JEQ     ??menu_program_24
+   \   00017E   5E83         SUB.B   #0x1, R14
+   \   000180   2E24         JEQ     ??menu_program_25
+   \   000182   893C         JMP     ??menu_program_7
+    284                case 0x31:
+    285                  lcd_write(LCD_LINE_1, LCD_COMMAND);
+   \                     ??menu_program_24:
+   \   000184   4D43         MOV.B   #0x0, R13
+   \   000186   7C408000     MOV.B   #0x80, R12
+   \   00018A   ........     CALLA   #lcd_write
+    286                  current_character = 0x00;
+   \   00018E   C243....     MOV.B   #0x0, &current_character
+   \   000192   1C3C         JMP     ??menu_program_26
+    287                  while (current_character != RETURN){
+    288                    if (wait_for_character()){
+   \                     ??menu_program_3:
+   \   000194   ........     CALLA   #wait_for_character
+   \   000198   0C93         CMP.W   #0x0, R12
+   \   00019A   0324         JEQ     ??menu_program_27
+    289                      current_character = RETURN;
+   \   00019C   F2400D00.... MOV.B   #0xd, &current_character
+    290                    }
+    291                    if(current_character != RETURN){
+   \                     ??menu_program_27:
+   \   0001A2   F2900D00.... CMP.B   #0xd, &current_character
+   \   0001A8   0B24         JEQ     ??menu_program_28
+    292          //            display_line_1[index++] = current_character;
+    293                      display_1[index++] = current_character;
+   \   0001AA   1F42....     MOV.W   &display_1, R15
+   \   0001AE   0F5A         ADD.W   R10, R15
+   \   0001B0   DF42....0000 MOV.B   &current_character, 0(R15)
+   \   0001B6   1A53         ADD.W   #0x1, R10
+    294          //  display_1 = "   N.C. State   ";
+    295                      outchar(current_character);
+   \   0001B8   5C42....     MOV.B   &current_character, R12
+   \   0001BC   ........     CALLA   #outchar
+    296                    }
+    297                    if(index == 17){
+   \                     ??menu_program_28:
+   \   0001C0   3A901100     CMP.W   #0x11, R10
+   \   0001C4   0320         JNE     ??menu_program_26
+    298                      current_character = RETURN;
+   \   0001C6   F2400D00.... MOV.B   #0xd, &current_character
+    299                    }
+    300                  }
+   \                     ??menu_program_26:
+   \   0001CC   F2900D00.... CMP.B   #0xd, &current_character
+   \   0001D2   E023         JNE     ??menu_program_3
+    301          //        lcd_out(display_line_1, LCD_LINE_1);
+    302                  outchar(current_character);
+   \   0001D4   5C42....     MOV.B   &current_character, R12
+   \   0001D8   ........     CALLA   #outchar
+    303                  break;
+   \   0001DC   5C3C         JMP     ??menu_program_7
+    304                case 0x32:
+    305                  lcd_write(LCD_LINE_2, LCD_COMMAND);
+   \                     ??menu_program_25:
+   \   0001DE   4D43         MOV.B   #0x0, R13
+   \   0001E0   7C40C000     MOV.B   #0xc0, R12
+   \   0001E4   ........     CALLA   #lcd_write
+    306                  current_character = 0x00;
+   \   0001E8   C243....     MOV.B   #0x0, &current_character
+   \   0001EC   1C3C         JMP     ??menu_program_29
+    307                  while (current_character != RETURN){
+    308                    if (wait_for_character()){
+   \                     ??menu_program_4:
+   \   0001EE   ........     CALLA   #wait_for_character
+   \   0001F2   0C93         CMP.W   #0x0, R12
+   \   0001F4   0324         JEQ     ??menu_program_30
+    309                      current_character = RETURN;
+   \   0001F6   F2400D00.... MOV.B   #0xd, &current_character
+    310                    }
+    311                    if(current_character != RETURN){
+   \                     ??menu_program_30:
+   \   0001FC   F2900D00.... CMP.B   #0xd, &current_character
+   \   000202   0B24         JEQ     ??menu_program_31
+    312                      display_2[index++] = current_character;
+   \   000204   1F42....     MOV.W   &display_2, R15
+   \   000208   0F5A         ADD.W   R10, R15
+   \   00020A   DF42....0000 MOV.B   &current_character, 0(R15)
+   \   000210   1A53         ADD.W   #0x1, R10
+    313          //            display_line_2[index++] = current_character;
+    314                      outchar(current_character);
+   \   000212   5C42....     MOV.B   &current_character, R12
+   \   000216   ........     CALLA   #outchar
+    315                    }
+    316                    if(index == 17){
+   \                     ??menu_program_31:
+   \   00021A   3A901100     CMP.W   #0x11, R10
+   \   00021E   0320         JNE     ??menu_program_29
+    317                      current_character = RETURN;
+   \   000220   F2400D00.... MOV.B   #0xd, &current_character
+    318                    }
+    319                  }
+   \                     ??menu_program_29:
+   \   000226   F2900D00.... CMP.B   #0xd, &current_character
+   \   00022C   E023         JNE     ??menu_program_4
+    320          //        lcd_out(display_line_2, LCD_LINE_2);
+    321                  outchar(current_character);
+   \   00022E   5C42....     MOV.B   &current_character, R12
+   \   000232   ........     CALLA   #outchar
+    322                  break;
+    323                default:
+    324                  break;
+    325                }
+    326                break;
+   \   000236   2F3C         JMP     ??menu_program_7
+    327              case 0x45:  // E
+    328              case 0x65:  // e
+    329                if (wait_for_character()){
+   \                     ??menu_program_14:
+   \   000238   ........     CALLA   #wait_for_character
+   \   00023C   0C93         CMP.W   #0x0, R12
+   \   00023E   0324         JEQ     ??menu_program_32
+    330                  print_CR();
+   \   000240   ........     CALLA   #print_CR
+    331                  return;
+   \   000244   2C3C         JMP     ??menu_program_22
+    332                }
+    333                outchar(current_character);
+   \                     ??menu_program_32:
+   \   000246   5C42....     MOV.B   &current_character, R12
+   \   00024A   ........     CALLA   #outchar
+    334                if (current_character == 0x30){  // This turns LED off
+   \   00024E   F2903000.... CMP.B   #0x30, &current_character
+   \   000254   0320         JNE     ??menu_program_33
+    335                  P1OUT &= ~IR_LED;
+   \   000256   E2C20202     BIC.B   #0x4, &0x202
+   \   00025A   1D3C         JMP     ??menu_program_7
+    336                }else{
+    337                  P1OUT |= IR_LED;
+   \                     ??menu_program_33:
+   \   00025C   E2D20202     BIS.B   #0x4, &0x202
+    338                }
+    339                break;
+   \   000260   1A3C         JMP     ??menu_program_7
+    340          /*
+    341              case 0x46:  // F
+    342              case 0x66:  // f
+    343                break;
+    344          */
+    345              case 0x47:  // G
+    346              case 0x67:  // g
+    347                GPS_test();
+   \                     ??menu_program_15:
+   \   000262   ........     CALLA   #GPS_test
+    348                break;
+   \   000266   173C         JMP     ??menu_program_7
+    349          /*
+    350              case 0x48:  // H
+    351              case 0x68:  // h
+    352                break;
+    353          
+    354              case 0x49:  // I
+    355              case 0x69:  // i
+    356                break;
+    357          
+    358              case 0x4a:  // J
+    359              case 0x6a:  // j
+    360                break;
+    361          
+    362              case 0x4B:  // K
+    363              case 0x6B:  // k
+    364                break;
+    365          */
+    366              case 0x4C:  // L
+    367              case 0x6C:  // l
+    368                control_state[2] &= ~BLINK_LED;
+   \                     ??menu_program_16:
+   \   000268   D2C3....     BIC.B   #0x1, &control_state + 2
+    369                LCD_test();
+   \   00026C   ........     CALLA   #LCD_test
+    370                break;
+   \   000270   123C         JMP     ??menu_program_7
+    371          
+    372              case 0x4D:  // M
+    373              case 0x6D:  // m
+    374                if (wait_for_character()){
+   \                     ??menu_program_17:
+   \   000272   ........     CALLA   #wait_for_character
+   \   000276   0C93         CMP.W   #0x0, R12
+   \   000278   0324         JEQ     ??menu_program_34
+    375                  print_CR();
+   \   00027A   ........     CALLA   #print_CR
+    376                  return;
+   \   00027E   0F3C         JMP     ??menu_program_22
+    377                }
+    378                outchar(current_character);
+   \                     ??menu_program_34:
+   \   000280   5C42....     MOV.B   &current_character, R12
+   \   000284   ........     CALLA   #outchar
+    379                LED5_SMCLK_switch(current_character);
+   \   000288   5C42....     MOV.B   &current_character, R12
+   \   00028C   ........     CALLA   #LED5_SMCLK_switch
+    380                break;
+   \   000290   023C         JMP     ??menu_program_7
+    381          /*
+    382              case 0x4E:  // N
+    383              case 0x6E:  // n
+    384                break;
+    385          //
+    386              case 0x4F:  // O
+    387              case 0x6F:  // o
+    388                break;
+    389          //
+    390              case 0x50:  // P
+    391              case 0x70:  // p
+    392                break;
+    393          //
+    394              case 0x51:  // Q
+    395              case 0x71:  // q
+    396                break;
+    397          //
+    398              case 0x52:  // R
+    399              case 0x72:  // r
+    400                break;
+    401          
+    402              case 0x53:  // S Status
+    403              case 0x73:  // s
+    404                if (wait_for_character()){
+    405                  print_CR();
+    406                  return;
+    407                }
+    408                outchar(current_character);
+    409                outchar(0x20);
+    410                switch (current_character){
+    411                  case 'L':
+    412                  case 'l':
+    413                    outchar('L');outchar('E');outchar('D');outchar('5');outchar('t');outchar('o');outchar('8');outchar(0x20);outchar('O');
+    414                    if(control_state[0] & LEDS5to8){
+    415                      outchar('n');
+    416                    }else{
+    417                      outchar('f');outchar('f');
+    418                    }
+    419                    break;
+    420                  case 'W':
+    421                  case 'w':
+    422                    outchar('W');outchar('h');outchar('e');outchar('e');outchar('l');outchar(0x20);
+    423                    outchar('C');outchar('o');outchar('n');outchar('t');outchar('r');outchar('o');outchar('l');outchar(0x20);outchar('O');
+    424                    if(control_state[0] & LEDS5to8){
+    425                      outchar('f');outchar('f');
+    426                    }else{
+    427                      outchar('n');
+    428                    }
+    429                    break;
+    430                  case 0x30:
+    431                    break;
+    432                  default:
+    433                    break;
+    434                  }
+    435                break;
+    436          
+    437              case 0x54:  // T
+    438              case 0x74:  // t
+    439                break;
+    440          //
+    441              case 0x55:  // U
+    442              case 0x75:  // u
+    443                break;
+    444          //
+    445              case 0x56:  // V
+    446              case 0x76:  // v
+    447                break;
+    448          */
+    449              case 0x57:  // W Whels
+    450              case 0x77:  // w Wheels
+    451                WHEELS_test();
+   \                     ??menu_program_18:
+   \   000292   ........     CALLA   #WHEELS_test
+    452                break;
+    453          /*//
+    454              case 0x58:  // X
+    455              case 0x78:  // x
+    456                break;
+    457          //
+    458              case 0x59:  // Y
+    459              case 0x79:  // y
+    460                break;
+    461          //
+    462              case 0x5A:  // Z
+    463              case 0x7A:  // z
+    464                break;
+    465          //
+    466              case 0x5B:  // [
+    467                break;
+    468          //
+    469              case 0x5C:  //
+    470                break;
+    471          //
+    472              case 0x5D:  // ]
+    473                break;
+    474          //
+    475              case 0x5E:  // ^
+    476                break;
+    477          //
+    478              case 0x5F:  // _
+    479                break;
+    480          //
+    481              case 0x60:  // `
+    482                break;
+    483          //
+    484              case 0x7B:  // {
+    485                break;
+    486          //
+    487              case 0x7C:  // |
+    488                break;
+    489          //
+    490              case 0x7D:  // }
+    491                break;
+    492          //
+    493              case 0x7E:  // ~
+    494                break;
+    495          //
+    496              case 0x7F:  // del
+    497                break;
+    498          */
+    499              } // end of character determination Switch
+    500              current_character = 0x00;
+   \                     ??menu_program_7:
+   \   000296   C243....     MOV.B   #0x0, &current_character
+    501              print_CR();
+   \   00029A   ........     CALLA   #print_CR
+    502          }
+   \                     ??menu_program_22:
+   \   00029E   1A17         POPM.W  #0x2, R11
+   \   0002A0   1001         RETA
+   \   0002A2                REQUIRE _A_PAOUT_L
+    503          //------------------------------------------------------------------------------
+    504          
+
+   \                                 In  segment CODE, align 2
+    505          void out_control_words(void){
+   \                     out_control_words:
+    506            outshorthex(control_state[2]);
+   \   000000   5C42....     MOV.B   &control_state + 2, R12
+   \   000004   4C4C         MOV.B   R12, R12
+   \   000006   ........     CALLA   #outshorthex
+    507            outchar(SPACE);
+   \   00000A   7C402000     MOV.B   #0x20, R12
+   \   00000E   ........     CALLA   #outchar
+    508            outshorthex(control_state[1]);
+   \   000012   5C42....     MOV.B   &control_state + 1, R12
+   \   000016   4C4C         MOV.B   R12, R12
+   \   000018   ........     CALLA   #outshorthex
+    509            outchar(SPACE);
+   \   00001C   7C402000     MOV.B   #0x20, R12
+   \   000020   ........     CALLA   #outchar
+    510            outshorthex(control_state[0]);
+   \   000024   5C42....     MOV.B   &control_state, R12
+   \   000028   4C4C         MOV.B   R12, R12
+   \   00002A   ........     BRA     #outshorthex
+    511          }
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for build_date>`:
+   \   000000   4A616E202036 DC8 "Jan  6 2014"
+   \            203230313400
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for build_time>`:
+   \   000000   32323A32373A DC8 "22:27:45"
+   \            343500      
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   grab_a_character
+        4   -> increment_usb_rx_ring
+      4   increment_gps_rx_ring
+      4   increment_usb_rx_ring
+      4   menu
+        4   -> grab_a_character
+        4   -> menu_program
+        4   -> outchar
+        4   -> print_CR
+        4   -> wait_for_character
+      8   menu_program
+        8   -> GPS_test
+        8   -> LCD_test
+        8   -> LED5_SMCLK_switch
+        8   -> WHEELS_test
+        8   -> lcd_write
+        8   -> out_control_words
+        8   -> outchar
+        8   -> outhex
+        8   -> print_CR
+        8   -> wait_for_character
+      4   out_control_words
+        4   -> outchar
+        4   -> outshorthex
+      4   wait_for_character
+        4   -> increment_usb_rx_ring
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      12  ?<Initializer for build_date>
+       9  ?<Initializer for build_time>
+       2  _A_PAOUT_L
+       2  _A_UCA0IE_L
+      12  build_date
+       9  build_time
+       1  character_time_out
+       1  current_character
+      38  grab_a_character
+      18  increment_gps_rx_ring
+      18  increment_usb_rx_ring
+      44  menu
+     674  menu_program
+      46  out_control_words
+      62  wait_for_character
+
+ 
+ 900 bytes in segment CODE
+   4 bytes in segment DATA16_AN
+  21 bytes in segment DATA16_I
+  21 bytes in segment DATA16_ID
+   2 bytes in segment DATA16_Z
+ 
+ 900 bytes of CODE  memory
+  21 bytes of CONST memory
+  23 bytes of DATA  memory (+ 4 bytes shared)
+
+Errors: none
+Warnings: none

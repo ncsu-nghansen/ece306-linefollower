@@ -1,0 +1,426 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       06/Jan/2014  22:36:39 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\adc.c                                #
+#    Command line  =  "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\adc.c" -lC                           #
+#                     "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\Debug\List\" -o                      #
+#                     "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\Debug\Obj\" --no_cse --no_unroll     #
+#                     --no_inline --no_code_motion --no_tbaa --debug          #
+#                     -D__MSP430FR5739__ -e --double=32 --dlib_config         #
+#                     "C:\Program Files (x86)\IAR Systems\Embedded Workbench  #
+#                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\Debug\List\adc.lst                   #
+#    Object file   =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\Debug\Obj\adc.r43                    #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\Jim\NCSU\Current\Software Tools\Code Master\Homework_01\adc.c
+      1          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x700
+   \   union <unnamed> _A_ADC10CTL0_L
+   \                     _A_ADC10CTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x702
+   \   union <unnamed> _A_ADC10CTL1_L
+   \                     _A_ADC10CTL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x704
+   \   union <unnamed> _A_ADC10CTL2_L
+   \                     _A_ADC10CTL2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x70a
+   \   union <unnamed> _A_ADC10MCTL0_L
+   \                     _A_ADC10MCTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x71a
+   \   union <unnamed> _A_ADC10IE_L
+   \                     _A_ADC10IE_L:
+   \   000000                DS8 2
+      2          #include  "macros.h"
+      3          #include  "functions.h"
+      4          //------------------------------------------------------------------------------
+      5          // ADC Configurations
+      6          
+      7          #define ADC10SC_SS         (0x00)
+      8          extern volatile unsigned char control_state[CNTL_STATE_INDEX];
+      9          
+     10          extern volatile unsigned char current_character;
+     11          
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     12          volatile unsigned int ADC_Right_Detector;  // A00 ADC10INCH_0 - P1.0
+   \                     ADC_Right_Detector:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     13          volatile unsigned int ADC_Left_Detector;   // A01 ADC10INCH_1 - P1.1
+   \                     ADC_Left_Detector:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     14          volatile unsigned int ADC_Thumb;           // A03 ADC10INCH_3 - P1.3
+   \                     ADC_Thumb:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     15          volatile unsigned int ADC_Temp;            // A10 ADC10INCH_10 - Temperature diode from REF module
+   \                     ADC_Temp:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     16          volatile unsigned int ADC_Bat;             // A11 ADC10INCH_11 - Internal
+   \                     ADC_Bat:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     17          volatile unsigned char ADC_Channel;
+   \                     ADC_Channel:
+   \   000000                DS8 1
+     18          
+     19          // Configure ADC10
+
+   \                                 In  segment CODE, align 2
+     20          void Init_ADC(void){
+   \                     Init_ADC:
+     21          // ADC10CTL0 Register Description
+     22            ADC10CTL0 = RESET_STATE;
+   \   000000   82430007     MOV.W   #0x0, &0x700
+     23          // Sample-and-hold time. These bits define the number of ADC10CLK
+     24          // cycles in the sampling period for the ADC10.  
+     25            ADC10CTL0 |= ADC10SHT_2;        // 16 ADC clocks
+   \   000004   B2D000020007 BIS.W   #0x200, &0x700
+     26          // Multiple Sample and Conversion 
+     27            ADC10CTL0 &= ~ADC10MSC;         // Single Sequence
+   \   00000A   B2C080000007 BIC.W   #0x80, &0x700
+     28          // Turn ADC core on
+     29            ADC10CTL0 |= ADC10ON;           // ADC ON - Core Enabled
+   \   000010   B2D010000007 BIS.W   #0x10, &0x700
+     30          // Enable Conversion - to be done later
+     31          //  ADC10CTL0 |= ADC10ENC;        // Enable Conversion
+     32          // Start Conversion - to be done later
+     33          //  ADC10CTL0 |= ADC10SC;         // Start Conversion
+     34          
+     35          // ADC10CTL1 Register Description  
+     36          // ADC10CTL1 Can be modified only when ADC10CTL0 bit ADC10ENC = 0.  
+     37            ADC10CTL1 = RESET_STATE;
+   \   000016   82430207     MOV.W   #0x0, &0x702
+     38          // ADC10_B sample-and-hold source select - ADC10SHS
+     39          //   00b = ADC10SC bit
+     40          //   01b = Timer trigger 0
+     41          //   10b = Timer trigger 1
+     42          //   11b = Timer trigger 2
+     43            ADC10CTL1 |= ADC10SHS_0;        // ADC10SC bit
+   \   00001A   924202070207 MOV.W   &0x702, &0x702
+     44          // ADC10_B sample-and-hold pulse-mode select - ADC10SHP
+     45            ADC10CTL1 |= ADC10SHP;          // SAMPCON signal is sourced from the sampling timer.
+   \   000020   B2D000020207 BIS.W   #0x200, &0x702
+     46          // ADC10_B invert signal sample-and-hold - ADC10ISSH
+     47          //   0b = The sample-input signal is not inverted.
+     48          //   1b = The sample-input signal is inverted.
+     49            ADC10CTL1 &= ~ADC10ISSH;        // The sample-input signal is not inverted.
+   \   000026   B2C000010207 BIC.W   #0x100, &0x702
+     50          // ADC10_B clock divider - ADC10DIV
+     51          //   000b = Divide by 1
+     52          //   001b = Divide by 2
+     53          //   010b = Divide by 3
+     54          //   011b = Divide by 4
+     55          //   100b = Divide by 5
+     56          //   101b = Divide by 6
+     57          //   110b = Divide by 7
+     58          //   111b = Divide by 8
+     59            ADC10CTL1 |= ADC10DIV_0;        // The sample-input signal is not inverted.
+   \   00002C   924202070207 MOV.W   &0x702, &0x702
+     60          // ADC10_B clock source select - ADC10SSEL
+     61          //   00b = MODCLK
+     62          //   01b = ACLK
+     63          //   10b = MCLK
+     64          //   11b = SMCLK
+     65            ADC10CTL1 |= ADC10SSEL_0;       // MODCLK
+   \   000032   924202070207 MOV.W   &0x702, &0x702
+     66          // ADC10_B conversion sequence mode select
+     67          //  00b = Single-channel, single-conversion
+     68          //  01b = Sequence-of-channels
+     69          //  10b = Repeat-single-channel
+     70          //  11b = Repeat-sequence-of-channels
+     71            ADC10CTL1 |= ADC10CONSEQ_0;     // Single-channel, single-conversion
+   \   000038   924202070207 MOV.W   &0x702, &0x702
+     72          // ADC10_B busy. This bit indicates an active sample or conversion operation.
+     73          //  ADC10CTL1 == ADC10BUSY;       // Use as the cource for if or while
+     74            
+     75          // ADC10CTL2 Register Description
+     76            ADC10CTL2 = RESET_STATE;
+   \   00003E   82430407     MOV.W   #0x0, &0x704
+     77          // ADC10_B predivider. This bit predivides the selected ADC10_B clock source
+     78          // before it gets divided again using ADC10DIVx.
+     79          //  00b = Predivide by 1
+     80          //  01b = Predivide by 4
+     81          //  10b = Predivide by 64
+     82          //  11b = Reserved
+     83            ADC10CTL2 |= ADC10DIV_0;        // Predivide by 1
+   \   000042   924204070407 MOV.W   &0x704, &0x704
+     84          // ADC10_B resolution. This bit defines the conversion result resolution.
+     85          //  0b = 8 bit (10 clock cycle conversion time)
+     86          //  1b = 10 bit (12 clock cycle conversion time)
+     87            ADC10CTL2 |= ADC10RES;          // 10-bit resolution
+   \   000048   B2D010000407 BIS.W   #0x10, &0x704
+     88          // ADC10_B data read-back format - ADC10DF. Data is always stored in the binary unsigned format.
+     89          //  0b = Binary unsigned. Theoretically the analog input voltage 
+     90          //     –V(REF) results in 0000h, 
+     91          //     +V(REF) results in 03FFh.
+     92            ADC10CTL2 &= ~ADC10DF;          // Binary unsigned
+   \   00004E   B2C20407     BIC.W   #0x8, &0x704
+     93          // ADC10_B sampling rate. This bit selects drive capability of the ADC10_B
+     94          // reference buffer for the maximum sampling rate. Setting ADC10SR reduces the
+     95          // current consumption of this buffer.
+     96          //  0b = ADC10_B buffer supports up to approximately 200 ksps.
+     97          //  1b = ADC10_B buffer supports up to approximately 50 ksps.
+     98            ADC10CTL2 &= ~ADC10SR;          // supports up to approximately 200 ksps
+   \   000052   A2C20407     BIC.W   #0x4, &0x704
+     99          
+    100          // ADC10MCTL0 Register Description
+    101            ADC10MCTL0 = RESET_STATE;
+   \   000056   82430A07     MOV.W   #0x0, &0x70a
+    102          // Select reference. It is not recommended to change this setting while a
+    103          // conversion is ongoing. Can be modified only when ADC10ENC = 0. 
+    104          // Resetting ADC10ENC = 0 by software and changing these fields immediately 
+    105          // shows effect also when aconversion is active.
+    106          //  000b = V(R+) = AVCC and V(R-) = AVSS
+    107          //  001b = V(R+) = VREF and V(R-) = AVSS
+    108          //  010b = V(R+) = VEREF+ buffered and V(R-) = AVSS
+    109          //  011b =V(R+) = VEREF+ and V(R-) = AVSS
+    110          //  100b = V(R+) = AVCC and V(R-) = VEREF-
+    111          //  101b = V(R+) = VREF and V(R-) = VEREF-
+    112          //  110b = V(R+) = VEREF+ buffered and V(R-) = VEREF-
+    113          //  111b = V(R+) = VEREF+ and V(R-) = VEREF-
+    114            ADC10MCTL0 |= ADC10SREF_0;      // V(R+) = AVCC and V(R-) = AVSS
+   \   00005A   92420A070A07 MOV.W   &0x70a, &0x70a
+    115          // Input channel select. Writing these bits select the channel for a single-conversion
+    116          // or the highest channel for a sequence of conversions. Reading these bits in
+    117          // ADC10CONSEQ = 01,11 returns the channel currently converted.
+    118          // Can be modified only when ADC10ENC = 0. Resetting ADC10ENC = 0 by
+    119          // software and changing these fields immediately shows effect also when a
+    120          // conversion is active.
+    121          //  0000b =  A0 ADC10INCH_0
+    122          //  0001b =  A1 ADC10INCH_1
+    123          //  0010b =  A2 ADC10INCH_2
+    124          //  0011b =  A3 ADC10INCH_3
+    125          //  0100b =  A4 ADC10INCH_4
+    126          //  0101b =  A5 ADC10INCH_5
+    127          //  0110b =  A6 ADC10INCH_6
+    128          //  0111b =  A7 ADC10INCH_7
+    129          //  1000b =  A8 ADC10INCH_8 - VEREF
+    130          //  1001b =  A9 ADC10INCH_9 - VREF-/VEREF-
+    131          //  1010b = A10 ADC10INCH_10 - Temperature diode from REF module
+    132          //  1011b = A11 ADC10INCH_11 - (AVCC – AVSS) / 2
+    133          //  1100b = A12 ADC10INCH_12
+    134          //  1101b = A13 ADC10INCH_13
+    135          //  1110b = A14 ADC10INCH_14
+    136          //  1111b = A15 ADC10INCH_15
+    137            ADC10MCTL0 |= ADC10INCH_3;      // Channel A3
+   \   000060   B2D003000A07 BIS.W   #0x3, &0x70a
+    138            ADC_Channel = 0;
+   \   000066   C243....     MOV.B   #0x0, &ADC_Channel
+    139            ADC10IE |= ADC10IE0;            // Enable ADC conv complete interrupt
+   \   00006A   92D31A07     BIS.W   #0x1, &0x71a
+    140          }
+   \   00006E   1001         RETA
+   \   000070                REQUIRE _A_ADC10CTL0_L
+   \   000070                REQUIRE _A_ADC10CTL1_L
+   \   000070                REQUIRE _A_ADC10CTL2_L
+   \   000070                REQUIRE _A_ADC10MCTL0_L
+   \   000070                REQUIRE _A_ADC10IE_L
+    141          
+
+   \                                 In  segment CODE, align 2
+    142          void ADC_Process(void){
+   \                     ADC_Process:
+    143                if (control_state[0] & ADC_Conversion){
+   \   000000   C293....     CMP.B   #0x0, &control_state
+   \   000004   2D34         JGE     ??ADC_Process_2
+    144                control_state[0] &= ~ADC_Conversion;
+   \   000006   F2C08000.... BIC.B   #0x80, &control_state
+    145                while (ADC10CTL1 & BUSY);        // Wait if ADC10 core is active
+   \                     ??ADC_Process_0:
+   \   00000C   92B30207     BIT.W   #0x1, &0x702
+   \   000010   FD2F         JC      ??ADC_Process_0
+    146                ADC10CTL0 &= ~ADC10ENC;          // Sampling and conversion start
+   \   000012   A2C30007     BIC.W   #0x2, &0x700
+    147                ADC10MCTL0 &= 0xF0;              // Channel A0
+   \   000016   B2F0F0000A07 AND.W   #0xf0, &0x70a
+    148                switch (ADC_Channel){
+   \   00001C   5E42....     MOV.B   &ADC_Channel, R14
+   \   000020   4E83         SUB.B   #0x0, R14
+   \   000022   0924         JEQ     ??ADC_Process_3
+   \   000024   5E83         SUB.B   #0x1, R14
+   \   000026   0B24         JEQ     ??ADC_Process_4
+   \   000028   5E83         SUB.B   #0x1, R14
+   \   00002A   0C24         JEQ     ??ADC_Process_5
+   \   00002C   5E83         SUB.B   #0x1, R14
+   \   00002E   0E24         JEQ     ??ADC_Process_6
+   \   000030   5E83         SUB.B   #0x1, R14
+   \   000032   1024         JEQ     ??ADC_Process_7
+   \   000034   123C         JMP     ??ADC_Process_1
+    149                case 0x00:
+    150                  ADC10MCTL0 |= ADC10INCH_0;     // Channel A0
+   \                     ??ADC_Process_3:
+   \   000036   92420A070A07 MOV.W   &0x70a, &0x70a
+    151                  break;
+   \   00003C   0E3C         JMP     ??ADC_Process_1
+    152                case 0x01:
+    153                  ADC10MCTL0 |= ADC10INCH_1;     // Channel A1
+   \                     ??ADC_Process_4:
+   \   00003E   92D30A07     BIS.W   #0x1, &0x70a
+    154                  break;
+   \   000042   0B3C         JMP     ??ADC_Process_1
+    155                case 0x02:
+    156                  ADC10MCTL0 |= ADC10INCH_3;     // Channel A3
+   \                     ??ADC_Process_5:
+   \   000044   B2D003000A07 BIS.W   #0x3, &0x70a
+    157                  break;
+   \   00004A   073C         JMP     ??ADC_Process_1
+    158                case 0x03:
+    159                  ADC10MCTL0 |= ADC10INCH_11;    // Channel A11
+   \                     ??ADC_Process_6:
+   \   00004C   B2D00B000A07 BIS.W   #0xb, &0x70a
+    160                  break;
+   \   000052   033C         JMP     ??ADC_Process_1
+    161                case 0x04:
+    162                  ADC10MCTL0 |= ADC10INCH_10;    // Channel A10
+   \                     ??ADC_Process_7:
+   \   000054   B2D00A000A07 BIS.W   #0xa, &0x70a
+    163                  break;
+    164                default:
+    165                  break;
+    166                }
+    167                ADC10CTL0 |= ADC10ENC + ADC10SC;      // Sampling and conversion start
+   \                     ??ADC_Process_1:
+   \   00005A   B2D003000007 BIS.W   #0x3, &0x700
+    168              }
+    169          
+    170          }
+   \                     ??ADC_Process_2:
+   \   000060   1001         RETA
+   \   000062                REQUIRE _A_ADC10CTL1_L
+   \   000062                REQUIRE _A_ADC10CTL0_L
+   \   000062                REQUIRE _A_ADC10MCTL0_L
+    171          
+    172          
+    173          
+    174          
+    175          
+    176          /*
+    177          void Init_ADC(void){
+    178            ADC10CTL0 |= ADC10SHT_2 + ADC10ON;        // ADC10ON, S&H=16 ADC clks
+    179            ADC10CTL1 |= ADC10SHP;                    // ADCCLK = MODOSC; sampling timer
+    180            ADC10CTL2 |= ADC10RES;                    // 10-bit conversion results
+    181            ADC10MCTL0 |= ADC10INCH_3;                // A1 ADC input select; Vref=AVCC
+    182            ADC10IE |= ADC10IE0;                      // Enable ADC conv complete interrupt
+    183          }
+    184          */
+    185          
+    186          /*
+    187          //------------------------------------------------------------------------------
+    188          //--------------------------------  Sample 1  ----------------------------------
+    189          //  Description: A single sample is made on A1 with reference to AVcc.
+    190          //  Software sets ADC10SC to start sample and conversion - ADC10SC
+    191          //  automatically cleared at EOC. ADC10 internal oscillator times sample (16x)
+    192          //  and conversion. In Mainloop MSP430 waits in LPM0 to save power until ADC10
+    193          //  conversion complete, ADC10_ISR will force exit from LPM0 in Mainloop on
+    194          //  reti. If A1 > 0.5*AVcc, P1.0 set, else reset.
+    195            ADC10CTL0 |= ADC10SHT_2 + ADC10ON;        // ADC10ON, S&H=16 ADC clks
+    196            ADC10CTL1 |= ADC10SHP;                    // ADCCLK = MODOSC; sampling timer
+    197            ADC10CTL2 |= ADC10RES;                    // 10-bit conversion results
+    198            ADC10MCTL0 |= ADC10INCH_1;                // A1 ADC input select; Vref=AVCC
+    199            ADC10IE |= ADC10IE0;                      // Enable ADC conv complete interrupt
+    200          
+    201          // in main  
+    202            ADC10CTL0 |= ADC10ENC + ADC10SC;        // Sampling and conversion start
+    203            
+    204            // ADC10 interrupt service routine
+    205          #pragma vector=ADC10_VECTOR
+    206          __interrupt void ADC10_ISR(void)
+    207          {
+    208            switch(__even_in_range(ADC10IV,12))
+    209            {
+    210              case  0: break;                          // No interrupt
+    211              case  2: break;                          // conversion result overflow
+    212              case  4: break;                          // conversion time overflow
+    213              case  6: break;                          // ADC10HI
+    214              case  8: break;                          // ADC10LO
+    215              case 10: break;                          // ADC10IN
+    216              case 12: ADC_Result = ADC10MEM0;         
+    217                       __bic_SR_register_on_exit(CPUOFF);                                              
+    218                       break;                          // Clear CPUOFF bit from 0(SR)                         
+    219              default: break; 
+    220            }  
+    221          }
+    222          //--------------------------------  Sample 1  ----------------------------------
+    223          //------------------------------------------------------------------------------
+    224          */
+    225          
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   ADC_Process
+      4   Init_ADC
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  ADC_Bat
+       1  ADC_Channel
+       2  ADC_Left_Detector
+      98  ADC_Process
+       2  ADC_Right_Detector
+       2  ADC_Temp
+       2  ADC_Thumb
+     112  Init_ADC
+       2  _A_ADC10CTL0_L
+       2  _A_ADC10CTL1_L
+       2  _A_ADC10CTL2_L
+       2  _A_ADC10IE_L
+       2  _A_ADC10MCTL0_L
+
+ 
+ 210 bytes in segment CODE
+  10 bytes in segment DATA16_AN
+  11 bytes in segment DATA16_Z
+ 
+ 210 bytes of CODE memory
+  11 bytes of DATA memory (+ 10 bytes shared)
+
+Errors: none
+Warnings: none

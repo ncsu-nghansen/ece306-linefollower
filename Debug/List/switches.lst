@@ -1,0 +1,130 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       10/Jan/2014  23:25:25 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  D:\NCSU\Current\Software Tools\Code                     #
+#                     Master\Homework_01\switches.c                           #
+#    Command line  =  "D:\NCSU\Current\Software Tools\Code                    #
+#                     Master\Homework_01\switches.c" -lC                      #
+#                     "D:\NCSU\Current\Software Tools\Code                    #
+#                     Master\Homework_01\Debug\List\" -o                      #
+#                     "D:\NCSU\Current\Software Tools\Code                    #
+#                     Master\Homework_01\Debug\Obj\" --no_cse --no_unroll     #
+#                     --no_inline --no_code_motion --no_tbaa --debug          #
+#                     -D__MSP430FR5739__ -e --double=32 --dlib_config         #
+#                     "C:\Program Files (x86)\IAR Systems\Embedded Workbench  #
+#                     6.5_2\430\LIB\DLIB\dl430xsfn.h" --core=430X             #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  D:\NCSU\Current\Software Tools\Code                     #
+#                     Master\Homework_01\Debug\List\switches.lst              #
+#    Object file   =  D:\NCSU\Current\Software Tools\Code                     #
+#                     Master\Homework_01\Debug\Obj\switches.r43               #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\NCSU\Current\Software Tools\Code Master\Homework_01\switches.c
+      1          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x220
+   \   union <unnamed> _A_PBIN_L
+   \                     _A_PBIN_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x322
+   \   union <unnamed> _A_PJOUT_L
+   \                     _A_PJOUT_L:
+   \   000000                DS8 2
+      2          #include  "functions.h"
+      3          //------------------------------------------------------------------------------
+      4          // Switch Configurations
+      5          #define LED1                 (0x01) // LED 1
+      6          #define LED2                 (0x02) // LED 2
+      7          #define LED3                 (0x04) // LED 3
+      8          #define LED4                 (0x08) // LED 4
+      9          #define LED5                 (0x10) // LED 5
+     10          #define LED6                 (0x20) // LED 6
+     11          #define LED7                 (0x40) // LED 7
+     12          #define LED8                 (0x80) // LED 8
+     13          #define SW1                  (0x01) // Switch 1
+     14          #define SW2                  (0x02) // Switch 2
+     15          
+     16          
+     17          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     18          void Switches_Process(void){
+   \                     Switches_Process:
+     19            if (!(P4IN & SW1)){
+   \   000000   D2B32102     BIT.B   #0x1, &0x221
+   \   000004   082C         JC      ??Switches_Process_0
+     20              PJOUT |= LED1;                   // Change State of LED 1
+   \   000006   92D32203     BIS.W   #0x1, &0x322
+     21              PJOUT |= LED2;                   // Change State of LED 2
+   \   00000A   A2D32203     BIS.W   #0x2, &0x322
+     22              PJOUT |= LED3;                   // Change State of LED 3
+   \   00000E   A2D22203     BIS.W   #0x4, &0x322
+     23              PJOUT |= LED4;                   // Change State of LED 4
+   \   000012   B2D22203     BIS.W   #0x8, &0x322
+     24            }
+     25          
+     26            if (!(P4IN & SW2)) {
+   \                     ??Switches_Process_0:
+   \   000016   E2B32102     BIT.B   #0x2, &0x221
+   \   00001A   0C2C         JC      ??Switches_Process_1
+     27              P3OUT |= LED5;                   // Change State of LED 5
+   \   00001C   F2D010002202 BIS.B   #0x10, &0x222
+     28              P3OUT |= LED6;                   // Change State of LED 6
+   \   000022   F2D020002202 BIS.B   #0x20, &0x222
+     29              P3OUT |= LED7;                   // Change State of LED 7
+   \   000028   F2D040002202 BIS.B   #0x40, &0x222
+     30              P3OUT |= LED8;                   // Change State of LED 8
+   \   00002E   F2D080002202 BIS.B   #0x80, &0x222
+     31            }
+     32          
+     33          }
+   \                     ??Switches_Process_1:
+   \   000034   1001         RETA
+   \   000036                REQUIRE _A_PBIN_L
+   \   000036                REQUIRE _A_PJOUT_L
+   \   000036                REQUIRE _A_PBOUT_L
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Switches_Process
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      54  Switches_Process
+       2  _A_PBIN_L
+       2  _A_PBOUT_L
+       2  _A_PJOUT_L
+
+ 
+ 54 bytes in segment CODE
+  6 bytes in segment DATA16_AN
+ 
+ 54 bytes of CODE memory
+  0 bytes of DATA memory (+ 6 bytes shared)
+
+Errors: none
+Warnings: none

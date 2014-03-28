@@ -1,0 +1,383 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       06/Jan/2014  22:27:44 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\interrupts_timers.c                  #
+#    Command line  =  "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\interrupts_timers.c" -lC             #
+#                     "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\Debug\List\" -o                      #
+#                     "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\Debug\Obj\" --no_cse --no_unroll     #
+#                     --no_inline --no_code_motion --no_tbaa --debug          #
+#                     -D__MSP430FR5739__ -e --double=32 --dlib_config         #
+#                     "C:\Program Files (x86)\IAR Systems\Embedded Workbench  #
+#                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\Debug\List\interrupts_timers.lst     #
+#    Object file   =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\Debug\Obj\interrupts_timers.r43      #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\Jim\NCSU\Current\Software Tools\Code Master\Homework_01\interrupts_timers.c
+      1          //******************************************************************************
+      2          //
+      3          //  Description: This file contains the Interrupt Routines for Timers
+      4          //               
+      5          //
+      6          //  Jim Carlson
+      7          //  Aug 2013
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //******************************************************************************
+     10          
+     11          //------------------------------------------------------------------------------
+     12          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x352
+   \   unsigned short volatile TA0CCR0
+   \                     TA0CCR0:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x382
+   \   unsigned short volatile TA1CCTL0
+   \                     TA1CCTL0:
+   \   000000                DS8 2
+     13          #include  "functions.h"
+     14          #include  "my_macros.h"
+     15          
+     16          //------------------------------------------------------------------------------
+     17          //Globals Defined in interrupts_timers.c
+     18          
+     19          // Used with Provided Compiled Code
+     20          // LEDs 
+     21          // GPS
+     22          // unsigned int gps_resetting;
+     23          // unsigned int gps_2b_reset;
+     24          // unsigned int reset_gps_time;
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     25           volatile int time_pass_by;
+   \                     time_pass_by:
+   \   000000                DS8 2
+     26          // char transmit_delay;
+     27          // char transmit_time;
+     28          
+     29          //Globals Defined in other files
+     30          
+     31          // Used with Provided Compiled Code
+     32          // extern char *display_1;
+     33          // extern char *display_2;
+     34          // System info
+     35          // extern volatile unsigned char control_state[CNTL_STATE_INDEX];
+     36          // extern volatile unsigned int update_display_count;
+     37          // extern volatile unsigned int display_update_time;
+     38          // Time
+     39          // extern volatile unsigned int five_msec_count;
+     40          // extern volatile unsigned int sleeping;
+     41          // extern volatile char sleeptime;
+     42          // Serial
+     43          // extern volatile char slow_input_down;
+     44          // volatile unsigned char character_time_out;
+     45          extern volatile char switch_states;
+     46          extern volatile unsigned int count_debounce_SW1;
+     47          extern volatile unsigned int count_debounce_SW2;
+     48          
+     49          //------------------------------------------------------------------------------
+     50          
+     51          //******************************************************************************
+     52          //------------------------------------------------------------------------------
+     53          // TimerA0 0 Interrupt handler
+     54          #pragma vector = TIMER0_A0_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     55          __interrupt void Timer0_A0_ISR(void){
+   \                     Timer0_A0_ISR:
+   \   000000   3F15         PUSHM.W #0x4, R15
+     56            P3OUT ^= TEST_PROBE;
+   \   000002   F2E22202     XOR.B   #0x8, &0x222
+     57          
+     58            if(switch_states & SW1_DEBOUNCE){
+   \   000006   F2B01000.... BIT.B   #0x10, &switch_states
+   \   00000C   0B28         JNC     ??Timer0_A0_ISR_0
+     59              count_debounce_SW1++;
+   \   00000E   9253....     ADD.W   #0x1, &count_debounce_SW1
+     60              if(count_debounce_SW1 >= SOME_NUMBER_OF_MILLISECONDS){
+   \   000012   B290F401.... CMP.W   #0x1f4, &count_debounce_SW1
+   \   000018   0528         JNC     ??Timer0_A0_ISR_0
+     61                switch_states &= ~SW1_DEBOUNCE;
+   \   00001A   F2C01000.... BIC.B   #0x10, &switch_states
+     62                enable_switch_SW1();
+   \   000020   ........     CALLA   #enable_switch_SW1
+     63          	}
+     64            }
+     65            
+     66            if(switch_states & SW2_DEBOUNCE){
+   \                     ??Timer0_A0_ISR_0:
+   \   000024   F2B02000.... BIT.B   #0x20, &switch_states
+   \   00002A   0B28         JNC     ??Timer0_A0_ISR_1
+     67              count_debounce_SW2++;
+   \   00002C   9253....     ADD.W   #0x1, &count_debounce_SW2
+     68              if(count_debounce_SW2 >= SOME_NUMBER_OF_MILLISECONDS){
+   \   000030   B290F401.... CMP.W   #0x1f4, &count_debounce_SW2
+   \   000036   0528         JNC     ??Timer0_A0_ISR_1
+     69                switch_states &= ~SW2_DEBOUNCE;
+   \   000038   F2C02000.... BIC.B   #0x20, &switch_states
+     70                enable_switch_SW2();
+   \   00003E   ........     CALLA   #enable_switch_SW2
+     71          	}
+     72            }
+     73            
+     74            TA0CCR0 += TA0CCR0_INTERVAL;         // Add Offset to TACCR0
+   \                     ??Timer0_A0_ISR_1:
+   \   000042   B25000105203 ADD.W   #0x1000, &0x352
+     75          }
+   \   000048   3C17         POPM.W  #0x4, R15
+   \   00004A   0013         RETI
+   \   00004C                REQUIRE _A_PBOUT_L
+   \   00004C                REQUIRE TA0CCR0
+     76          //------------------------------------------------------------------------------
+     77          /*
+     78          //------------------------------------------------------------------------------
+     79          // TimerA0 1-2, Overflow Interrupt Vector (TAIV) handler
+     80          #pragma vector=TIMER0_A1_VECTOR
+     81          __interrupt void TIMER0_A1_ISR(void){
+     82            switch(__even_in_range(TA0IV,14)){
+     83              case  0: break;                    // No interrupt
+     84              case  2:                           // CCR1 not used
+     85                TA0CCR1 += TA0CCR1_INTERVAL;     // Add Offset to TACCR1
+     86                break;
+     87              case  4:                           // CCR2 not used
+     88                TA0CCR2 += TA0CCR2_INTERVAL;     // Add Offset to TACCR2
+     89                break;
+     90              case  6: break;                    // reserved
+     91              case  8: break;                    // reserved
+     92              case 10: break;                    // reserved
+     93              case 12: break;                    // reserved
+     94              case 14:                           // overflow
+     95                break;
+     96              default: break; 
+     97            }
+     98          }
+     99          //------------------------------------------------------------------------------
+    100          */
+    101          //******************************************************************************
+    102          
+    103          
+    104          //******************************************************************************
+    105          
+    106          //------------------------------------------------------------------------------
+    107          // 
+    108          // 
+    109          // TimerA1 0 Interrupt handler
+    110          #pragma vector = TIMER1_A0_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+    111          __interrupt void Timer1_A0_ISR(void){
+   \                     Timer1_A0_ISR:
+   \   000000   3F15         PUSHM.W #0x4, R15
+    112            TA1CCTL0 &= ~CCIE;                    // CCR0 Disable interrupt
+   \   000002   B2C010008203 BIC.W   #0x10, &0x382
+    113            switch_control();
+   \   000008   ........     CALLA   #switch_control
+    114          }
+   \   00000C   3C17         POPM.W  #0x4, R15
+   \   00000E   0013         RETI
+   \   000010                REQUIRE TA1CCTL0
+
+   \                                 In  segment INTVEC, offset 0x52, root
+   \                     `??Timer1_A0_ISR??INTVEC 82`:
+   \   000052   ....         DC16    Timer1_A0_ISR
+
+   \                                 In  segment INTVEC, offset 0x5a, root
+   \                     `??Timer0_A0_ISR??INTVEC 90`:
+   \   00005A   ....         DC16    Timer0_A0_ISR
+    115          //------------------------------------------------------------------------------
+    116          /*
+    117          //------------------------------------------------------------------------------
+    118          // TimerA1 1-2, Overflow Interrupt Vector (TAIV) handler
+    119          #pragma vector=TIMER1_A1_VECTOR
+    120          __interrupt void TIMER1_A1_ISR(void){
+    121            switch(__even_in_range(TA1IV,14)){
+    122              case  0: break;                    // No interrupt
+    123              case  2:                           // CCR1 not used
+    124                TA1CCR1 += TA1CCR1_INTERVAL;     // Add Offset to TACCR1
+    125                break;
+    126              case  4:                           // CCR2 not used
+    127                TA1CCR2 += TA1CCR2_INTERVAL;     // Add Offset to TACCR2
+    128                break;
+    129              case  6: break;                    // reserved
+    130              case  8: break;                    // reserved
+    131              case 10: break;                    // reserved
+    132              case 12: break;                    // reserved
+    133              case 14:                           // overflow
+    134                break;
+    135              default: break; 
+    136            }
+    137          }
+    138          //------------------------------------------------------------------------------
+    139          */
+    140          //******************************************************************************
+    141          
+    142          //******************************************************************************
+    143          /*
+    144          //------------------------------------------------------------------------------
+    145          // TimerB0 0 Interrupt handler
+    146          #pragma vector=TIMER0_B0_VECTOR
+    147          __interrupt void Timer0_B0_ISR(void){
+    148            TB0CCR0 += TB0CCR0_INTERVAL;         // Add Offset to TACCR0
+    149          }
+    150          //------------------------------------------------------------------------------
+    151          
+    152          //------------------------------------------------------------------------------
+    153          // TimerB0 1-2, Overflow Interrupt Vector (TAIV) handler
+    154          #pragma vector=TIMER0_B1_VECTOR
+    155          __interrupt void TIMER0_B1_ISR(void){
+    156            switch(__even_in_range(TB0IV,14)){
+    157              case  0: break;                    // No interrupt
+    158              case  2:                           // CCR1 
+    159                TB0CCR1 += TB0CCR1_INTERVAL;     // Add Offset to TB0CCR1
+    160                break;
+    161              case  4:                           // CCR2 
+    162                TB0CCR2 += TB0CCR2_INTERVAL;     // Add Offset to TB0CCR2
+    163                break;
+    164              case  6: break;                    // reserved
+    165              case  8: break;                    // reserved
+    166              case 10: break;                    // reserved
+    167              case 12: break;                    // reserved
+    168              case 14:                           // overflow
+    169                break;
+    170              default: break; 
+    171            }
+    172          }
+    173          //------------------------------------------------------------------------------
+    174          */
+    175          //******************************************************************************
+    176          
+    177          //******************************************************************************
+    178          /*
+    179          //------------------------------------------------------------------------------
+    180          // TimerB1 0 Interrupt handler
+    181          #pragma vector=TIMER1_B0_VECTOR
+    182          __interrupt void Timer1_B0_ISR(void){
+    183            TB1CCR0 += TB1CCR0_INTERVAL;         // Add Offset to TB1CCR0
+    184          }
+    185          //------------------------------------------------------------------------------
+    186          
+    187          //------------------------------------------------------------------------------
+    188          // TimerB1 1-2, Overflow Interrupt Vector (TAIV) handler
+    189          #pragma vector=TIMER1_B1_VECTOR
+    190          __interrupt void TIMER1_B1_ISR(void){
+    191            switch(__even_in_range(TB1IV,14)){
+    192              case  0: break;                    // No interrupt
+    193              case  2:                           // CCR1
+    194                TB1CCR1 += TB1CCR1_INTERVAL;     // Add Offset to TB1CCR1
+    195                break;
+    196              case  4:                           // CCR2
+    197                TB1CCR2 += TB1CCR2_INTERVAL;     // Add Offset to TB1CCR2
+    198                break;
+    199              case  6: break;                    // reserved
+    200              case  8: break;                    // reserved
+    201              case 10: break;                    // reserved
+    202              case 12: break;                    // reserved
+    203              case 14:                           // overflow
+    204                break;
+    205              default: break; 
+    206            }
+    207          }
+    208          //------------------------------------------------------------------------------
+    209          */
+    210          //******************************************************************************
+    211          
+    212          
+    213          //******************************************************************************
+    214          /*
+    215          //------------------------------------------------------------------------------
+    216          // TimerB2 0 Interrupt handler
+    217          #pragma vector=TIMER2_B0_VECTOR
+    218          __interrupt void Timer2_B0_ISR(void){
+    219            TB2CCR0 += TB2CCR0_INTERVAL;         // Add Offset to TB1CCR0
+    220          }
+    221          //------------------------------------------------------------------------------
+    222          
+    223          //------------------------------------------------------------------------------
+    224          // TimerB2 1-2, Overflow Interrupt Vector (TAIV) handler
+    225          #pragma vector=TIMER2_B1_VECTOR
+    226          __interrupt void TIMER2_B1_ISR(void){
+    227            switch(__even_in_range(TB2IV,14)){
+    228              case  0: break;                    // No interrupt
+    229              case  2:                           // CCR1
+    230                TB2CCR2 += TB2CCR2_INTERVAL;     // Add Offset to TB1CCR1
+    231                break;
+    232              case  4:                           // CCR2
+    233                TB2CCR2 += TB2CCR2_INTERVAL;     // Add Offset to TB1CCR2
+    234                break;
+    235              case  6: break;                    // reserved
+    236              case  8: break;                    // reserved
+    237              case 10: break;                    // reserved
+    238              case 12: break;                    // reserved
+    239              case 14:                           // overflow
+    240                break;
+    241              default: break; 
+    242            }
+    243          }
+    244          //------------------------------------------------------------------------------
+    245          */
+    246          //******************************************************************************
+    247          
+    248          //------------------------------------------------------------------------------
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+     12   Timer0_A0_ISR
+       12   -> enable_switch_SW1
+       12   -> enable_switch_SW2
+     12   Timer1_A0_ISR
+       12   -> switch_control
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  ??Timer0_A0_ISR??INTVEC 90
+       2  ??Timer1_A0_ISR??INTVEC 82
+       2  TA0CCR0
+       2  TA1CCTL0
+      76  Timer0_A0_ISR
+      16  Timer1_A0_ISR
+       2  _A_PBOUT_L
+       2  time_pass_by
+
+ 
+  6 bytes in segment DATA16_AN
+  2 bytes in segment DATA16_Z
+  4 bytes in segment INTVEC
+ 92 bytes in segment ISR_CODE
+ 
+ 92 bytes of CODE  memory
+  0 bytes of CONST memory (+ 4 bytes shared)
+  2 bytes of DATA  memory (+ 6 bytes shared)
+
+Errors: none
+Warnings: none

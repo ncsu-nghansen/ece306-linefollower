@@ -1,0 +1,100 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       21/Mar/2014  15:50:48 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  K:\ece306\Projects\Project5\LED.c                       #
+#    Command line  =  K:\ece306\Projects\Project5\LED.c -lC                   #
+#                     K:\ece306\Projects\Project5\Debug\List\ -o              #
+#                     K:\ece306\Projects\Project5\Debug\Obj\ --no_cse         #
+#                     --no_unroll --no_inline --no_code_motion --no_tbaa      #
+#                     --debug -D__MSP430FR5739__ -e --double=32               #
+#                     --dlib_config "C:\Program Files (x86)\IAR               #
+#                     Systems\Embedded Workbench                              #
+#                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  K:\ece306\Projects\Project5\Debug\List\LED.lst          #
+#    Object file   =  K:\ece306\Projects\Project5\Debug\Obj\LED.r43           #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+K:\ece306\Projects\Project5\LED.c
+      1          /******************************************************************************
+      2          LED.c
+      3          
+      4          DESC: This file contains a method that initializes the LEDs
+      5          
+      6          GLOBALS: None
+      7          
+      8          Nathan Hansen, Feb 2014, Built with IAR Embedded Workbench Version: 5.60.5
+      9          ******************************************************************************/
+     10          
+     11          #include  "functions.h"
+     12          #include  "macros.h"
+     13          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x322
+   \   union <unnamed> _A_PJOUT_L
+   \                     _A_PJOUT_L:
+   \   000000                DS8 2
+     14          
+     15          //Init_LEDs
+     16          //
+     17          //DESC: LED drive pins are all set to zero using macros for the addresses. Half are 
+     18          //on Port3 and half on PortJ
+     19          //ARGS: None
+     20          //RET: None
+
+   \                                 In  segment CODE, align 2
+     21          void Init_LEDs(void)
+   \                     Init_LEDs:
+     22          {
+     23            PJOUT &= ~LED1;
+   \   000000   92C32203     BIC.W   #0x1, &0x322
+     24            PJOUT &= ~LED2;
+   \   000004   A2C32203     BIC.W   #0x2, &0x322
+     25            PJOUT &= ~LED3;
+   \   000008   A2C22203     BIC.W   #0x4, &0x322
+     26            PJOUT &= ~LED4;
+   \   00000C   B2C22203     BIC.W   #0x8, &0x322
+     27            
+     28            /*P3OUT &= ~LED5;
+     29            P3OUT &= ~LED6;
+     30            P3OUT &= ~LED7;
+     31            P3OUT &= ~LED8;*/
+     32          }
+   \   000010   1001         RETA
+   \   000012                REQUIRE _A_PJOUT_L
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Init_LEDs
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      18  Init_LEDs
+       2  _A_PJOUT_L
+
+ 
+ 18 bytes in segment CODE
+  2 bytes in segment DATA16_AN
+ 
+ 18 bytes of CODE memory
+  0 bytes of DATA memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: none

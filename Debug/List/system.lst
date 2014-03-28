@@ -1,0 +1,84 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       21/Mar/2014  15:50:57 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  K:\ece306\Projects\Project5\system.c                    #
+#    Command line  =  K:\ece306\Projects\Project5\system.c -lC                #
+#                     K:\ece306\Projects\Project5\Debug\List\ -o              #
+#                     K:\ece306\Projects\Project5\Debug\Obj\ --no_cse         #
+#                     --no_unroll --no_inline --no_code_motion --no_tbaa      #
+#                     --debug -D__MSP430FR5739__ -e --double=32               #
+#                     --dlib_config "C:\Program Files (x86)\IAR               #
+#                     Systems\Embedded Workbench                              #
+#                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  K:\ece306\Projects\Project5\Debug\List\system.lst       #
+#    Object file   =  K:\ece306\Projects\Project5\Debug\Obj\system.r43        #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+K:\ece306\Projects\Project5\system.c
+      1          #include  "msp430.h"
+      2          #include  "functions.h"
+      3          
+      4          
+      5          //------------------------------------------------------------------------------
+      6          // System Configurations
+      7          
+      8          // Tells the compiler to provide the value in reg as an input to an 
+      9          // inline assembly block.  Even though the block contains no instructions,
+     10          // the compiler may not optimize it away, and is told that the value
+     11          // may change and should not be relied upon.
+     12          
+     13          //inline void READ_AND_DISCARD(unsigned int reg) __attribute__((always_inline));
+     14          //void READ_AND_DISCARD(unsigned int reg){
+     15          //  asm volatile ("" : "=m" (reg) : "r" (reg));
+     16          //}
+     17          
+     18          //inline void enable_interrupts(void) __attribute__((always_inline));
+
+   \                                 In  segment CODE, align 2
+     19          void enable_interrupts(void){
+   \                     enable_interrupts:
+     20            __bis_SR_register(GIE);     // enable interrupts
+   \   000000   32D2         BIS.W   #0x8, SR
+     21          //  asm volatile ("eint \n");
+     22          }
+   \   000002   1001         RETA
+     23          
+     24          //inline void disable_interrupts(void) __attribute__((always_inline));
+     25          //void disable_interrupts(void){
+     26          //  asm volatile ("dint \n");
+     27          //}
+     28          
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   enable_interrupts
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  enable_interrupts
+
+ 
+ 4 bytes in segment CODE
+ 
+ 4 bytes of CODE memory
+
+Errors: none
+Warnings: none

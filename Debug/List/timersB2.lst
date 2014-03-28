@@ -1,0 +1,459 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       11/Jan/2014  11:04:51 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  D:\NCSU\Current\Software Tools\Code                     #
+#                     Master\Homework_01\timersB2.c                           #
+#    Command line  =  "D:\NCSU\Current\Software Tools\Code                    #
+#                     Master\Homework_01\timersB2.c" -lC                      #
+#                     "D:\NCSU\Current\Software Tools\Code                    #
+#                     Master\Homework_01\Debug\List\" -o                      #
+#                     "D:\NCSU\Current\Software Tools\Code                    #
+#                     Master\Homework_01\Debug\Obj\" --no_cse --no_unroll     #
+#                     --no_inline --no_code_motion --no_tbaa --debug          #
+#                     -D__MSP430FR5739__ -e --double=32 --dlib_config         #
+#                     "C:\Program Files (x86)\IAR Systems\Embedded Workbench  #
+#                     6.5_2\430\LIB\DLIB\dl430xsfn.h" --core=430X             #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  D:\NCSU\Current\Software Tools\Code                     #
+#                     Master\Homework_01\Debug\List\timersB2.lst              #
+#    Object file   =  D:\NCSU\Current\Software Tools\Code                     #
+#                     Master\Homework_01\Debug\Obj\timersB2.r43               #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\NCSU\Current\Software Tools\Code Master\Homework_01\timersB2.c
+      1          //******************************************************************************
+      2          //
+      3          //  Description: This file contains the Main Routine - "While" Operating System
+      4          //
+      5          //
+      6          //  Jim Carlson
+      7          //  Aug 2013
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //******************************************************************************
+     10          
+     11          //------------------------------------------------------------------------------
+     12          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x440
+   \   unsigned short volatile TB2CTL
+   \                     TB2CTL:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x442
+   \   unsigned short volatile TB2CCTL0
+   \                     TB2CCTL0:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x452
+   \   unsigned short volatile TB2CCR0
+   \                     TB2CCR0:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x454
+   \   unsigned short volatile TB2CCR1
+   \                     TB2CCR1:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x456
+   \   unsigned short volatile TB2CCR2
+   \                     TB2CCR2:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x46e
+   \   unsigned short const volatile TB2IV
+   \                     TB2IV:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x460
+   \   unsigned short volatile TB2EX0
+   \                     TB2EX0:
+   \   000000                DS8 2
+     13          #include  "functions.h"
+     14          
+     15          
+     16          // Timer B2
+     17          #define TB2CCR0_INTERVAL        (4096) // 32768 /  4096 = 1024 Hz  125 msec
+     18          // Timer B2[1-2+overflow] Intervals
+     19          #define TB2CCR1_INTERVAL        (8192) //
+     20          #define TB2CCR2_INTERVAL       (25060) //
+     21          
+     22          #define CNTL_STATE_INDEX        (3)
+     23          
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     24          volatile unsigned int five_msec_count;
+   \                     five_msec_count:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     25          volatile unsigned int sleeping;
+   \                     sleeping:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     26          volatile char sleeptime;
+   \                     sleeptime:
+   \   000000                DS8 1
+     27          extern volatile unsigned char control_state[CNTL_STATE_INDEX];
+     28          //------------------------------------------------------------------------------
+     29          
+     30          //******************************************************************************
+     31          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     32          void Init_Timer_B2(void) {
+   \                     Init_Timer_B2:
+     33          // sleep_timer - SMCLK source, up count mode, divide clock by 4
+     34            TB2CTL = TBSSEL_2 + MC__CONTINUOUS + TBCLR + ID_2;  // SMCLK, continuous mode /4
+   \   000000   B240A4024004 MOV.W   #0x2a4, &0x440
+     35            TB2EX0 = TBIDEX_7;                        // Second Divider - Divide clock by 8
+   \   000006   B24007006004 MOV.W   #0x7, &0x460
+     36          
+     37            TB2CCR0 = TB2CCR0_INTERVAL;          // CCR0
+   \   00000C   B24000105204 MOV.W   #0x1000, &0x452
+     38            TB2CCTL0 |= CCIE;                    // CCR0 enable interrupt
+   \   000012   B2D010004204 BIS.W   #0x10, &0x442
+     39            
+     40          //  TB2CCR1 = TB2CCR1_INTERVAL;          // CCR1 
+     41          //  TB2CCTL1 |= CCIE;                    // CCR1 enable interrupt
+     42          
+     43          //  TB2CCR2 = TB2CCR2_INTERVAL;          // CCR2 
+     44          //  TB2CCTL2 |= CCIE;                    // CCR2 enable interrupt
+     45          }
+   \   000018   1001         RETA
+   \   00001A                REQUIRE TB2CTL
+   \   00001A                REQUIRE TB2EX0
+   \   00001A                REQUIRE TB2CCR0
+   \   00001A                REQUIRE TB2CCTL0
+     46          //------------------------------------------------------------------------------
+     47          //******************************************************************************
+     48          
+     49          //******************************************************************************
+     50          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     51          void measure_delay(void){
+   \                     measure_delay:
+     52            int i;
+     53          //  PJOUT |= LED2;control_state[1] |= LED2;
+     54            for(i=0; i<25; i++){ 
+   \   000000   0F43         MOV.W   #0x0, R15
+   \   000002   013C         JMP     ??measure_delay_1
+   \                     ??measure_delay_0:
+   \   000004   1F53         ADD.W   #0x1, R15
+   \                     ??measure_delay_1:
+   \   000006   3F901900     CMP.W   #0x19, R15
+   \   00000A   FC3B         JL      ??measure_delay_0
+     55          //    usleep(40);
+     56            }
+     57          //  PJOUT &= ~LED2;control_state[1] &= ~LED2;
+     58          }
+   \   00000C   1001         RETA
+     59          //------------------------------------------------------------------------------
+     60          //******************************************************************************
+     61          
+     62          //******************************************************************************
+     63          //------------------------------------------------------------------------------
+     64          // At the current clock rate this yoeds about 10usec per value passed
+     65          // A value of  0 yields 1.37 uSec
+     66          // A value of  1 yields 1.87 uSec
+     67          // A value of  2 yields 2.36 uSec
+     68          // A value of  3 yields 2.86 uSec
+     69          // A value of  4 yields 3.36 uSec
+     70          // A value of  5 yields 3.86 uSec
+     71          // A value of  6 yields 4.36 uSec
+     72          // A value of  7 yields 4.85 uSec
+     73          // A value of  8 yields 5.354 uSec
+     74          // A value of  9 yields 5.854 uSec
+     75          // A value of 10 yields 6.353 uSec
+     76          // A value of 11 yields 6.851 uSec
+     77          // A value of 12 yields 7.351 uSec
+     78          // A value of 13 yields 7.849 uSec
+     79          // A value of 14 yields 8.350 uSec
+     80          // A value of 15 yields 8.849 uSec
+     81          // A value of 16 yields 9.342 uSec
+     82          // A value of 17 yields 9.84 uSec
+     83          // A value of 18 yields 10.34 uSec
+     84          // A value of 19 yields 10.84 uSec
+
+   \                                 In  segment CODE, align 2
+     85          void usleep10(unsigned int usec){
+   \                     usleep10:
+     86            int i,j;
+     87          //  unsigned int time;
+     88          //  PJOUT |= LED2;control_state[1] |= LED2;
+     89          //  time = usec;
+     90            for(j=0;j<usec;j++){
+   \   000000   0E43         MOV.W   #0x0, R14
+   \   000002   053C         JMP     ??usleep10_2
+     91              for(i=0;i<14;i++);
+   \                     ??usleep10_0:
+   \   000004   1F53         ADD.W   #0x1, R15
+   \                     ??usleep10_1:
+   \   000006   3F900E00     CMP.W   #0xe, R15
+   \   00000A   FC3B         JL      ??usleep10_0
+   \   00000C   1E53         ADD.W   #0x1, R14
+   \                     ??usleep10_2:
+   \   00000E   0E9C         CMP.W   R12, R14
+   \   000010   022C         JC      ??usleep10_3
+   \   000012   0F43         MOV.W   #0x0, R15
+   \   000014   F83F         JMP     ??usleep10_1
+     92            }
+     93          //  sleeping = ASLEEP;
+     94          //  sleeptime = SLEEP_TIME;
+     95          //  sleeptime = msec;
+     96          //  while(sleeping);
+     97          //  PJOUT &= ~LED2;control_state[1] &= ~LED2;
+     98          }
+   \                     ??usleep10_3:
+   \   000016   1001         RETA
+     99          //------------------------------------------------------------------------------
+    100          //******************************************************************************
+    101          
+    102          //******************************************************************************
+    103          //------------------------------------------------------------------------------
+    104          //Each count passed is at least x times 5 milliseconds
+
+   \                                 In  segment CODE, align 2
+    105          void five_msec_sleep(unsigned int fivemsec){
+   \                     five_msec_sleep:
+    106          //  int i;
+    107          //  PJOUT |= LED2;control_state[1] |=LED2;
+    108            five_msec_count = 0;
+   \   000000   8243....     MOV.W   #0x0, &five_msec_count
+    109            while(fivemsec > (five_msec_count+1));
+   \                     ??five_msec_sleep_0:
+   \   000004   1F42....     MOV.W   &five_msec_count, R15
+   \   000008   1F53         ADD.W   #0x1, R15
+   \   00000A   0F9C         CMP.W   R12, R15
+   \   00000C   FB2B         JNC     ??five_msec_sleep_0
+    110          //  PJOUT &= ~LED2;control_state[1] &= ~LED2;
+    111          }
+   \   00000E   1001         RETA
+    112          //------------------------------------------------------------------------------
+    113          //******************************************************************************
+    114          
+    115          //******************************************************************************
+    116          //
+    117          //  Description: This file contains the Interrupt Routines for Timers
+    118          //               
+    119          //
+    120          //  Jim Carlson
+    121          //  Aug 2013
+    122          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+    123          //******************************************************************************
+    124          
+    125          //------------------------------------------------------------------------------
+    126          
+    127          
+    128          //------------------------------------------------------------------------------
+    129          //Globals Defined in interrupts_timers.c
+    130          // Timer B2
+    131          
+    132          // LEDs 
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+    133          volatile unsigned int led_blink;
+   \                     led_blink:
+   \   000000                DS8 2
+    134          // GPS
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+    135          unsigned int gps_resetting;
+   \                     gps_resetting:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+    136          unsigned int gps_2b_reset;
+   \                     gps_2b_reset:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+    137          unsigned int reset_gps_time;
+   \                     reset_gps_time:
+   \   000000                DS8 2
+    138          extern volatile int time_pass_by;
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+    139          char transmit_delay;
+   \                     transmit_delay:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+    140          char transmit_time;
+   \                     transmit_time:
+   \   000000                DS8 1
+    141          
+    142          //Globals Defined in other files
+    143          // System info
+    144          extern volatile unsigned char control_state[CNTL_STATE_INDEX];
+    145          // Time
+    146          extern volatile unsigned int Time_Sequence;
+    147          extern volatile unsigned int five_msec_count;
+    148          extern volatile unsigned int sleeping;
+    149          extern volatile char one_time;
+    150          extern volatile char sleeptime;
+    151          // Serial
+    152          
+    153          
+    154          //******************************************************************************
+    155          //------------------------------------------------------------------------------
+    156          // Timer2 B0 Interrupt handler
+    157          #pragma vector=TIMER2_B0_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+    158          __interrupt void Timer2_B0_ISR(void){
+   \                     Timer2_B0_ISR:
+    159            Time_Sequence++;
+   \   000000   9253....     ADD.W   #0x1, &Time_Sequence
+    160            one_time = 1;
+   \   000004   D243....     MOV.B   #0x1, &one_time
+    161            if (five_msec_count < 1000){
+   \   000008   B290E803.... CMP.W   #0x3e8, &five_msec_count
+   \   00000E   022C         JC      ??Timer2_B0_ISR_0
+    162              five_msec_count++;
+   \   000010   9253....     ADD.W   #0x1, &five_msec_count
+    163            }
+    164            TB2CCR0 += TB2CCR0_INTERVAL;     // Add Offset to TB1CCR0
+   \                     ??Timer2_B0_ISR_0:
+   \   000014   B25000105204 ADD.W   #0x1000, &0x452
+    165          }
+   \   00001A   0013         RETI
+   \   00001C                REQUIRE TB2CCR0
+    166          //------------------------------------------------------------------------------
+    167          
+    168          //------------------------------------------------------------------------------
+    169          // Timer2 B1-B3 Interrupt Vector (TAIV) handler
+    170          #pragma vector=TIMER2_B1_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+    171          __interrupt void TIMER2_B1_ISR(void){
+   \                     TIMER2_B1_ISR:
+   \   000000   0F12         PUSH.W  R15
+    172            switch(__even_in_range(TB2IV,14)){
+   \   000002   1F426E04     MOV.W   &0x46e, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for TIMER2_B1_ISR>_0`:
+   \   000008   0E3C         JMP     ??TIMER2_B1_ISR_1
+   \   00000A   063C         JMP     ??TIMER2_B1_ISR_2
+   \   00000C   093C         JMP     ??TIMER2_B1_ISR_3
+   \   00000E   0B3C         JMP     ??TIMER2_B1_ISR_1
+   \   000010   0A3C         JMP     ??TIMER2_B1_ISR_1
+   \   000012   093C         JMP     ??TIMER2_B1_ISR_1
+   \   000014   083C         JMP     ??TIMER2_B1_ISR_1
+   \   000016   073C         JMP     ??TIMER2_B1_ISR_1
+    173              case  0: break;                    // No interrupt
+    174              case  2:                           // CCR1 is set to be 100 msec timer
+    175                TB2CCR1 += TB2CCR1_INTERVAL;     // Add Offset to TB1CCR1
+   \                     ??TIMER2_B1_ISR_2:
+   \   000018   B25000205404 ADD.W   #0x2000, &0x454
+    176                break;
+   \   00001E   033C         JMP     ??TIMER2_B1_ISR_1
+    177              case  4:                           // CCR2 is set to be 200 msec timer
+    178                TB2CCR2 += TB2CCR2_INTERVAL;     // Add Offset to TB1CCR2
+   \                     ??TIMER2_B1_ISR_3:
+   \   000020   B250E4615604 ADD.W   #0x61e4, &0x456
+    179                break;
+    180              case  6: break;                    // reserved
+    181              case  8: break;                    // reserved
+    182              case 10: break;                    // reserved
+    183              case 12: break;                    // reserved
+    184              case 14:                           // overflow
+    185                break;
+    186              default: break; 
+    187            }
+    188          }
+   \                     ??TIMER2_B1_ISR_1:
+   \   000026   3F41         POP.W   R15
+   \   000028   0013         RETI
+   \   00002A                REQUIRE TB2CCR1
+   \   00002A                REQUIRE TB2CCR2
+   \   00002A                REQUIRE TB2IV
+
+   \                                 In  segment INTVEC, offset 0x44, root
+   \                     `??TIMER2_B1_ISR??INTVEC 68`:
+   \   000044   ....         DC16    TIMER2_B1_ISR
+
+   \                                 In  segment INTVEC, offset 0x46, root
+   \                     `??Timer2_B0_ISR??INTVEC 70`:
+   \   000046   ....         DC16    Timer2_B0_ISR
+    189          //------------------------------------------------------------------------------
+    190          //******************************************************************************
+    191          
+    192          //------------------------------------------------------------------------------
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Init_Timer_B2
+      6   TIMER2_B1_ISR
+      4   Timer2_B0_ISR
+      4   five_msec_sleep
+      4   measure_delay
+      4   usleep10
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  ??TIMER2_B1_ISR??INTVEC 68
+       2  ??Timer2_B0_ISR??INTVEC 70
+      26  Init_Timer_B2
+       2  TB2CCR0
+       2  TB2CCR1
+       2  TB2CCR2
+       2  TB2CCTL0
+       2  TB2CTL
+       2  TB2EX0
+       2  TB2IV
+      42  TIMER2_B1_ISR
+      28  Timer2_B0_ISR
+       2  five_msec_count
+      16  five_msec_sleep
+       2  gps_2b_reset
+       2  gps_resetting
+       2  led_blink
+      14  measure_delay
+       2  reset_gps_time
+       2  sleeping
+       1  sleeptime
+       1  transmit_delay
+       1  transmit_time
+      24  usleep10
+
+ 
+ 80 bytes in segment CODE
+ 14 bytes in segment DATA16_AN
+ 15 bytes in segment DATA16_Z
+  4 bytes in segment INTVEC
+ 70 bytes in segment ISR_CODE
+ 
+ 150 bytes of CODE  memory
+   0 bytes of CONST memory (+  4 bytes shared)
+  15 bytes of DATA  memory (+ 14 bytes shared)
+
+Errors: none
+Warnings: none

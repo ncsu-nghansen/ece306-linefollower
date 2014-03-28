@@ -1,0 +1,501 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       06/Jan/2014  22:36:39 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\wheels.c                             #
+#    Command line  =  "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\wheels.c" -lC                        #
+#                     "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\Debug\List\" -o                      #
+#                     "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\Debug\Obj\" --no_cse --no_unroll     #
+#                     --no_inline --no_code_motion --no_tbaa --debug          #
+#                     -D__MSP430FR5739__ -e --double=32 --dlib_config         #
+#                     "C:\Program Files (x86)\IAR Systems\Embedded Workbench  #
+#                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\Debug\List\wheels.lst                #
+#    Object file   =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\Debug\Obj\wheels.r43                 #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\Jim\NCSU\Current\Software Tools\Code Master\Homework_01\wheels.c
+      1          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
+      2          #include  "macros.h"
+      3          #include  "functions.h"
+      4          //------------------------------------------------------------------------------
+      5          // WHEELS Configurations
+      6          
+      7          extern volatile unsigned char control_state[CNTL_STATE_INDEX];
+      8          
+      9          extern volatile unsigned char current_character;
+     10          
+
+   \                                 In  segment CODE, align 2
+     11          void WHEELS_test(void){
+   \                     WHEELS_test:
+     12          //  int i;
+     13          //  unsigned int temporary_value;
+     14          //  int temp;
+     15            if (wait_for_character()){
+   \   000000   ........     CALLA   #wait_for_character
+   \   000004   0C93         CMP.W   #0x0, R12
+   \   000006   0224         JEQ     ??WHEELS_test_6
+     16              print_CR();
+   \   000008   ........     BRA     #print_CR
+     17              return;
+     18            }
+     19            outchar(current_character);
+   \                     ??WHEELS_test_6:
+   \   00000C   5C42....     MOV.B   &current_character, R12
+   \   000010   ........     CALLA   #outchar
+     20            switch (current_character) {
+   \   000014   5E42....     MOV.B   &current_character, R14
+   \   000018   7E803500     SUB.B   #0x35, R14
+   \   00001C   0D24         JEQ     ??WHEELS_test_7
+   \   00001E   5E83         SUB.B   #0x1, R14
+   \   000020   3924         JEQ     ??WHEELS_test_8
+   \   000022   5E83         SUB.B   #0x1, R14
+   \   000024   6524         JEQ     ??WHEELS_test_9
+   \   000026   5E83         SUB.B   #0x1, R14
+   \   000028   8824         JEQ     ??WHEELS_test_10
+   \   00002A   7E800900     SUB.B   #0x9, R14
+   \   00002E   AB24         JEQ     ??WHEELS_test_11
+   \   000030   7E802000     SUB.B   #0x20, R14
+   \   000034   A824         JEQ     ??WHEELS_test_11
+   \   000036   E23C         JMP     ??WHEELS_test_5
+     21              /*
+     22              case 0x00:  // DEFAULT
+     23                break;
+     24              case 0x21:  // !
+     25                break;
+     26              case 0x22:  // "
+     27                break;
+     28              case 0x23:  // #
+     29                break;
+     30              case 0x24:  // $
+     31                break;
+     32              case 0x25:  // %
+     33                break;
+     34              case 0x26:  // &
+     35                break;
+     36              case 0x27:  // '
+     37                break;
+     38              case 0x28:  // (
+     39                break;
+     40              case 0x29:  // )
+     41                break;
+     42              case 0x2A:  // *
+     43                break;
+     44              case 0x2B:  // +
+     45                break;
+     46              case 0x2C:  // ,
+     47                break;
+     48              case 0x2D:  // -
+     49                break;
+     50              case 0x2E:  // .
+     51                break;
+     52              case 0x2F:  // /
+     53                break;
+     54              case 0x30:  // 0
+     55                break;
+     56              case 0x31:  // 1
+     57                break;
+     58              case 0x32:  // 2
+     59                break;
+     60              case 0x33:  // 3
+     61                break;
+     62              case 0x34:  // 4
+     63                break;
+     64          */
+     65          // R_FORWARD            (0x10) // 5
+     66          // R_REVERSE            (0x20) // 6
+     67          // L_FORWARD            (0x40) // 7
+     68          // L_REVERSE            (0x80) // 8
+     69              case 0x35:  // 5
+     70                if(!(control_state[0] & USE_LED5)){
+   \                     ??WHEELS_test_7:
+   \   000038   F2B04000.... BIT.B   #0x40, &control_state
+   \   00003E   042C         JC      ??WHEELS_test_12
+     71                  LED5_SMCLK_switch(LED5_SEL);
+   \   000040   7C403100     MOV.B   #0x31, R12
+   \   000044   ........     CALLA   #LED5_SMCLK_switch
+     72                }
+     73                if (wait_for_character()){
+   \                     ??WHEELS_test_12:
+   \   000048   ........     CALLA   #wait_for_character
+   \   00004C   0C93         CMP.W   #0x0, R12
+   \   00004E   0224         JEQ     ??WHEELS_test_13
+     74                  print_CR();
+   \   000050   ........     BRA     #print_CR
+     75                  return;
+     76                }
+     77                outchar(current_character);
+   \                     ??WHEELS_test_13:
+   \   000054   5C42....     MOV.B   &current_character, R12
+   \   000058   ........     CALLA   #outchar
+     78                if (current_character == 0x30){       // This turns R_FORWARD off
+   \   00005C   F2903000.... CMP.B   #0x30, &current_character
+   \   000062   0720         JNE     ??WHEELS_test_14
+     79                  P3OUT &= ~R_FORWARD;control_state[1] &= ~R_FORWARD;
+   \   000064   F2C010002202 BIC.B   #0x10, &0x222
+   \   00006A   F2C01000.... BIC.B   #0x10, &control_state + 1
+   \   000070   C53C         JMP     ??WHEELS_test_5
+     80                }else{
+     81                  if(control_state[1] & R_REVERSE){   // This turns R_FORWARD on but R_REVERSE off first
+   \                     ??WHEELS_test_14:
+   \   000072   F2B02000.... BIT.B   #0x20, &control_state + 1
+   \   000078   0628         JNC     ??WHEELS_test_15
+     82                    P3OUT &= ~R_REVERSE;control_state[1] &= ~R_REVERSE;
+   \   00007A   F2C020002202 BIC.B   #0x20, &0x222
+   \   000080   F2C02000.... BIC.B   #0x20, &control_state + 1
+     83                  }
+     84                  P3OUT  |= R_FORWARD;control_state[1] |= R_FORWARD;
+   \                     ??WHEELS_test_15:
+   \   000086   F2D010002202 BIS.B   #0x10, &0x222
+   \   00008C   F2D01000.... BIS.B   #0x10, &control_state + 1
+     85                }
+     86                break;
+   \   000092   B43C         JMP     ??WHEELS_test_5
+     87              case 0x36:  // 6
+     88                if(!(control_state[0] & USE_LED5)){
+   \                     ??WHEELS_test_8:
+   \   000094   F2B04000.... BIT.B   #0x40, &control_state
+   \   00009A   042C         JC      ??WHEELS_test_16
+     89                  LED5_SMCLK_switch(LED5_SEL);
+   \   00009C   7C403100     MOV.B   #0x31, R12
+   \   0000A0   ........     CALLA   #LED5_SMCLK_switch
+     90                }
+     91                if (wait_for_character()){
+   \                     ??WHEELS_test_16:
+   \   0000A4   ........     CALLA   #wait_for_character
+   \   0000A8   0C93         CMP.W   #0x0, R12
+   \   0000AA   0224         JEQ     ??WHEELS_test_17
+     92                  print_CR();
+   \   0000AC   ........     BRA     #print_CR
+     93                  return;
+     94                }
+     95                outchar(current_character);
+   \                     ??WHEELS_test_17:
+   \   0000B0   5C42....     MOV.B   &current_character, R12
+   \   0000B4   ........     CALLA   #outchar
+     96                if (current_character == 0x30){  // This turns LED off
+   \   0000B8   F2903000.... CMP.B   #0x30, &current_character
+   \   0000BE   0720         JNE     ??WHEELS_test_18
+     97                  P3OUT &= ~R_REVERSE;control_state[1] &= ~R_REVERSE;
+   \   0000C0   F2C020002202 BIC.B   #0x20, &0x222
+   \   0000C6   F2C02000.... BIC.B   #0x20, &control_state + 1
+   \   0000CC   973C         JMP     ??WHEELS_test_5
+     98                }else{
+     99                  if(control_state[1] & R_FORWARD){   // This turns R_REVERSE on but R_FORWARD off first
+   \                     ??WHEELS_test_18:
+   \   0000CE   F2B01000.... BIT.B   #0x10, &control_state + 1
+   \   0000D4   0628         JNC     ??WHEELS_test_19
+    100                    P3OUT &= ~R_FORWARD;control_state[1] &= ~R_FORWARD;
+   \   0000D6   F2C010002202 BIC.B   #0x10, &0x222
+   \   0000DC   F2C01000.... BIC.B   #0x10, &control_state + 1
+    101                  }
+    102                  P3OUT  |= R_REVERSE;control_state[1] |= R_REVERSE;
+   \                     ??WHEELS_test_19:
+   \   0000E2   F2D020002202 BIS.B   #0x20, &0x222
+   \   0000E8   F2D02000.... BIS.B   #0x20, &control_state + 1
+    103                }
+    104                break;
+   \   0000EE   863C         JMP     ??WHEELS_test_5
+    105              case 0x37:  // 7
+    106                if (wait_for_character()){
+   \                     ??WHEELS_test_9:
+   \   0000F0   ........     CALLA   #wait_for_character
+   \   0000F4   0C93         CMP.W   #0x0, R12
+   \   0000F6   0224         JEQ     ??WHEELS_test_20
+    107                  print_CR();
+   \   0000F8   ........     BRA     #print_CR
+    108                  return;
+    109                }
+    110                outchar(current_character);
+   \                     ??WHEELS_test_20:
+   \   0000FC   5C42....     MOV.B   &current_character, R12
+   \   000100   ........     CALLA   #outchar
+    111                if (current_character == 0x30){  // This turns LED off
+   \   000104   F2903000.... CMP.B   #0x30, &current_character
+   \   00010A   0720         JNE     ??WHEELS_test_21
+    112                  P3OUT &= ~L_FORWARD;control_state[1] &= ~L_FORWARD;
+   \   00010C   F2C040002202 BIC.B   #0x40, &0x222
+   \   000112   F2C04000.... BIC.B   #0x40, &control_state + 1
+   \   000118   713C         JMP     ??WHEELS_test_5
+    113                }else{
+    114                  if(control_state[1] & L_REVERSE){   // This turns L_FORWARD on but L_REVERSE off first
+   \                     ??WHEELS_test_21:
+   \   00011A   C293....     CMP.B   #0x0, &control_state + 1
+   \   00011E   0634         JGE     ??WHEELS_test_22
+    115                    P3OUT &= ~L_REVERSE;control_state[1] &= ~L_REVERSE;
+   \   000120   F2C080002202 BIC.B   #0x80, &0x222
+   \   000126   F2C08000.... BIC.B   #0x80, &control_state + 1
+    116                  }
+    117                  P3OUT  |= L_FORWARD;control_state[1] |= L_FORWARD;
+   \                     ??WHEELS_test_22:
+   \   00012C   F2D040002202 BIS.B   #0x40, &0x222
+   \   000132   F2D04000.... BIS.B   #0x40, &control_state + 1
+    118                }
+    119                break;
+   \   000138   613C         JMP     ??WHEELS_test_5
+    120              case 0x38:  // 8
+    121                if (wait_for_character()){
+   \                     ??WHEELS_test_10:
+   \   00013A   ........     CALLA   #wait_for_character
+   \   00013E   0C93         CMP.W   #0x0, R12
+   \   000140   0224         JEQ     ??WHEELS_test_23
+    122                  print_CR();
+   \   000142   ........     BRA     #print_CR
+    123                  return;
+    124                }
+    125                outchar(current_character);
+   \                     ??WHEELS_test_23:
+   \   000146   5C42....     MOV.B   &current_character, R12
+   \   00014A   ........     CALLA   #outchar
+    126                if (current_character == 0x30){  // This turns LED off
+   \   00014E   F2903000.... CMP.B   #0x30, &current_character
+   \   000154   0720         JNE     ??WHEELS_test_24
+    127                  P3OUT &= ~L_REVERSE;control_state[1] &= ~L_REVERSE;
+   \   000156   F2C080002202 BIC.B   #0x80, &0x222
+   \   00015C   F2C08000.... BIC.B   #0x80, &control_state + 1
+   \   000162   4C3C         JMP     ??WHEELS_test_5
+    128                }else{
+    129                  if(control_state[1] & L_FORWARD){   // This turns L_REVERSE on but L_FORWARD off first
+   \                     ??WHEELS_test_24:
+   \   000164   F2B04000.... BIT.B   #0x40, &control_state + 1
+   \   00016A   0628         JNC     ??WHEELS_test_25
+    130                    P3OUT &= ~L_FORWARD;control_state[1] &= ~L_FORWARD;
+   \   00016C   F2C040002202 BIC.B   #0x40, &0x222
+   \   000172   F2C04000.... BIC.B   #0x40, &control_state + 1
+    131                  }
+    132                  P3OUT  |= L_REVERSE;control_state[1] |= L_REVERSE;
+   \                     ??WHEELS_test_25:
+   \   000178   F2D080002202 BIS.B   #0x80, &0x222
+   \   00017E   F2D08000.... BIS.B   #0x80, &control_state + 1
+    133                }
+    134                break;
+   \   000184   3B3C         JMP     ??WHEELS_test_5
+    135          /*
+    136              case 0x39:  // 9
+    137                break;
+    138              case 0x3A:  // :
+    139                break;
+    140              case 0x3B:  // ;
+    141                break;
+    142              case 0x3c:  // <
+    143                break;
+    144              case 0x3D:  // =
+    145                break;
+    146              case 0x3e:  // >
+    147                break;
+    148              case 0x3F:  // ?
+    149                break;
+    150              case 0x40:  // @
+    151                break;
+    152          */
+    153              case 0x41:  // A all Wheels off / on
+    154              case 0x61:  // a
+    155                if(!(control_state[0] & USE_LED5)){
+   \                     ??WHEELS_test_11:
+   \   000186   F2B04000.... BIT.B   #0x40, &control_state
+   \   00018C   042C         JC      ??WHEELS_test_26
+    156                  LED5_SMCLK_switch(LED5_SEL);
+   \   00018E   7C403100     MOV.B   #0x31, R12
+   \   000192   ........     CALLA   #LED5_SMCLK_switch
+    157                }
+    158                if (wait_for_character()){
+   \                     ??WHEELS_test_26:
+   \   000196   ........     CALLA   #wait_for_character
+   \   00019A   0C93         CMP.W   #0x0, R12
+   \   00019C   0224         JEQ     ??WHEELS_test_27
+    159                  print_CR();
+   \   00019E   ........     BRA     #print_CR
+    160                  return;
+    161                }
+    162                outchar(current_character);
+   \                     ??WHEELS_test_27:
+   \   0001A2   5C42....     MOV.B   &current_character, R12
+   \   0001A6   ........     CALLA   #outchar
+    163                P3OUT &= ~R_REVERSE;control_state[1] &= ~R_REVERSE;
+   \   0001AA   F2C020002202 BIC.B   #0x20, &0x222
+   \   0001B0   F2C02000.... BIC.B   #0x20, &control_state + 1
+    164                P3OUT &= ~L_REVERSE;control_state[1] &= ~L_REVERSE;
+   \   0001B6   F2C080002202 BIC.B   #0x80, &0x222
+   \   0001BC   F2C08000.... BIC.B   #0x80, &control_state + 1
+    165                if (current_character == 0x30){  // This turns Wheels off
+   \   0001C2   F2903000.... CMP.B   #0x30, &current_character
+   \   0001C8   0D20         JNE     ??WHEELS_test_28
+    166                  P3OUT &= ~R_FORWARD;control_state[1] &= ~R_FORWARD;
+   \   0001CA   F2C010002202 BIC.B   #0x10, &0x222
+   \   0001D0   F2C01000.... BIC.B   #0x10, &control_state + 1
+    167                  P3OUT &= ~L_FORWARD;control_state[1] &= ~L_FORWARD;
+   \   0001D6   F2C040002202 BIC.B   #0x40, &0x222
+   \   0001DC   F2C04000.... BIC.B   #0x40, &control_state + 1
+   \   0001E2   0C3C         JMP     ??WHEELS_test_5
+    168                }else{
+    169                  P3OUT |= R_FORWARD;control_state[1] |= R_FORWARD;
+   \                     ??WHEELS_test_28:
+   \   0001E4   F2D010002202 BIS.B   #0x10, &0x222
+   \   0001EA   F2D01000.... BIS.B   #0x10, &control_state + 1
+    170                  P3OUT |= L_FORWARD;control_state[1] |= L_FORWARD;
+   \   0001F0   F2D040002202 BIS.B   #0x40, &0x222
+   \   0001F6   F2D04000.... BIS.B   #0x40, &control_state + 1
+    171                }
+    172                break;
+    173          /*
+    174              case 0x42:  // B
+    175              case 0x62:  // b
+    176                break;
+    177              case 0x43:  // C
+    178              case 0x63:  // c
+    179                break;
+    180              case 0x44:  // D
+    181              case 0x64:  // d
+    182                break;
+    183              case 0x45:  // E
+    184              case 0x65:  // e
+    185                break;
+    186              case 0x46:  // F
+    187              case 0x66:  // f
+    188                break;
+    189              case 0x47:  // G
+    190              case 0x67:  // g
+    191                break;
+    192              case 0x48:  // H
+    193              case 0x68:  // h
+    194                break;
+    195              case 0x49:  // I
+    196              case 0x69:  // i
+    197                break;
+    198              case 0x4a:  // J
+    199              case 0x6a:  // j
+    200                break;
+    201              case 0x4B:  // K
+    202              case 0x6B:  // k
+    203                break;
+    204              case 0x4C:  // L
+    205              case 0x6C:  // l
+    206                break;
+    207              case 0x4D:  // M
+    208              case 0x6D:  // m
+    209                break;
+    210              case 0x4E:  // N
+    211              case 0x6E:  // n
+    212                break;
+    213              case 0x4F:  // O
+    214              case 0x6F:  // o
+    215                break;
+    216              case 0x50:  // P
+    217              case 0x70:  // p
+    218                break;
+    219              case 0x51:  // Q
+    220              case 0x71:  // q
+    221                break;
+    222              case 0x52:  // R
+    223              case 0x72:  // r
+    224                break;
+    225              case 0x53:  // S
+    226              case 0x73:  // s
+    227                break;
+    228              case 0x54:  // T
+    229              case 0x74:  // t
+    230                break;
+    231              case 0x55:  // U
+    232              case 0x75:  // u
+    233                break;
+    234              case 0x56:  // V
+    235              case 0x76:  // v
+    236                break;
+    237              case 0x57:  // W
+    238              case 0x77:  // w
+    239                break;
+    240              case 0x58:  // X
+    241              case 0x78:  // x
+    242                break;
+    243              case 0x59:  // Y
+    244              case 0x79:  // y
+    245                break;
+    246              case 0x5A:  // Z
+    247              case 0x7A:  // z
+    248                break;
+    249              case 0x5B:  // [
+    250                break;
+    251              case 0x5C:  //
+    252                break;
+    253              case 0x5D:  // ]
+    254                break;
+    255              case 0x5E:  // ^
+    256                break;
+    257              case 0x5F:  // _
+    258                break;
+    259              case 0x60:  // `
+    260                break;
+    261              case 0x7B:  // {
+    262                break;
+    263              case 0x7C:  // |
+    264                break;
+    265              case 0x7D:  // }
+    266                break;
+    267              case 0x7E:  // ~
+    268                break;
+    269              case 0x7F:  // del
+    270                break;
+    271          */
+    272              default:
+    273                break;
+    274              } // end of character determination Switch
+    275              current_character = 0x00;
+   \                     ??WHEELS_test_5:
+   \   0001FC   C243....     MOV.B   #0x0, &current_character
+    276          }
+   \   000200   1001         RETA
+   \   000202                REQUIRE _A_PBOUT_L
+    277          //------------------------------------------------------------------------------
+    278          
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   WHEELS_test
+        4   -> LED5_SMCLK_switch
+        4   -> outchar
+        4   -> print_CR
+        4   -> wait_for_character
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+     514  WHEELS_test
+       2  _A_PBOUT_L
+
+ 
+ 514 bytes in segment CODE
+   2 bytes in segment DATA16_AN
+ 
+ 514 bytes of CODE memory
+   0 bytes of DATA memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: none

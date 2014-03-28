@@ -1,0 +1,109 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       22/Mar/2014  14:12:01 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  K:\ece306\Projects\Project5\timers.c                    #
+#    Command line  =  K:\ece306\Projects\Project5\timers.c -lC                #
+#                     K:\ece306\Projects\Project5\Debug\List\ -o              #
+#                     K:\ece306\Projects\Project5\Debug\Obj\ --no_cse         #
+#                     --no_unroll --no_inline --no_code_motion --no_tbaa      #
+#                     --debug -D__MSP430FR5739__ -e --double=32               #
+#                     --dlib_config "C:\Program Files (x86)\IAR               #
+#                     Systems\Embedded Workbench                              #
+#                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  K:\ece306\Projects\Project5\Debug\List\timers.lst       #
+#    Object file   =  K:\ece306\Projects\Project5\Debug\Obj\timers.r43        #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+K:\ece306\Projects\Project5\timers.c
+      1          /******************************************************************************
+      2          Timer Configuration
+      3          
+      4          DESC: Contains methods serves to set up a timer based in a precompiled file
+      5          
+      6          GLOBALS: None
+      7          
+      8          Nathan Hansen, 7 Feb 2014, Built with IAR Embedded Workbench Version: 5.60.5
+      9          ******************************************************************************/
+     10          
+     11          #include  "functions.h"
+     12          #include  "macros.h"
+     13          #include  "msp430.h"
+     14          
+
+   \                                 In  segment CODE, align 2
+     15          void Init_Timers(void)
+   \                     Init_Timers:
+     16          {
+     17          	//Init_Timer_A0(); //
+     18          	//Init_Timer_A1(); //
+     19          	//Init_Timer_B0(); //
+     20          	//Init_Timer_B1(); //
+     21          	Init_Timer_B2();   //  Required for provided compiled code to work
+   \   000000   ........     BRA     #Init_Timer_B2
+     22          }
+     23          
+
+   \                                 In  segment CODE, align 2
+     24          void waitMsec(int time)
+   \                     waitMsec:
+     25          {
+     26          	int lastTime = TimeMsec, timeElapsed = RESET_TIME;
+   \   000000   1F42....     MOV.W   &TimeMsec, R15
+   \   000004   0E43         MOV.W   #0x0, R14
+   \   000006   063C         JMP     ??waitMsec_1
+     27          	
+     28          	while(timeElapsed < time)
+     29          	{
+     30          		if(lastTime != TimeMsec)
+   \                     ??waitMsec_0:
+   \   000008   1F92....     CMP.W   &TimeMsec, R15
+   \   00000C   0324         JEQ     ??waitMsec_1
+     31          		{
+     32          			timeElapsed++;
+   \   00000E   1E53         ADD.W   #0x1, R14
+     33          			lastTime = TimeMsec;
+   \   000010   1F42....     MOV.W   &TimeMsec, R15
+     34          		}
+     35          	}
+   \                     ??waitMsec_1:
+   \   000014   0E9C         CMP.W   R12, R14
+   \   000016   F83B         JL      ??waitMsec_0
+     36          }
+   \   000018   1001         RETA
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Init_Timers
+        4   -> Init_Timer_B2
+      4   waitMsec
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  Init_Timers
+      26  waitMsec
+
+ 
+ 30 bytes in segment CODE
+ 
+ 30 bytes of CODE memory
+
+Errors: none
+Warnings: none

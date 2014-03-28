@@ -1,0 +1,453 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       26/Mar/2014  23:46:53 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  K:\ece306\Projects\Project8\motor_control.c             #
+#    Command line  =  K:\ece306\Projects\Project8\motor_control.c -lC         #
+#                     K:\ece306\Projects\Project8\Debug\List\ -o              #
+#                     K:\ece306\Projects\Project8\Debug\Obj\ --no_cse         #
+#                     --no_unroll --no_inline --no_code_motion --no_tbaa      #
+#                     --debug -D__MSP430FR5739__ -e --double=32               #
+#                     --dlib_config "C:\Program Files (x86)\IAR               #
+#                     Systems\Embedded Workbench                              #
+#                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  K:\ece306\Projects\Project8\Debug\List\motor_control.ls #
+#                     t                                                       #
+#    Object file   =  K:\ece306\Projects\Project8\Debug\Obj\motor_control.r43 #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+K:\ece306\Projects\Project8\motor_control.c
+      1          /******************************************************************************
+      2          Main
+      3          
+      4          DESC: This file contains the Main Routine - "While" Operating System
+      5          
+      6          GLOBALS: Last_SW1_State and Last_SW2_State are defined;
+      7          display_1 and display_2 are changed
+      8          
+      9          Nathan Hansen, Feb 2014, Built with IAR Embedded Workbench Version: 5.60.5
+     10          ******************************************************************************/
+     11          
+     12          
+     13          //Include Statements
+     14          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
+     15          #include  "functions.h"
+     16          #include  "macros.h"
+     17          
+
+   \                                 In  segment CODE, align 2
+     18          void Motors_Process(void)
+   \                     Motors_Process:
+     19          {
+     20          	if(MotorTimer <= RESET_TIME)
+   \   000000   9293....     CMP.W   #0x1, &MotorTimer
+   \   000004   0234         JGE     ??Motors_Process_1
+     21          	{
+     22          		allStop();
+   \   000006   ........     BRA     #allStop
+     23          		return;
+     24          	}
+     25          
+     26          	allStop();
+   \                     ??Motors_Process_1:
+   \   00000A   ........     CALLA   #allStop
+     27          	
+     28          	if(LeftMotorPower > 0)
+   \   00000E   9293....     CMP.W   #0x1, &LeftMotorPower
+   \   000012   0B38         JL      ??Motors_Process_2
+     29          		if(TimeMsec % MAX_POWER < LeftMotorPower)
+                 		^
+Warning[Pa082]: undefined behavior: the order of volatile accesses is
+          undefined in this statement
+   \   000014   1C42....     MOV.W   &TimeMsec, R12
+   \   000018   3E406400     MOV.W   #0x64, R14
+   \   00001C   ........     CALLA   #?DivMod16u
+   \   000020   1E92....     CMP.W   &LeftMotorPower, R14
+   \   000024   022C         JC      ??Motors_Process_2
+     30          			leftForward();
+   \   000026   ........     CALLA   #leftForward
+     31          	/*else
+     32          		if(TimeMsec % MAX_POWER < -LeftMotorPower)
+     33          			leftReverse();*/
+     34          	
+     35          	if(RightMotorPower > 0)
+   \                     ??Motors_Process_2:
+   \   00002A   9293....     CMP.W   #0x1, &RightMotorPower
+   \   00002E   0B38         JL      ??Motors_Process_0
+     36          		if(TimeMsec % MAX_POWER < RightMotorPower)
+                 		^
+Warning[Pa082]: undefined behavior: the order of volatile accesses is
+          undefined in this statement
+   \   000030   1C42....     MOV.W   &TimeMsec, R12
+   \   000034   3E406400     MOV.W   #0x64, R14
+   \   000038   ........     CALLA   #?DivMod16u
+   \   00003C   1E92....     CMP.W   &RightMotorPower, R14
+   \   000040   022C         JC      ??Motors_Process_0
+     37          			rightForward();
+   \   000042   ........     CALLA   #rightForward
+     38          	/*else
+     39          		if(TimeMsec % MAX_POWER < -RightMotorPower)
+     40          			rightReverse();
+     41          	*/
+     42          
+     43          	/*	
+     44          	leftReverse();
+     45          	for(int i = 0; LeftMotorPower < 0 && i < -LeftMotorPower; i++);          
+     46          	allStop();
+     47          	
+     48          	rightForward();
+     49          	for(int i = 0; RightMotorPower >= 0 && i < RightMotorPower; i++);
+     50          	allStop();
+     51          	
+     52          	rightReverse();
+     53          	for(int i = 0; RightMotorPower < 0 && i < -RightMotorPower; i++);  
+     54          	allStop();
+     55                  
+     56          	unsigned int LastMsec = TimeMsec;
+     57          	for(int i = RESET_TIME; TimeMsec == LastMsec; i++)
+     58          	{
+     59          		if(LeftMotorPower > OFF_POWER && (i%MAX_POWER) < LeftMotorPower)
+     60          			leftForward();
+     61          		else if(LeftMotorPower < OFF_POWER && (i%MAX_POWER) < -LeftMotorPower)
+     62          			leftReverse();
+     63          			
+     64          		if(RightMotorPower > OFF_POWER && (i%MAX_POWER) < RightMotorPower)
+     65          			rightForward();
+     66          		else if(RightMotorPower < OFF_POWER && (i%MAX_POWER) < -RightMotorPower)
+     67          			rightReverse();	
+     68          	}*/	
+     69          	
+     70                  //if(TimeMsec != LastMsec)
+     71                  //  MotorTimer--;	
+     72          }
+   \                     ??Motors_Process_0:
+   \   000046   1001         RETA
+     73          
+
+   \                                 In  segment CODE, align 2
+     74          void leftForward(void)
+   \                     leftForward:
+     75          {
+     76          	leftStop(); //Zero L_Reverse first
+   \   000000   ........     CALLA   #leftStop
+     77          	P3OUT |= L_FORWARD;  //Then set L_Forward
+   \   000004   F2D040002202 BIS.B   #0x40, &0x222
+     78          }
+   \   00000A   1001         RETA
+   \   00000C                REQUIRE _A_PBOUT_L
+     79          
+
+   \                                 In  segment CODE, align 2
+     80          void leftReverse(void)
+   \                     leftReverse:
+     81          {
+     82          	leftStop(); //Zero L_Forward first
+   \   000000   ........     CALLA   #leftStop
+     83          	P3OUT |= L_REVERSE;  //Then ser L_Reverse
+   \   000004   F2D080002202 BIS.B   #0x80, &0x222
+     84          }
+   \   00000A   1001         RETA
+   \   00000C                REQUIRE _A_PBOUT_L
+     85          
+
+   \                                 In  segment CODE, align 2
+     86          void rightForward(void)
+   \                     rightForward:
+     87          {
+     88          	rightStop(); //Zero R_Reverse first
+   \   000000   ........     CALLA   #rightStop
+     89          	P3OUT |= R_FORWARD;  //Then set R_Forward
+   \   000004   F2D010002202 BIS.B   #0x10, &0x222
+     90          }
+   \   00000A   1001         RETA
+   \   00000C                REQUIRE _A_PBOUT_L
+     91          
+
+   \                                 In  segment CODE, align 2
+     92          void rightReverse(void)
+   \                     rightReverse:
+     93          {
+     94          	rightStop(); //Zero R_Forward first
+   \   000000   ........     CALLA   #rightStop
+     95          	P3OUT |= R_REVERSE;  //Then set R_Reverse
+   \   000004   F2D020002202 BIS.B   #0x20, &0x222
+     96          }
+   \   00000A   1001         RETA
+   \   00000C                REQUIRE _A_PBOUT_L
+     97          
+
+   \                                 In  segment CODE, align 2
+     98          void rightStop(void)
+   \                     rightStop:
+     99          {
+    100          	P3OUT &= ~R_FORWARD;
+   \   000000   F2C010002202 BIC.B   #0x10, &0x222
+    101          	P3OUT &= ~R_REVERSE;
+   \   000006   F2C020002202 BIC.B   #0x20, &0x222
+    102          }
+   \   00000C   1001         RETA
+   \   00000E                REQUIRE _A_PBOUT_L
+    103          
+
+   \                                 In  segment CODE, align 2
+    104          void leftStop(void)
+   \                     leftStop:
+    105          {
+    106          	P3OUT &= ~L_FORWARD;
+   \   000000   F2C040002202 BIC.B   #0x40, &0x222
+    107          	P3OUT &= ~L_REVERSE;
+   \   000006   F2C080002202 BIC.B   #0x80, &0x222
+    108          }
+   \   00000C   1001         RETA
+   \   00000E                REQUIRE _A_PBOUT_L
+    109          
+
+   \                                 In  segment CODE, align 2
+    110          void allStop(void)
+   \                     allStop:
+    111          {
+    112          	leftStop();
+   \   000000   ........     CALLA   #leftStop
+    113          	rightStop();
+   \   000004   ........     BRA     #rightStop
+    114          }
+    115          
+
+   \                                 In  segment CODE, align 2
+    116          void timedForward(int time)
+   \                     timedForward:
+    117          {
+    118          	MotorTimer = time;
+   \   000000   824C....     MOV.W   R12, &MotorTimer
+    119          	LeftMotorPower = LPOWER;
+   \   000004   B2406400.... MOV.W   #0x64, &LeftMotorPower
+    120          	RightMotorPower = RPOWER;
+   \   00000A   B2405F00.... MOV.W   #0x5f, &RightMotorPower
+    121          }
+   \   000010   1001         RETA
+    122          
+
+   \                                 In  segment CODE, align 2
+    123          void timedReverse(int time)
+   \                     timedReverse:
+    124          {
+    125          	MotorTimer = time;
+   \   000000   824C....     MOV.W   R12, &MotorTimer
+    126          	LeftMotorPower = -LPOWER;
+   \   000004   B2409CFF.... MOV.W   #0xff9c, &LeftMotorPower
+    127          	RightMotorPower = -RPOWER;
+   \   00000A   B240A1FF.... MOV.W   #0xffa1, &RightMotorPower
+    128          }
+   \   000010   1001         RETA
+    129          
+
+   \                                 In  segment CODE, align 2
+    130          void timedLeft(int time)
+   \                     timedLeft:
+    131          {
+    132          	MotorTimer = time;
+   \   000000   824C....     MOV.W   R12, &MotorTimer
+    133          	LeftMotorPower = OFF_POWER;
+   \   000004   8243....     MOV.W   #0x0, &LeftMotorPower
+    134          	RightMotorPower = RPOWER;
+   \   000008   B2405F00.... MOV.W   #0x5f, &RightMotorPower
+    135          }
+   \   00000E   1001         RETA
+    136          
+
+   \                                 In  segment CODE, align 2
+    137          void timedRight(int time)
+   \                     timedRight:
+    138          {
+    139          	MotorTimer = time;
+   \   000000   824C....     MOV.W   R12, &MotorTimer
+    140          	LeftMotorPower = LPOWER;
+   \   000004   B2406400.... MOV.W   #0x64, &LeftMotorPower
+    141          	RightMotorPower = OFF_POWER;
+   \   00000A   8243....     MOV.W   #0x0, &RightMotorPower
+    142          }
+   \   00000E   1001         RETA
+    143          
+
+   \                                 In  segment CODE, align 2
+    144          void timedSpinCW(int time)
+   \                     timedSpinCW:
+    145          {
+    146          	MotorTimer = time;
+   \   000000   824C....     MOV.W   R12, &MotorTimer
+    147          	LeftMotorPower = LPOWER;
+   \   000004   B2406400.... MOV.W   #0x64, &LeftMotorPower
+    148          	RightMotorPower = -RPOWER;
+   \   00000A   B240A1FF.... MOV.W   #0xffa1, &RightMotorPower
+    149          }
+   \   000010   1001         RETA
+    150          
+
+   \                                 In  segment CODE, align 2
+    151          void timedSpinCCW(int time)
+   \                     timedSpinCCW:
+    152          {
+    153          	MotorTimer = time;
+   \   000000   824C....     MOV.W   R12, &MotorTimer
+    154          	LeftMotorPower = -LPOWER;
+   \   000004   B2409CFF.... MOV.W   #0xff9c, &LeftMotorPower
+    155          	RightMotorPower = RPOWER;
+   \   00000A   B2405F00.... MOV.W   #0x5f, &RightMotorPower
+    156          }
+   \   000010   1001         RETA
+    157          
+
+   \                                 In  segment CODE, align 2
+    158          void circleCW(void)
+   \                     circleCW:
+    159          {
+    160          	MotorTimer = CIRCLE_CW_TIME;
+   \   000000   B2404E0C.... MOV.W   #0xc4e, &MotorTimer
+    161          	LeftMotorPower = LPOWER;
+   \   000006   B2406400.... MOV.W   #0x64, &LeftMotorPower
+    162          	RightMotorPower = RPOWER/CIRCLE_DIV;
+   \   00000C   B2400B00.... MOV.W   #0xb, &RightMotorPower
+    163          }
+   \   000012   1001         RETA
+    164          
+
+   \                                 In  segment CODE, align 2
+    165          void circleCCW(void)
+   \                     circleCCW:
+    166          {
+    167          	MotorTimer = CIRCLE_CCW_TIME;
+   \   000000   B240A60E.... MOV.W   #0xea6, &MotorTimer
+    168          	LeftMotorPower = LPOWER/CIRCLE_DIV;
+   \   000006   B2400C00.... MOV.W   #0xc, &LeftMotorPower
+    169          	RightMotorPower = RPOWER;
+   \   00000C   B2405F00.... MOV.W   #0x5f, &RightMotorPower
+    170          }
+   \   000012   1001         RETA
+    171          
+
+   \                                 In  segment CODE, align 2
+    172          void figureEight(void)
+   \                     figureEight:
+    173          {
+    174          	circleCW();
+   \   000000   ........     CALLA   #circleCW
+    175          	circleCCW();
+   \   000004   ........     BRA     #circleCCW
+    176          }
+    177          
+
+   \                                 In  segment CODE, align 2
+    178          void triangle(void)
+   \                     triangle:
+    179          {
+   \   000000   0A12         PUSH.W  R10
+    180          	for(int i = RESET_0; i < TRI_SIDES; i++)
+   \   000002   0A43         MOV.W   #0x0, R10
+   \   000004   0D3C         JMP     ??triangle_1
+    181          	{
+    182          		timedForward(TRI_TIME);   
+   \                     ??triangle_0:
+   \   000006   3C40FA00     MOV.W   #0xfa, R12
+   \   00000A   ........     CALLA   #timedForward
+    183          		timedLeft(TURN_60);
+   \   00000E   3C40E803     MOV.W   #0x3e8, R12
+   \   000012   ........     CALLA   #timedLeft
+    184          		timedForward(TRI_TIME);
+   \   000016   3C40FA00     MOV.W   #0xfa, R12
+   \   00001A   ........     CALLA   #timedForward
+    185          	}
+   \   00001E   1A53         ADD.W   #0x1, R10
+   \                     ??triangle_1:
+   \   000020   3A900300     CMP.W   #0x3, R10
+   \   000024   F03B         JL      ??triangle_0
+    186          }
+   \   000026   3A41         POP.W   R10
+   \   000028   1001         RETA
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Motors_Process
+        4   -> allStop
+        4   -> leftForward
+        4   -> rightForward
+      4   allStop
+        4   -> leftStop
+        4   -> rightStop
+      4   circleCCW
+      4   circleCW
+      4   figureEight
+        4   -> circleCCW
+        4   -> circleCW
+      4   leftForward
+        4   -> leftStop
+      4   leftReverse
+        4   -> leftStop
+      4   leftStop
+      4   rightForward
+        4   -> rightStop
+      4   rightReverse
+        4   -> rightStop
+      4   rightStop
+      4   timedForward
+      4   timedLeft
+      4   timedReverse
+      4   timedRight
+      4   timedSpinCCW
+      4   timedSpinCW
+      6   triangle
+        6   -> timedForward
+        6   -> timedLeft
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      72  Motors_Process
+       2  _A_PBOUT_L
+       8  allStop
+      20  circleCCW
+      20  circleCW
+       8  figureEight
+      12  leftForward
+      12  leftReverse
+      14  leftStop
+      12  rightForward
+      12  rightReverse
+      14  rightStop
+      18  timedForward
+      16  timedLeft
+      18  timedReverse
+      16  timedRight
+      18  timedSpinCCW
+      18  timedSpinCW
+      42  triangle
+
+ 
+ 350 bytes in segment CODE
+   2 bytes in segment DATA16_AN
+ 
+ 350 bytes of CODE memory
+   0 bytes of DATA memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: 2

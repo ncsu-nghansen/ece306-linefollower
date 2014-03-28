@@ -1,0 +1,1545 @@
+################################################################################
+#                                                                              #
+#      IAR Universal Linker V5.2.4.16                                          #
+#                                                                              #
+#           Link time     =  05/Aug/2013  22:08:03                             #
+#           Target CPU    =  MSP430                                            #
+#           List file     =  D:\Jim\NCSU\Current\Code\Working\Debug\List\Worki #
+#                            ng.map                                            #
+#           Output file 1 =  D:\Jim\NCSU\Current\Code\Working\Debug\Exe\Workin #
+#                            g.d43                                             #
+#                            Format: debug                                     #
+#                            UBROF version 10.0.6                              #
+#                            Using library modules for C-SPY (-rt)             #
+#           Command line  =  D:\Jim\NCSU\Current\Code\Working\Debug\Obj\LCD.r4 #
+#                            3                                                 #
+#                            D:\Jim\NCSU\Current\Code\Working\Debug\Obj\LED.r4 #
+#                            3                                                 #
+#                            D:\Jim\NCSU\Current\Code\Working\Debug\Obj\adc.r4 #
+#                            3                                                 #
+#                            D:\Jim\NCSU\Current\Code\Working\Debug\Obj\clocks #
+#                            .r43                                              #
+#                            D:\Jim\NCSU\Current\Code\Working\Debug\Obj\gps.r4 #
+#                            3                                                 #
+#                            D:\Jim\NCSU\Current\Code\Working\Debug\Obj\init.r #
+#                            43                                                #
+#                            D:\Jim\NCSU\Current\Code\Working\Debug\Obj\interr #
+#                            upts.r43                                          #
+#                            D:\Jim\NCSU\Current\Code\Working\Debug\Obj\main.r #
+#                            43                                                #
+#                            D:\Jim\NCSU\Current\Code\Working\Debug\Obj\menu.r #
+#                            43                                                #
+#                            D:\Jim\NCSU\Current\Code\Working\Debug\Obj\ports. #
+#                            r43                                               #
+#                            D:\Jim\NCSU\Current\Code\Working\Debug\Obj\serial #
+#                            .r43                                              #
+#                            D:\Jim\NCSU\Current\Code\Working\Debug\Obj\spi.r4 #
+#                            3                                                 #
+#                            D:\Jim\NCSU\Current\Code\Working\Debug\Obj\switch #
+#                            es.r43                                            #
+#                            D:\Jim\NCSU\Current\Code\Working\Debug\Obj\system #
+#                            .r43                                              #
+#                            D:\Jim\NCSU\Current\Code\Working\Debug\Obj\timers #
+#                            .r43                                              #
+#                            D:\Jim\NCSU\Current\Code\Working\Debug\Obj\wheels #
+#                            .r43                                              #
+#                            -o                                                #
+#                            D:\Jim\NCSU\Current\Code\Working\Debug\Exe\Workin #
+#                            g.d43                                             #
+#                            -l                                                #
+#                            D:\Jim\NCSU\Current\Code\Working\Debug\List\Worki #
+#                            ng.map                                            #
+#                            -xesnio                                           #
+#                            "-IC:\Program Files (x86)\IAR Systems\Embedded Wo #
+#                            rkbench 6.0 Kickstart\430\LIB\"                   #
+#                            -f                                                #
+#                            "C:\Program Files (x86)\IAR Systems\Embedded Work #
+#                            bench 6.0 Kickstart\430\CONFIG\lnk430FR5739.xcl"  #
+#                            (-cmsp430 -QCODE_I=CODE_ID                        #
+#                            -Z(DATA)DATA16_I,DATA16_Z,DATA16_N,TLS16_I,DATA16 #
+#                            _HEAP+_DATA16_HEAP_SIZE=1C00-1FFF                 #
+#                            -Z(DATA)CODE_I -Z(DATA)CSTACK+_STACK_SIZE#        #
+#                            -Z(CONST)DATA16_C,DATA16_ID,TLS16_ID,DIFUNCT,CHEC #
+#                            KSUM=C200-FF7F                                    #
+#                            -Z(CODE)CSTART,ISR_CODE,CODE_ID=C200-FF7F         #
+#                            -P(CODE)CODE=C200-FF7F -Z(CODE)INTVEC=FF80-FFFF   #
+#                            -Z(CODE)RESET=FFFE-FFFF) -f                       #
+#                            "C:\Program Files (x86)\IAR Systems\Embedded Work #
+#                            bench 6.0 Kickstart\430\config\multiplier32_loc2. #
+#                            xcl"                                              #
+#                            (-e?Mul8HwLoc2=?Mul8 -e?Mul16HwLoc2=?Mul16        #
+#                            -e?Mul16to32uHwLoc2=?Mul16to32u                   #
+#                            -e?Mul16to32sHwLoc2=?Mul16to32s                   #
+#                            -e?Mul32Hw32Loc2=?Mul32                           #
+#                            -e?Mul64Hw32Loc2=_Mul64i                          #
+#                            -e?Mul32u32uto64iHw32Loc2=_Mul32u32uto64i         #
+#                            -e?Mul32fHwLoc2=_Mul32f                           #
+#                            -e_Mul64fHwPtrLoc2=_Mul64fPtr) -D_STACK_SIZE=A0   #
+#                            -rt                                               #
+#                            "C:\Program Files (x86)\IAR Systems\Embedded Work #
+#                            bench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43"   #
+#                            -e_PrintfLarge=_Printf -e_ScanfLarge=_Scanf       #
+#                            -D_DATA16_HEAP_SIZE=A0 -s __program_start         #
+#                            -D_DATA20_HEAP_SIZE=50                            #
+#                                                                              #
+#                           Copyright (C) 1987-2011 IAR Systems AB.            #
+################################################################################
+
+
+
+
+
+                ****************************************
+                *                                      *
+                *           CROSS REFERENCE            *
+                *                                      *
+                ****************************************
+
+       Program entry at :           C2B6  Relocatable, from module : ?cstart
+
+
+
+
+                ****************************************
+                *                                      *
+                *            RUNTIME MODEL             *
+                *                                      *
+                ****************************************
+
+  __Heap_Handler             = Basic
+  __SystemLibrary            = DLib
+  __core                     = 430X
+  __data_model               = small
+  __dlib_file_descriptor     = 0
+  __dlib_full_locale_support = 0
+  __double_size              = 32
+  __pic                      = no
+  __reg_r4                   = free
+  __reg_r5                   = free
+  __rt_version               = 3
+
+                ****************************************
+                *                                      *
+                *    AUTOMATIC SYMBOL REDIRECTIONS     *
+                *                                      *
+                ****************************************
+
+                  There are no automatic symbol redirections.
+
+                ****************************************
+                *                                      *
+                *              ENTRY LIST              *
+                *                                      *
+                ****************************************
+
+Module  Entry                              Address
+------  -----                              -------
+?FILLER_BYTES
+?ABS_ENTRY_MOD
+        _DATA20_HEAP_SIZE                   0050
+        _DATA16_HEAP_SIZE                   00A0
+        _STACK_SIZE                         00A0
+LCD ( D:\Jim\NCSU\Current\Code\Working\Debug\Obj\LCD.r43 )
+        _A_PAOUT_L                          0202
+        _A_PBOUT_L                          0222
+        _A_PJOUT_L                          0322
+        lcd_control                         1C44
+        display_line_1                      1C45
+        display_line_2                      1C56
+        display_1                           1C16
+        display_2                           1C18
+        char_count                          1C1A
+        current_line                        1C67
+        LCD_test                            C5F2
+        spi_rs_data                         E064
+        spi_rs_command                      E06C
+        spi_chipselect_idle                 NOT NEEDED
+        spi_chipselect_active               NOT NEEDED
+        Init_LCD                            D71C
+        lcd_command                         DF52
+        lcd_write                           DCAE
+        lcd_clear                           NOT NEEDED
+        lcd_putc                            DD50
+        lcd_puts                            DEA0
+        lcd_out                             DEEA
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        PAOUT                               0202
+        PAOUT_H                             0203
+        PAOUT_L                             0202
+        PBOUT                               0222
+        PBOUT_H                             0223
+        PBOUT_L                             0222
+        PJOUT                               0322
+        PJOUT_H                             0323
+        PJOUT_L                             0322
+LED ( D:\Jim\NCSU\Current\Code\Working\Debug\Obj\LED.r43 )
+        _A_PBOUT_L                          NOT NEEDED
+        _A_PJOUT_L                          NOT NEEDED
+        Init_LEDs                           D876
+        LED5_SMCLK_switch                   DF30
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        PBOUT                               0222
+        PBOUT_H                             0223
+        PBOUT_L                             0222
+        PJOUT                               0322
+        PJOUT_H                             0323
+        PJOUT_L                             0322
+adc ( D:\Jim\NCSU\Current\Code\Working\Debug\Obj\adc.r43 )
+        _A_ADC10CTL0_L                      0700
+        _A_ADC10CTL1_L                      0702
+        _A_ADC10CTL2_L                      0704
+        _A_ADC10MCTL0_L                     070A
+        _A_ADC10IE_L                        071A
+        ADC_Right_Detector                  1C1C
+        ADC_Left_Detector                   1C1E
+        ADC_Thumb                           1C20
+        ADC_Temp                            1C22
+        ADC_Bat                             1C24
+        ADC_Channel                         1C68
+        Init_ADC                            D806
+        ADC_Process                         D8D8
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        ADC10CTL0                           0700
+        ADC10CTL0_H                         0701
+        ADC10CTL0_L                         0700
+        ADC10CTL1                           0702
+        ADC10CTL1_H                         0703
+        ADC10CTL1_L                         0702
+        ADC10CTL2                           0704
+        ADC10CTL2_H                         0705
+        ADC10CTL2_L                         0704
+        ADC10MCTL0                          070A
+        ADC10MCTL0_H                        070B
+        ADC10MCTL0_L                        070A
+        ADC10IE                             071A
+        ADC10IE_H                           071B
+        ADC10IE_L                           071A
+clocks ( D:\Jim\NCSU\Current\Code\Working\Debug\Obj\clocks.r43 )
+        _A_CSCTL0_L                         0160
+        _A_CSCTL1_L                         0162
+        _A_CSCTL2_L                         0164
+        _A_CSCTL3_L                         0166
+        _A_WDTCTL_L                         015C
+        Init_Clocks                         DEC6
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        CSCTL0                              0160
+        CSCTL0_H                            0161
+        CSCTL0_L                            0160
+        CSCTL1                              0162
+        CSCTL1_H                            0163
+        CSCTL1_L                            0162
+        CSCTL2                              0164
+        CSCTL2_H                            0165
+        CSCTL2_L                            0164
+        CSCTL3                              0166
+        CSCTL3_H                            0167
+        CSCTL3_L                            0166
+        WDTCTL                              015C
+        WDTCTL_H                            015D
+        WDTCTL_L                            015C
+gps ( D:\Jim\NCSU\Current\Code\Working\Debug\Obj\gps.r43 )
+        _A_PAIN_L                           0200
+        _A_PAOUT_L                          NOT NEEDED
+        _A_PBOUT_L                          NOT NEEDED
+        _A_PJOUT_L                          NOT NEEDED
+        _A_UCA1IE_L                         05FA
+        NMEA_BUF                            1C69
+        gps_index                           1C26
+        message_type                        1CB7
+        correct_message                     1CB8
+        message_selection                   NOT NEEDED
+        onlyonce                            1C28
+        fix_quality                         1CB9
+        gps_system_init                     D9F8
+        gps_wakeup                          DB3C
+        gps_meassage_type                   D794
+        count_commas                        DE04
+        GPS_process_simple                  NOT NEEDED
+        GPS_clean_buffer                    DF0E
+        GPS_process                         D33A
+        LCD_gps_meassage_print              D4F6
+        VS_gps_meassage_print               D59A
+        GPS_test                            CB52
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        PAIN                                0200
+        PAIN_H                              0201
+        PAIN_L                              0200
+        PAOUT                               0202
+        PAOUT_H                             0203
+        PAOUT_L                             0202
+        PBOUT                               0222
+        PBOUT_H                             0223
+        PBOUT_L                             0222
+        PJOUT                               0322
+        PJOUT_H                             0323
+        PJOUT_L                             0322
+        UCA1IE                              05FA
+        UCA1IE_H                            05FB
+        UCA1IE_L                            05FA
+init ( D:\Jim\NCSU\Current\Code\Working\Debug\Obj\init.r43 )
+        Init_Conditions                     D93A
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+interrupts ( D:\Jim\NCSU\Current\Code\Working\Debug\Obj\interrupts.r43 )
+        _A_ADC10MCTL0_L                     NOT NEEDED
+        _A_ADC10MEM0_L                      0712
+        _A_ADC10IV_L                        071E
+        _A_PBOUT_L                          NOT NEEDED
+        _A_PBIFG_L                          023C
+        _A_PJOUT_L                          NOT NEEDED
+        TA1CCR0                             0392
+        TA1CCR1                             0394
+        TA1CCR2                             0396
+        TA1IV                               03AE
+        TB0CCR0                             03D2
+        TB0CCR1                             03D4
+        TB0CCR2                             03D6
+        TB0IV                               03EE
+        TB1CCR0                             0412
+        TB1CCR1                             0414
+        TB1CCR2                             0416
+        TB1IV                               042E
+        TB2CCR0                             0452
+        TB2CCR1                             0454
+        TB2CCR2                             0456
+        TB2IV                               046E
+        _A_UCA0RXBUF_L                      05CC
+        UCA0IV                              05DE
+        UCB0IV                              066E
+        _A_UCA1RXBUF_L                      05EC
+        UCA1IV                              05FE
+        led_blink                           1C2A
+        test_character                      NOT NEEDED
+        character_count                     1CBA
+        gps_resetting                       1C2C
+        gps_2b_reset                        1C2E
+        reset_gps_time                      1C30
+        gps_message_process                 NOT NEEDED
+        time_pass_by                        1C32
+        transmit_delay                      1CBB
+        transmit_time                       1CBC
+        Timer1_A0_ISR                       C2DE
+        TIMER1_A1_ISR                       C2E6
+        Timer0_B0_ISR                       C336
+        TIMER0_B1_ISR                       C360
+        Timer1_B0_ISR                       C398
+        TIMER1_B1_ISR                       C3FC
+        Timer2_B0_ISR                       C492
+        TIMER2_B1_ISR                       C49A
+        USCI_A0_ISR                         C4D2
+        USCI_A1_ISR                         C508
+        USCI_B0_ISR                         C53E
+        switch_interrupt                    C550
+        ADC10_ISR                           C586
+        switch_interrupt::??INTVEC 80       FFD0
+        TIMER2_B1_ISR::??INTVEC 84          FFD4
+        Timer2_B0_ISR::??INTVEC 86          FFD6
+        TIMER1_B1_ISR::??INTVEC 90          FFDA
+        Timer1_B0_ISR::??INTVEC 92          FFDC
+        TIMER1_A1_ISR::??INTVEC 96          FFE0
+        Timer1_A0_ISR::??INTVEC 98          FFE2
+        USCI_A1_ISR::??INTVEC 102           FFE6
+        ADC10_ISR::??INTVEC 108             FFEC
+        USCI_B0_ISR::??INTVEC 110           FFEE
+        USCI_A0_ISR::??INTVEC 112           FFF0
+        TIMER0_B1_ISR::??INTVEC 116         FFF4
+        Timer0_B0_ISR::??INTVEC 118         FFF6
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        ADC10MCTL0                          070A
+        ADC10MCTL0_H                        070B
+        ADC10MCTL0_L                        070A
+        ADC10MEM0                           0712
+        ADC10MEM0_H                         0713
+        ADC10MEM0_L                         0712
+        ADC10IV                             071E
+        ADC10IV_H                           071F
+        ADC10IV_L                           071E
+        PBOUT                               0222
+        PBOUT_H                             0223
+        PBOUT_L                             0222
+        PBIFG                               023C
+        PBIFG_H                             023D
+        PBIFG_L                             023C
+        PJOUT                               0322
+        PJOUT_H                             0323
+        PJOUT_L                             0322
+        UCA0RXBUF                           05CC
+        UCA0RXBUF_H                         05CD
+        UCA0RXBUF_L                         05CC
+        UCA1RXBUF                           05EC
+        UCA1RXBUF_H                         05ED
+        UCA1RXBUF_L                         05EC
+main ( D:\Jim\NCSU\Current\Code\Working\Debug\Obj\main.r43 )
+        _A_PJOUT_L                          NOT NEEDED
+        control_state                       1CBD
+        slow_input_down                     1CC0
+        gps_character                       NOT NEEDED
+        main                                D61E
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        PJOUT                               0322
+        PJOUT_H                             0323
+        PJOUT_L                             0322
+menu ( D:\Jim\NCSU\Current\Code\Working\Debug\Obj\menu.r43 )
+        _A_PAOUT_L                          NOT NEEDED
+        _A_UCA0IE_L                         05DA
+        build_date                          1C00
+        build_time                          1C0C
+        current_character                   1CC1
+        character_time_out                  1CC2
+        menu                                DDAE
+        wait_for_character                  DB80
+        grab_a_character                    DE7A
+        increment_usb_rx_ring               DFE8
+        increment_gps_rx_ring               NOT NEEDED
+        menu_program                        CE9A
+        out_control_words                   DD80
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        PAOUT                               0202
+        PAOUT_H                             0203
+        PAOUT_L                             0202
+        UCA0IE                              05DA
+        UCA0IE_H                            05DB
+        UCA0IE_L                            05DA
+ports ( D:\Jim\NCSU\Current\Code\Working\Debug\Obj\ports.r43 )
+        _A_PAOUT_L                          NOT NEEDED
+        _A_PADIR_L                          0204
+        _A_PASEL0_L                         020A
+        _A_PASEL1_L                         020C
+        _A_PBOUT_L                          NOT NEEDED
+        _A_PBDIR_L                          0224
+        _A_PBREN_L                          0226
+        _A_PBSEL0_L                         022A
+        _A_PBSEL1_L                         022C
+        _A_PBIES_L                          0238
+        _A_PJOUT_L                          NOT NEEDED
+        _A_PJDIR_L                          0324
+        _A_PJSEL0_L                         032A
+        _A_PJSEL1_L                         032C
+        Init_Ports                          DF8E
+        Init_Port1                          DA50
+        Init_Port2                          DC38
+        Init_Port3                          D6A2
+        Init_Port4                          DDDA
+        Init_PortJ                          DF74
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        PAOUT                               0202
+        PAOUT_H                             0203
+        PAOUT_L                             0202
+        PADIR                               0204
+        PADIR_H                             0205
+        PADIR_L                             0204
+        PASEL0                              020A
+        PASEL0_H                            020B
+        PASEL0_L                            020A
+        PASEL1                              020C
+        PASEL1_H                            020D
+        PASEL1_L                            020C
+        PBOUT                               0222
+        PBOUT_H                             0223
+        PBOUT_L                             0222
+        PBDIR                               0224
+        PBDIR_H                             0225
+        PBDIR_L                             0224
+        PBREN                               0226
+        PBREN_H                             0227
+        PBREN_L                             0226
+        PBSEL0                              022A
+        PBSEL0_H                            022B
+        PBSEL0_L                            022A
+        PBSEL1                              022C
+        PBSEL1_H                            022D
+        PBSEL1_L                            022C
+        PBIES                               0238
+        PBIES_H                             0239
+        PBIES_L                             0238
+        PJOUT                               0322
+        PJOUT_H                             0323
+        PJOUT_L                             0322
+        PJDIR                               0324
+        PJDIR_H                             0325
+        PJDIR_L                             0324
+        PJSEL0                              032A
+        PJSEL0_H                            032B
+        PJSEL0_L                            032A
+        PJSEL1                              032C
+        PJSEL1_H                            032D
+        PJSEL1_L                            032C
+serial ( D:\Jim\NCSU\Current\Code\Working\Debug\Obj\serial.r43 )
+        _A_UCA0CTLW0_L                      05C0
+        _A_UCA0BRW_L                        05C6
+        _A_UCA0MCTLW_L                      05C8
+        _A_UCA0TXBUF_L                      05CE
+        _A_UCA0IE_L                         NOT NEEDED
+        _A_UCA0IFG_L                        05DC
+        _A_UCA1CTLW0_L                      05E0
+        _A_UCA1BRW_L                        05E6
+        _A_UCA1MCTLW_L                      05E8
+        _A_UCA1IE_L                         NOT NEEDED
+        TX_Buffer                           NOT NEEDED
+        USB_Char_Rx                         1CC3
+        usb_rx_ring_wr                      1C34
+        usb_rx_ring_rd                      1C36
+        USB_Char_Tx                         1CE3
+        usb_tx_ring_wr                      1C38
+        usb_tx_ring_rd                      1C3A
+        GPS_Char_Rx                         1D31
+        gps_rx_ring_wr                      1C3C
+        gps_rx_ring_rd                      1C3E
+        Init_Serial_UCA0                    DAA2
+        Init_Serial_UCA1                    DCE6
+        alphabet                            NOT NEEDED
+        Transmit_U                          NOT NEEDED
+        outchar                             E02E
+        outhex                              DBBE
+        outshorthex                         DBFC
+        print_CR                            E01E
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        UCA0CTLW0                           05C0
+        UCA0CTLW0_H                         05C1
+        UCA0CTLW0_L                         05C0
+        UCA0BRW                             05C6
+        UCA0BRW_H                           05C7
+        UCA0BRW_L                           05C6
+        UCA0MCTLW                           05C8
+        UCA0MCTLW_H                         05C9
+        UCA0MCTLW_L                         05C8
+        UCA0TXBUF                           05CE
+        UCA0TXBUF_H                         05CF
+        UCA0TXBUF_L                         05CE
+        UCA0IE                              05DA
+        UCA0IE_H                            05DB
+        UCA0IE_L                            05DA
+        UCA0IFG                             05DC
+        UCA0IFG_H                           05DD
+        UCA0IFG_L                           05DC
+        UCA1CTLW0                           05E0
+        UCA1CTLW0_H                         05E1
+        UCA1CTLW0_L                         05E0
+        UCA1BRW                             05E6
+        UCA1BRW_H                           05E7
+        UCA1BRW_L                           05E6
+        UCA1MCTLW                           05E8
+        UCA1MCTLW_H                         05E9
+        UCA1MCTLW_L                         05E8
+        UCA1IE                              05FA
+        UCA1IE_H                            05FB
+        UCA1IE_L                            05FA
+spi ( D:\Jim\NCSU\Current\Code\Working\Debug\Obj\spi.r43 )
+        _A_UCB0CTLW0_L                      0640
+        _A_UCB0BRW_L                        0646
+        _A_UCB0TXBUF_L                      064E
+        _A_UCB0IFG_L                        066C
+        SPI_Char                            NOT NEEDED
+        Init_SPI_B0                         DE54
+        SPI_test                            NOT NEEDED
+        SPI_B0_write                        DFD4
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        UCB0CTLW0                           0640
+        UCB0CTLW0_H                         0641
+        UCB0CTLW0_L                         0640
+        UCB0BRW                             0646
+        UCB0BRW_H                           0647
+        UCB0BRW_L                           0646
+        UCB0TXBUF                           064E
+        UCB0TXBUF_H                         064F
+        UCB0TXBUF_L                         064E
+        UCB0IFG                             066C
+        UCB0IFG_H                           066D
+        UCB0IFG_L                           066C
+switches ( D:\Jim\NCSU\Current\Code\Working\Debug\Obj\switches.r43 )
+        _A_PBIE_L                           023A
+        _A_PBIFG_L                          NOT NEEDED
+        switch_1                            NOT NEEDED
+        switch_2                            NOT NEEDED
+        switch_states                       1D51
+        count_debounce_SW1                  1D52
+        count_debounce_SW2                  1D53
+        Init_Switches                       E074
+        enable_switch_SW1                   E046
+        enable_switch_SW2                   E05A
+        disable_switch_SW1                  E050
+        disable_switch_SW2                  E03C
+        switch_control                      DAF2
+        Switches_Process                    DC74
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        PBIE                                023A
+        PBIE_H                              023B
+        PBIE_L                              023A
+        PBIFG                               023C
+        PBIFG_H                             023D
+        PBIFG_L                             023C
+system ( D:\Jim\NCSU\Current\Code\Working\Debug\Obj\system.r43 )
+        enable_interrupts                   E088
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+timers ( D:\Jim\NCSU\Current\Code\Working\Debug\Obj\timers.r43 )
+        _A_PBOUT_L                          NOT NEEDED
+        TA0CTL                              0340
+        TA0CCTL0                            0342
+        TA0CCTL1                            0344
+        TA0CCTL2                            0346
+        TA0CCR0                             0352
+        TA0CCR1                             0354
+        TA0CCR2                             0356
+        TA0EX0                              0360
+        TA1CTL                              0380
+        TA1CCTL0                            0382
+        TA1CCR0                             NOT NEEDED
+        TA1EX0                              03A0
+        TB0CTL                              03C0
+        TB0EX0                              03E0
+        TB1CTL                              0400
+        TB1CCTL0                            0402
+        TB1CCTL1                            0404
+        TB1CCTL2                            0406
+        TB1CCR0                             NOT NEEDED
+        TB1CCR1                             NOT NEEDED
+        TB1CCR2                             NOT NEEDED
+        TB1EX0                              0420
+        TB2CTL                              0440
+        TB2CCTL0                            0442
+        TB2CCTL1                            0444
+        TB2CCTL2                            0446
+        TB2CCR0                             NOT NEEDED
+        TB2CCR1                             NOT NEEDED
+        TB2CCR2                             NOT NEEDED
+        TB2EX0                              0460
+        five_msec_count                     1C40
+        sleeping                            1C42
+        sleeptime                           1D54
+        measure_delay                       NOT NEEDED
+        Init_Timers                         E084
+        Init_Timer0_A                       NOT NEEDED
+        Init_Timer1_A                       NOT NEEDED
+        Init_Timer0_B                       NOT NEEDED
+        Init_Timer1_B                       DD1E
+        Init_Timer2_B                       NOT NEEDED
+        usleep10                            DFA6
+        five_msec_sleep                     DE2C
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        PBOUT                               0222
+        PBOUT_H                             0223
+        PBOUT_L                             0222
+wheels ( D:\Jim\NCSU\Current\Code\Working\Debug\Obj\wheels.r43 )
+        _A_PBOUT_L                          NOT NEEDED
+        WHEELS_test                         D138
+        ?setjmp_save_r4                     NOT NEEDED
+        ?setjmp_save_r5                     NOT NEEDED
+        PBOUT                               0222
+        PBOUT_H                             0223
+        PBOUT_L                             0222
+?abort ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        abort                               NOT NEEDED
+?__dbg_break ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        __DebugBreak                        E090
+?__dwrite ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        __dwrite                            NOT NEEDED
+?__exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        __exit                              DFBE
+?__write ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        __write                             NOT NEEDED
+?_exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        _exit                               E08C
+        __cstart_call_dtors                 NOT NEEDED
+        __cstart_closeall                   NOT NEEDED
+        __cstart_clearlocks                 NOT NEEDED
+?cppinit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        __call_ctors                        NOT NEEDED
+        __alloc_record_needed_destruction   NOT NEEDED
+        __record_needed_destruction         NOT NEEDED
+        __call_dtors                        NOT NEEDED
+        __data16_vec_cctor                  NOT NEEDED
+?cstart ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        __program_start                     C2B6
+        ?cstart_begin                       C2B6
+        ?cstart_call_low_level_init         NOT NEEDED
+        ?cstart_init_copy_ramfunc           NOT NEEDED
+        ?cstart_init_zero                   C2BA
+        ?cstart_init_copy                   C2C6
+        ?cstart_init_zero20                 NOT NEEDED
+        ?cstart_init_copy20                 NOT NEEDED
+        __cstart_init_tls                   NOT NEEDED
+        ?cstart_call_ctors                  NOT NEEDED
+        ?cstart_call_main                   C2D6
+        ?cstart_end                         C2DE
+lowinit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        __low_level_init                    NOT NEEDED
+?reset_vector ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        ?reset_vector                       FFFE
+?exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        exit                                E07C
+?malloc ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        malloc                              NOT NEEDED
+?ShiftRight32u ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        ?ShiftRight32u                      D99A
+        ?ShiftRight32u_7                    D9DA
+        ?ShiftRight32u_6                    D9DE
+        ?ShiftRight32u_5                    D9E2
+        ?ShiftRight32u_4                    D9E6
+        ?ShiftRight32u_3                    D9EA
+        ?ShiftRight32u_2                    D9EE
+?memcpy ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        memcpy                              E00C
+?memmove ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        memmove                             NOT NEEDED
+?memzero ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        __data16_memzero                    DFFA
+        __data16_memcpy                     E080
+        __data16_memmove                    NOT NEEDED
+?setjmp ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        setjmp                              NOT NEEDED
+        ?setjmp_r5                          NOT NEEDED
+        ?setjmp_r4                          NOT NEEDED
+        ?setjmp_end                         NOT NEEDED
+?longjmp ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        longjmp                             NOT NEEDED
+        ?longjmp_r5                         NOT NEEDED
+        ?longjmp_r4                         NOT NEEDED
+        ?longjmp_end                        NOT NEEDED
+?IndCallR11 ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        ?IndCallR11                         NOT NEEDED
+?IndCallR15 ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        ?IndCallR15                         NOT NEEDED
+?xcloseall ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        _Close_all                          NOT NEEDED
+?xgetmemchunk ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        __data16_GetMemChunk                NOT NEEDED
+?xxmemxfree ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        __data16_free                       NOT NEEDED
+?xxmemxmalloc ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.0 Kickstart\430\LIB\DLIB\dl430xsfn.r43 )
+        __data16_Aldata                     NOT NEEDED
+        __data16_malloc                     NOT NEEDED
+        __data16_findmem                     LOCAL, NOT NEEDED
+
+
+                ****************************************
+                *                                      *
+                *            MODULE SUMMARY            *
+                *                                      *
+                ****************************************
+
+Module               CODE      DATA      CONST
+------               ----      ----      -----
+                    (Rel)  (Rel)  (Abs)  (Rel)
+?ShiftRight32u         94
+?__dbg_break            2
+?__exit                22
+?_exit                  4
+?cstart                40
+?exit                   4
+?memcpy                18
+?memzero               22
+?reset_vector           2
+LCD                 1 724     42            26
+  + shared                            6
+LED                   132
+adc                   210     11      8
+  + shared                            2
+clocks                 36            10
+gps                 1 924     85      2     32
+  + shared                            2
+init                   96
+interrupts            788     13     32
+  + shared            120            16
+  + common
+main                  132      4            34
+menu                  878     23            21
+  + shared                            2
+ports                 356            22
+serial                288    154     16
+spi                    58             8
+switches              180      3      2     68
+system                  4
+timers                118      5     46
+wheels                514
+N/A (command line)           160
+N/A (alignment)
+----------          -----    ---    ---    ---
+Total:              7 646    500    174    181
+  + common            120
+
+
+                ****************************************
+                *                                      *
+                *              CALL GRAPH              *
+                *                                      *
+                ****************************************
+
+  ->Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+                             CSTACK
+    | Stack used (prev) :  00000000
+  01  Timer1_A0_ISR
+      | Stack used (prev) :  00000000
+      | + function block  :  00000004
+  <-Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+    | Stack used          :  00000004
+
+
+  ->Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+                             CSTACK
+    | Stack used (prev) :  00000004
+  01  TIMER1_A1_ISR
+      | Stack used (prev) :  00000004
+      | + function block  :  00000006
+  <-Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+    | Stack used          :  0000000A
+
+
+  ->Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+                             CSTACK
+    | Stack used (prev) :  0000000A
+  01  Timer0_B0_ISR
+      | Stack used (prev) :  0000000A
+      | + function block  :  00000008
+  <-Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+    | Stack used          :  00000012
+
+
+  ->Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+                             CSTACK
+    | Stack used (prev) :  00000012
+  01  TIMER0_B1_ISR
+      | Stack used (prev) :  00000012
+      | + function block  :  00000006
+  <-Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+    | Stack used          :  00000018
+
+
+  ->Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+                             CSTACK
+    | Stack used (prev) :  00000018
+  03      enable_switch_SW2
+          | Stack used (prev) :  00000018
+          | + function block  :  00000004
+  03      enable_switch_SW1
+          | Stack used (prev) :  00000018
+          | + function block  :  00000004
+  02    switch_control
+        | Stack used (prev) :  0000001C
+        | + function block  :  00000004
+  01  Timer1_B0_ISR
+      | Stack used (prev) :  00000020
+      | + function block  :  0000000C
+  <-Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+    | Stack used          :  0000002C
+
+
+  ->Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+                             CSTACK
+    | Stack used (prev) :  0000002C
+  01  TIMER1_B1_ISR
+      | Stack used (prev) :  0000002C
+      | + function block  :  00000008
+  <-Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+    | Stack used          :  00000034
+
+
+  ->Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+                             CSTACK
+    | Stack used (prev) :  00000034
+  01  Timer2_B0_ISR
+      | Stack used (prev) :  00000034
+      | + function block  :  00000004
+  <-Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+    | Stack used          :  00000038
+
+
+  ->Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+                             CSTACK
+    | Stack used (prev) :  00000038
+  01  TIMER2_B1_ISR
+      | Stack used (prev) :  00000038
+      | + function block  :  00000006
+  <-Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+    | Stack used          :  0000003E
+
+
+  ->Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+                             CSTACK
+    | Stack used (prev) :  0000003E
+  01  USCI_A0_ISR
+      | Stack used (prev) :  0000003E
+      | + function block  :  00000008
+  <-Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+    | Stack used          :  00000046
+
+
+  ->Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+                             CSTACK
+    | Stack used (prev) :  00000046
+  01  USCI_A1_ISR
+      | Stack used (prev) :  00000046
+      | + function block  :  00000008
+  <-Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+    | Stack used          :  0000004E
+
+
+  ->Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+                             CSTACK
+    | Stack used (prev) :  0000004E
+  01  USCI_B0_ISR
+      | Stack used (prev) :  0000004E
+      | + function block  :  00000006
+  <-Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+    | Stack used          :  00000054
+
+
+  ->Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+                             CSTACK
+    | Stack used (prev) :  00000054
+  02    disable_switch_SW2
+        | Stack used (prev) :  00000054
+        | + function block  :  00000004
+  02    disable_switch_SW1
+        | Stack used (prev) :  00000054
+        | + function block  :  00000004
+  01  switch_interrupt
+      | Stack used (prev) :  00000058
+      | + function block  :  0000000C
+  <-Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+    | Stack used          :  00000064
+
+
+  ->Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+                             CSTACK
+    | Stack used (prev) :  00000064
+  01  ADC10_ISR
+      | Stack used (prev) :  00000064
+      | + function block  :  00000008
+  <-Sub-tree of type: Interrupt function tree that does not make
+                    : indirect calls
+    | Stack used          :  0000006C
+
+
+  ->Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+                             CSTACK
+    | Stack used (prev) :  0000006C
+  01  memcpy
+      | Stack used (prev) :  0000006C
+      | + function block  :  00000004
+  <-Sub-tree of type: Indirectly called function tree that does not make
+                    : indirect calls (Is not an interrupt and is not flagged
+                    : as not overlayable)
+    | Stack used          :  00000070
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  00000070
+  02    five_msec_sleep
+        | Stack used (prev) :  00000070
+        | + function block  :  00000004
+  03      Init_Timer1_B
+          | Stack used (prev) :  00000070
+          | + function block  :  00000004
+  02    Init_Timers
+        | Stack used (prev) :  00000074
+        | + function block  :  00000004
+  06            usleep10
+                | Stack used (prev) :  00000070
+                | + function block  :  00000004
+  06            SPI_B0_write
+                | Stack used (prev) :  00000070
+                | + function block  :  00000004
+  06            spi_rs_command
+                | Stack used (prev) :  00000070
+                | + function block  :  00000004
+  06            spi_rs_data
+                | Stack used (prev) :  00000070
+                | + function block  :  00000004
+  05          lcd_write
+              | Stack used (prev) :  00000074
+              | + function block  :  00000008
+  05          lcd_write
+              | Stack used (prev) :  00000074
+              | + function block  :  00000008
+              |  Already listed
+  04        lcd_putc
+            | Stack used (prev) :  0000007C
+            | + function block  :  00000004
+  03      lcd_puts
+          | Stack used (prev) :  00000080
+          | + function block  :  00000006
+  03      lcd_write
+          | Stack used (prev) :  00000074
+          | + function block  :  00000008
+          |  Already listed
+  02    Switches_Process
+        | Stack used (prev) :  00000086
+        | + function block  :  00000004
+  03      enable_switch_SW2
+          | Stack used (prev) :  00000018
+          | + function block  :  00000004
+          |  Already listed
+  03      enable_switch_SW1
+          | Stack used (prev) :  00000018
+          | + function block  :  00000004
+          |  Already listed
+  02    Init_Switches
+        | Stack used (prev) :  00000070
+        | + function block  :  00000004
+  02    Init_SPI_B0
+        | Stack used (prev) :  00000070
+        | + function block  :  00000004
+  02    Init_Serial_UCA1
+        | Stack used (prev) :  00000070
+        | + function block  :  00000004
+  02    Init_Serial_UCA0
+        | Stack used (prev) :  00000070
+        | + function block  :  00000004
+  03      Init_PortJ
+          | Stack used (prev) :  00000070
+          | + function block  :  00000004
+  03      Init_Port4
+          | Stack used (prev) :  00000070
+          | + function block  :  00000004
+  03      Init_Port3
+          | Stack used (prev) :  00000070
+          | + function block  :  00000004
+  03      Init_Port2
+          | Stack used (prev) :  00000070
+          | + function block  :  00000004
+  03      Init_Port1
+          | Stack used (prev) :  00000070
+          | + function block  :  00000004
+  02    Init_Ports
+        | Stack used (prev) :  00000074
+        | + function block  :  00000004
+  04        outchar
+            | Stack used (prev) :  00000070
+            | + function block  :  00000004
+  04        outchar
+            | Stack used (prev) :  00000070
+            | + function block  :  00000004
+            |  Already listed
+  03      print_CR
+          | Stack used (prev) :  00000074
+          | + function block  :  00000004
+  03      outchar
+          | Stack used (prev) :  00000070
+          | + function block  :  00000004
+          |  Already listed
+  05          print_CR
+              | Stack used (prev) :  00000074
+              | + function block  :  00000004
+              |  Already listed
+  05          outchar
+              | Stack used (prev) :  00000070
+              | + function block  :  00000004
+              |  Already listed
+  06            increment_usb_rx_ring
+                | Stack used (prev) :  00000070
+                | + function block  :  00000004
+  05          wait_for_character
+              | Stack used (prev) :  00000074
+              | + function block  :  00000004
+  06            Init_Port3
+                | Stack used (prev) :  00000070
+                | + function block  :  00000004
+                |  Already listed
+  05          LED5_SMCLK_switch
+              | Stack used (prev) :  00000074
+              | + function block  :  00000004
+  04        WHEELS_test
+            | Stack used (prev) :  00000078
+            | + function block  :  00000004
+  04        print_CR
+            | Stack used (prev) :  00000074
+            | + function block  :  00000004
+            |  Already listed
+  05          outchar
+              | Stack used (prev) :  00000070
+              | + function block  :  00000004
+              |  Already listed
+  04        outhex
+            | Stack used (prev) :  00000074
+            | + function block  :  00000008
+  04        outchar
+            | Stack used (prev) :  00000070
+            | + function block  :  00000004
+            |  Already listed
+  06            outchar
+                | Stack used (prev) :  00000070
+                | + function block  :  00000004
+                |  Already listed
+  05          outshorthex
+              | Stack used (prev) :  00000074
+              | + function block  :  00000008
+  05          outchar
+              | Stack used (prev) :  00000070
+              | + function block  :  00000004
+              |  Already listed
+  04        out_control_words
+            | Stack used (prev) :  0000007C
+            | + function block  :  00000004
+  04        wait_for_character
+            | Stack used (prev) :  00000074
+            | + function block  :  00000004
+            |  Already listed
+  04        wait_for_character
+            | Stack used (prev) :  00000074
+            | + function block  :  00000004
+            |  Already listed
+  04        wait_for_character
+            | Stack used (prev) :  00000074
+            | + function block  :  00000004
+            |  Already listed
+  04        wait_for_character
+            | Stack used (prev) :  00000074
+            | + function block  :  00000004
+            |  Already listed
+  04        wait_for_character
+            | Stack used (prev) :  00000074
+            | + function block  :  00000004
+            |  Already listed
+  05          print_CR
+              | Stack used (prev) :  00000074
+              | + function block  :  00000004
+              |  Already listed
+  05          outchar
+              | Stack used (prev) :  00000070
+              | + function block  :  00000004
+              |  Already listed
+  05          wait_for_character
+              | Stack used (prev) :  00000074
+              | + function block  :  00000004
+              |  Already listed
+  06            outchar
+                | Stack used (prev) :  00000070
+                | + function block  :  00000004
+                |  Already listed
+  05          VS_gps_meassage_print
+              | Stack used (prev) :  00000074
+              | + function block  :  00000008
+  05          VS_gps_meassage_print
+              | Stack used (prev) :  00000074
+              | + function block  :  00000008
+              |  Already listed
+  05          GPS_clean_buffer
+              | Stack used (prev) :  00000070
+              | + function block  :  00000004
+  05          GPS_clean_buffer
+              | Stack used (prev) :  00000070
+              | + function block  :  00000004
+              |  Already listed
+  05          gps_wakeup
+              | Stack used (prev) :  00000070
+              | + function block  :  00000004
+  06            gps_wakeup
+                | Stack used (prev) :  00000070
+                | + function block  :  00000004
+                |  Already listed
+  06            gps_wakeup
+                | Stack used (prev) :  00000070
+                | + function block  :  00000004
+                |  Already listed
+  05          gps_system_init
+              | Stack used (prev) :  00000074
+              | + function block  :  00000004
+  05          gps_system_init
+              | Stack used (prev) :  00000074
+              | + function block  :  00000004
+              |  Already listed
+  04        GPS_test
+            | Stack used (prev) :  0000007C
+            | + function block  :  00000006
+  04        LED5_SMCLK_switch
+            | Stack used (prev) :  00000074
+            | + function block  :  00000004
+            |  Already listed
+  05          lcd_putc
+              | Stack used (prev) :  0000007C
+              | + function block  :  00000004
+              |  Already listed
+  05          lcd_write
+              | Stack used (prev) :  00000074
+              | + function block  :  00000008
+              |  Already listed
+  04        lcd_out
+            | Stack used (prev) :  00000080
+            | + function block  :  00000006
+  04        lcd_write
+            | Stack used (prev) :  00000074
+            | + function block  :  00000008
+            |  Already listed
+  05          five_msec_sleep
+              | Stack used (prev) :  00000070
+              | + function block  :  00000004
+              |  Already listed
+  05          print_CR
+              | Stack used (prev) :  00000074
+              | + function block  :  00000004
+              |  Already listed
+  05          outshorthex
+              | Stack used (prev) :  00000074
+              | + function block  :  00000008
+              |  Already listed
+  05          outchar
+              | Stack used (prev) :  00000070
+              | + function block  :  00000004
+              |  Already listed
+  05          wait_for_character
+              | Stack used (prev) :  00000074
+              | + function block  :  00000004
+              |  Already listed
+  05          LED5_SMCLK_switch
+              | Stack used (prev) :  00000074
+              | + function block  :  00000004
+              |  Already listed
+  05          lcd_puts
+              | Stack used (prev) :  00000080
+              | + function block  :  00000006
+              |  Already listed
+  05          lcd_write
+              | Stack used (prev) :  00000074
+              | + function block  :  00000008
+              |  Already listed
+  06            usleep10
+                | Stack used (prev) :  00000070
+                | + function block  :  00000004
+                |  Already listed
+  06            SPI_B0_write
+                | Stack used (prev) :  00000070
+                | + function block  :  00000004
+                |  Already listed
+  06            spi_rs_command
+                | Stack used (prev) :  00000070
+                | + function block  :  00000004
+                |  Already listed
+  05          lcd_command
+              | Stack used (prev) :  00000074
+              | + function block  :  00000006
+  05          lcd_command
+              | Stack used (prev) :  00000074
+              | + function block  :  00000006
+              |  Already listed
+  05          lcd_command
+              | Stack used (prev) :  00000074
+              | + function block  :  00000006
+              |  Already listed
+  05          lcd_command
+              | Stack used (prev) :  00000074
+              | + function block  :  00000006
+              |  Already listed
+  05          lcd_command
+              | Stack used (prev) :  00000074
+              | + function block  :  00000006
+              |  Already listed
+  05          lcd_command
+              | Stack used (prev) :  00000074
+              | + function block  :  00000006
+              |  Already listed
+  05          lcd_command
+              | Stack used (prev) :  00000074
+              | + function block  :  00000006
+              |  Already listed
+  05          lcd_command
+              | Stack used (prev) :  00000074
+              | + function block  :  00000006
+              |  Already listed
+  05          lcd_command
+              | Stack used (prev) :  00000074
+              | + function block  :  00000006
+              |  Already listed
+  05          lcd_command
+              | Stack used (prev) :  00000074
+              | + function block  :  00000006
+              |  Already listed
+  05          lcd_command
+              | Stack used (prev) :  00000074
+              | + function block  :  00000006
+              |  Already listed
+  05          lcd_command
+              | Stack used (prev) :  00000074
+              | + function block  :  00000006
+              |  Already listed
+  06            usleep10
+                | Stack used (prev) :  00000070
+                | + function block  :  00000004
+                |  Already listed
+  06            lcd_write
+                | Stack used (prev) :  00000074
+                | + function block  :  00000008
+                |  Already listed
+  06            lcd_write
+                | Stack used (prev) :  00000074
+                | + function block  :  00000008
+                |  Already listed
+  06            lcd_write
+                | Stack used (prev) :  00000074
+                | + function block  :  00000008
+                |  Already listed
+  06            lcd_write
+                | Stack used (prev) :  00000074
+                | + function block  :  00000008
+                |  Already listed
+  06            lcd_write
+                | Stack used (prev) :  00000074
+                | + function block  :  00000008
+                |  Already listed
+  06            lcd_write
+                | Stack used (prev) :  00000074
+                | + function block  :  00000008
+                |  Already listed
+  06            lcd_write
+                | Stack used (prev) :  00000074
+                | + function block  :  00000008
+                |  Already listed
+  06            lcd_write
+                | Stack used (prev) :  00000074
+                | + function block  :  00000008
+                |  Already listed
+  06            lcd_write
+                | Stack used (prev) :  00000074
+                | + function block  :  00000008
+                |  Already listed
+  06            spi_rs_command
+                | Stack used (prev) :  00000070
+                | + function block  :  00000004
+                |  Already listed
+  06            spi_rs_data
+                | Stack used (prev) :  00000070
+                | + function block  :  00000004
+                |  Already listed
+  05          Init_LCD
+              | Stack used (prev) :  0000007C
+              | + function block  :  00000004
+  04        LCD_test
+            | Stack used (prev) :  00000086
+            | + function block  :  00000004
+  03      menu_program
+          | Stack used (prev) :  0000008A
+          | + function block  :  00000008
+  04        increment_usb_rx_ring
+            | Stack used (prev) :  00000070
+            | + function block  :  00000004
+            |  Already listed
+  03      grab_a_character
+          | Stack used (prev) :  00000074
+          | + function block  :  00000004
+  03      wait_for_character
+          | Stack used (prev) :  00000074
+          | + function block  :  00000004
+          |  Already listed
+  02    menu
+        | Stack used (prev) :  00000092
+        | + function block  :  00000004
+  02    Init_Conditions
+        | Stack used (prev) :  00000070
+        | + function block  :  00000004
+  03      outchar
+          | Stack used (prev) :  00000070
+          | + function block  :  00000004
+          |  Already listed
+  04        lcd_write
+            | Stack used (prev) :  00000074
+            | + function block  :  00000008
+            |  Already listed
+  03      LCD_gps_meassage_print
+          | Stack used (prev) :  0000007C
+          | + function block  :  00000008
+  03      LCD_gps_meassage_print
+          | Stack used (prev) :  0000007C
+          | + function block  :  00000008
+          |  Already listed
+  03      count_commas
+          | Stack used (prev) :  00000070
+          | + function block  :  00000004
+  03      gps_meassage_type
+          | Stack used (prev) :  00000070
+          | + function block  :  00000004
+  03      lcd_out
+          | Stack used (prev) :  00000080
+          | + function block  :  00000006
+          |  Already listed
+  02    GPS_process
+        | Stack used (prev) :  00000086
+        | + function block  :  00000004
+  03      enable_interrupts
+          | Stack used (prev) :  00000070
+          | + function block  :  00000004
+  02    Init_Clocks
+        | Stack used (prev) :  00000074
+        | + function block  :  00000004
+  02    ADC_Process
+        | Stack used (prev) :  00000070
+        | + function block  :  00000004
+  02    Init_ADC
+        | Stack used (prev) :  00000070
+        | + function block  :  00000004
+  03      LED5_SMCLK_switch
+          | Stack used (prev) :  00000074
+          | + function block  :  00000004
+          |  Already listed
+  02    Init_LEDs
+        | Stack used (prev) :  00000078
+        | + function block  :  00000004
+  02    lcd_out
+        | Stack used (prev) :  00000080
+        | + function block  :  00000006
+        |  Already listed
+  02    Init_LCD
+        | Stack used (prev) :  0000007C
+        | + function block  :  00000004
+        |  Already listed
+  01  main
+      | Stack used (prev) :  00000096
+      | + function block  :  00000004
+  <-Sub-tree of type: Function tree
+    | Stack used          :  0000009A
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  0000009A
+  01  exit
+      | Stack used (prev) :  0000009A
+      | + function block  :  00000004
+  <-Sub-tree of type: Function tree
+    | Stack used          :  0000009E
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  0000009E
+  01  __data16_memzero
+      | Stack used (prev) :  0000009E
+      | + function block  :  00000004
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000000A2
+
+
+  ->Sub-tree of type: Function tree
+                             CSTACK
+    | Stack used (prev) :  000000A2
+  02    memcpy
+        | Stack used (prev) :  0000006C
+        | + function block  :  00000004
+        |  Already listed
+  01  __data16_memcpy
+      | Stack used (prev) :  000000A2
+      | + function block  :  00000004
+  <-Sub-tree of type: Function tree
+    | Stack used          :  000000A6
+
+
+
+
+                ****************************************
+                *                                      *
+                *      SEGMENTS IN ADDRESS ORDER       *
+                *                                      *
+                ****************************************
+
+
+SEGMENT              SPACE    START ADDRESS   END ADDRESS     SIZE  TYPE  ALIGN
+=======              =====    =============   ===========     ====  ====  =====
+DATA16_AN                              015C - 015D               2   rel    0
+                                       0160 - 0167               8 
+                                       0200 - 0205               6 
+                                       020A - 020D               4 
+                                       0222 - 0227               6 
+                                       022A - 022D               4 
+                                       0238 - 023D               6 
+                                       0322 - 0325               4 
+                                       032A - 032D               4 
+                                       0340 - 0347               8 
+                                       0352 - 0357               6 
+                                       0360 - 0361               2 
+                                       0380 - 0383               4 
+                                       0392 - 0397               6 
+                                       03A0 - 03A1               2 
+                                       03AE - 03AF               2 
+                                       03C0 - 03C1               2 
+                                       03D2 - 03D7               6 
+                                       03E0 - 03E1               2 
+                                       03EE - 03EF               2 
+                                       0400 - 0407               8 
+                                       0412 - 0417               6 
+                                       0420 - 0421               2 
+                                       042E - 042F               2 
+                                       0440 - 0447               8 
+                                       0452 - 0457               6 
+                                       0460 - 0461               2 
+                                       046E - 046F               2 
+                                       05C0 - 05C1               2 
+                                       05C6 - 05C9               4 
+                                       05CC - 05CF               4 
+                                       05DA - 05E1               8 
+                                       05E6 - 05E9               4 
+                                       05EC - 05ED               2 
+                                       05FA - 05FB               2 
+                                       05FE - 05FF               2 
+                                       0640 - 0641               2 
+                                       0646 - 0647               2 
+                                       064E - 064F               2 
+                                       066C - 066F               4 
+                                       0700 - 0705               6 
+                                       070A - 070B               2 
+                                       0712 - 0713               2 
+                                       071A - 071B               2 
+                                       071E - 071F               2 
+DATA16_I                               1C00 - 1C14              15   rel    1
+DATA16_Z                               1C16 - 1D54             13F   rel    1
+CSTACK                                 1F60 - 1FFF              A0   rel    1
+DATA16_C                               C200 - C29F              A0   rel    0
+DATA16_ID                              C2A0 - C2B4              15   rel    1
+CSTART                                 C2B6 - C2DD              28   rel    1
+ISR_CODE                               C2DE - C5F1             314   rel    1
+<CODE> 1                               C5F2 - E091            1AA0   rel    1
+INTVEC                                 FF80 - FFF7              78   com    1
+RESET                                  FFFE - FFFF               2   rel    1
+
+                ****************************************
+                *                                      *
+                *        END OF CROSS REFERENCE        *
+                *                                      *
+                ****************************************
+
+ 7 766 bytes of CODE  memory
+   500 bytes of DATA  memory (+ 174 absolute )
+   181 bytes of CONST memory
+
+Errors: none
+Warnings: none
+

@@ -1,0 +1,137 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       21/Mar/2014  15:50:40 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  K:\ece306\Projects\Project5\clocks.c                    #
+#    Command line  =  K:\ece306\Projects\Project5\clocks.c -lC                #
+#                     K:\ece306\Projects\Project5\Debug\List\ -o              #
+#                     K:\ece306\Projects\Project5\Debug\Obj\ --no_cse         #
+#                     --no_unroll --no_inline --no_code_motion --no_tbaa      #
+#                     --debug -D__MSP430FR5739__ -e --double=32               #
+#                     --dlib_config "C:\Program Files (x86)\IAR               #
+#                     Systems\Embedded Workbench                              #
+#                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  K:\ece306\Projects\Project5\Debug\List\clocks.lst       #
+#    Object file   =  K:\ece306\Projects\Project5\Debug\Obj\clocks.r43        #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+K:\ece306\Projects\Project5\clocks.c
+      1          //******************************************************************************
+      2          //
+      3          //  Description: This file contains the Clock Initialization 
+      4          //
+      5          //  Nathan Hansen
+      6          //  Feb 2014
+      7          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      8          //******************************************************************************
+      9          
+     10          //------------------------------------------------------------------------------
+     11          
+     12          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x160
+   \   union <unnamed> _A_CSCTL0_L
+   \                     _A_CSCTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x162
+   \   union <unnamed> _A_CSCTL1_L
+   \                     _A_CSCTL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x164
+   \   union <unnamed> _A_CSCTL2_L
+   \                     _A_CSCTL2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x166
+   \   union <unnamed> _A_CSCTL3_L
+   \                     _A_CSCTL3_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x15c
+   \   union <unnamed> _A_WDTCTL_L
+   \                     _A_WDTCTL_L:
+   \   000000                DS8 2
+     13          #include  "functions.h"
+     14          #include "macros.h"
+     15          
+     16          //******************************************************************************
+     17          //------------------------------------------------------------------------------
+     18          // Clock Configurtaions
+     19          // This is the clock initialization for the program.
+     20          //
+     21          // Initial clock configuration, runs immediately after boot.
+     22          // Disables 1ms watchdog timer, 
+     23          //      configure MCLK to 8MHz
+     24          //      configure SMCLK to 8MHz.  
+     25          // Since the X1 oscillator is not currently connected, 
+     26          // X1CLK is an unknown speed (probably ~10kHz).
+     27          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     28          void Init_Clocks(void)
+   \                     Init_Clocks:
+     29          {
+     30            WDTCTL = WDTPW | WDTHOLD;            // Disable watchdog
+   \   000000   B240805A5C01 MOV.W   #0x5a80, &0x15c
+     31          // Clocks:
+     32            CSCTL0 = CSKEY;                      // Unlock register
+   \   000006   B24000A56001 MOV.W   #0xa500, &0x160
+     33            CSCTL1 |= DCOFSEL0 + DCOFSEL1;       // Set max. DCO setting [8MHz]
+   \   00000C   B2D006006201 BIS.W   #0x6, &0x162
+     34            CSCTL2 = SELA_1 + SELS_3 + SELM_3;   // set ACLK = vlo; SMCLK = DCO; MCLK = DCO
+   \   000012   B24033016401 MOV.W   #0x133, &0x164
+     35            CSCTL3 = DIVA_0 + DIVS_0 + DIVM_0;   // set all dividers /4
+   \   000018   82436601     MOV.W   #0x0, &0x166
+     36            CSCTL0_H = CSLOCK;                   // Lock registers
+   \   00001C   D2436101     MOV.B   #0x1, &0x161
+     37          }
+   \   000020   1001         RETA
+   \   000022                REQUIRE _A_WDTCTL_L
+   \   000022                REQUIRE _A_CSCTL0_L
+   \   000022                REQUIRE _A_CSCTL1_L
+   \   000022                REQUIRE _A_CSCTL2_L
+   \   000022                REQUIRE _A_CSCTL3_L
+     38          //------------------------------------------------------------------------------
+     39          //******************************************************************************
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Init_Clocks
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      34  Init_Clocks
+       2  _A_CSCTL0_L
+       2  _A_CSCTL1_L
+       2  _A_CSCTL2_L
+       2  _A_CSCTL3_L
+       2  _A_WDTCTL_L
+
+ 
+ 34 bytes in segment CODE
+ 10 bytes in segment DATA16_AN
+ 
+ 34 bytes of CODE memory
+  0 bytes of DATA memory (+ 10 bytes shared)
+
+Errors: none
+Warnings: none

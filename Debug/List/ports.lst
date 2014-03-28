@@ -1,0 +1,491 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       21/Mar/2014  15:50:53 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  K:\ece306\Projects\Project5\ports.c                     #
+#    Command line  =  K:\ece306\Projects\Project5\ports.c -lC                 #
+#                     K:\ece306\Projects\Project5\Debug\List\ -o              #
+#                     K:\ece306\Projects\Project5\Debug\Obj\ --no_cse         #
+#                     --no_unroll --no_inline --no_code_motion --no_tbaa      #
+#                     --debug -D__MSP430FR5739__ -e --double=32               #
+#                     --dlib_config "C:\Program Files (x86)\IAR               #
+#                     Systems\Embedded Workbench                              #
+#                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  K:\ece306\Projects\Project5\Debug\List\ports.lst        #
+#    Object file   =  K:\ece306\Projects\Project5\Debug\Obj\ports.r43         #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+K:\ece306\Projects\Project5\ports.c
+      1          /******************************************************************************
+      2          Port Configuration
+      3          
+      4          DESC: This file contains the initialization methods for all five ports, setting up the Pins
+      5          defined in macros.h for the desired operation modes. The modes are also defined in 
+      6          macros.c
+      7          
+      8          GLOBALS: None defined, none modified.
+      9          
+     10          Nathan Hansen, 7 Feb 2014, Built with IAR Embedded Workbench Version: 5.60.5
+     11          ******************************************************************************/
+     12          
+     13          #include  "functions.h"
+     14          #include  "macros.h"
+     15          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x202
+   \   union <unnamed> _A_PAOUT_L
+   \                     _A_PAOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x204
+   \   union <unnamed> _A_PADIR_L
+   \                     _A_PADIR_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x206
+   \   union <unnamed> _A_PAREN_L
+   \                     _A_PAREN_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x20a
+   \   union <unnamed> _A_PASEL0_L
+   \                     _A_PASEL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x20c
+   \   union <unnamed> _A_PASEL1_L
+   \                     _A_PASEL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x224
+   \   union <unnamed> _A_PBDIR_L
+   \                     _A_PBDIR_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x226
+   \   union <unnamed> _A_PBREN_L
+   \                     _A_PBREN_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x22a
+   \   union <unnamed> _A_PBSEL0_L
+   \                     _A_PBSEL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x22c
+   \   union <unnamed> _A_PBSEL1_L
+   \                     _A_PBSEL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x322
+   \   union <unnamed> _A_PJOUT_L
+   \                     _A_PJOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x324
+   \   union <unnamed> _A_PJDIR_L
+   \                     _A_PJDIR_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x326
+   \   union <unnamed> _A_PJREN_L
+   \                     _A_PJREN_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x32a
+   \   union <unnamed> _A_PJSEL0_L
+   \                     _A_PJSEL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x32c
+   \   union <unnamed> _A_PJSEL1_L
+   \                     _A_PJSEL1_L:
+   \   000000                DS8 2
+     16          
+     17          /*
+     18          Init_Ports
+     19          
+     20          DESC: Calls other methods to initialize pins on each port
+     21          
+     22          ARGS: None
+     23          
+     24          RET: None
+     25          */
+
+   \                                 In  segment CODE, align 2
+     26          void Init_Ports()
+   \                     Init_Ports:
+     27          {
+     28          	Init_Port1();
+   \   000000   ........     CALLA   #Init_Port1
+     29          	Init_Port2();
+   \   000004   ........     CALLA   #Init_Port2
+     30          	Init_Port3();
+   \   000008   ........     CALLA   #Init_Port3
+     31          	Init_Port4();
+   \   00000C   ........     CALLA   #Init_Port4
+     32          	Init_PortJ();
+   \   000010   ........     BRA     #Init_PortJ
+     33          }
+     34          
+     35          /*
+     36          Init_Port1
+     37          
+     38          DESC: Uses predefined macros to set up pins for the P1 port's assigned functions.
+     39          See project spec for full documentation of wiring.
+     40          
+     41          Port 	Pin 	Signal Name  	GP I/O or Function 	Direction / Function 
+     42          1 		0 		V_DETECT_R 		Function 			ADC - A0 	
+     43          1 		1 		V_DETECT_L 		Function 			ADC - A1 	
+     44          1 		2 		IR_LED 			GP I/O 				Output 	
+     45          1 		3 		V_THUMB 		Function 			ADC - A3	
+     46          1 		4 		SPI_CS_LCD 		GP I/O 				Output 	
+     47          1 		5 		RESET_LCD 		GP I/O 				Output
+     48          1 		6 		SPI_SIMO 		Function 			UCB0SIMO/UCB0SDA
+     49          1 		7 		RS_LCD 			GP I/O 				Output
+     50          
+     51          ARGS: None
+     52          
+     53          RET: None
+     54          */
+
+   \                                 In  segment CODE, align 2
+     55          void Init_Port1(void)
+   \                     Init_Port1:
+     56          {
+     57          	P1SEL0 = STD_IO;
+   \   000000   C2430A02     MOV.B   #0x0, &0x20a
+     58          	P1SEL0 |= (V_DETECT_R * FUNC3_0) | 
+     59          		(V_DETECT_L * FUNC3_0) | 
+     60          		(V_THUMB * FUNC3_0) |
+     61          		(SPI_SIMO * FUNC2_0);
+   \   000004   F2D00B000A02 BIS.B   #0xb, &0x20a
+     62          	
+     63          	P1SEL1 = STD_IO;
+   \   00000A   C2430C02     MOV.B   #0x0, &0x20c
+     64          	P1SEL1 |= (V_DETECT_R * FUNC3_1) |
+     65          		(V_DETECT_L * FUNC3_1) |
+     66          		(V_THUMB * FUNC3_1) |
+     67          		(SPI_SIMO * FUNC2_1);
+   \   00000E   F2D04B000C02 BIS.B   #0x4b, &0x20c
+     68          	
+     69          	P1OUT = SET_LOW;
+   \   000014   C2430202     MOV.B   #0x0, &0x202
+     70          	P1OUT |= (SPI_CS_LCD * SET_HIGH) |
+     71          		(RESET_LCD * SET_HIGH) |
+     72          		(SPI_SIMO * SET_HIGH) |
+     73          		(RS_LCD * SET_HIGH);
+   \   000018   F2D0F0000202 BIS.B   #0xf0, &0x202
+     74          	
+     75          	P1DIR = INPUT;
+   \   00001E   C2430402     MOV.B   #0x0, &0x204
+     76          	P1DIR |= (IR_LED * OUTPUT) | 
+     77          		(SPI_CS_LCD * OUTPUT) |
+     78          		(RESET_LCD * OUTPUT) |
+     79          		(RS_LCD * OUTPUT) |
+     80          		(SPI_SIMO * OUTPUT);
+   \   000022   F2D0F4000402 BIS.B   #0xf4, &0x204
+     81          			
+     82          	P1REN = NO_RESIST;
+   \   000028   C2430602     MOV.B   #0x0, &0x206
+     83          	P1REN |= (SPI_CS_LCD * RESIST) |
+     84          		(RESET_LCD * RESIST) |
+     85          		(SPI_SIMO * RESIST) |
+     86          		(RS_LCD * RESIST);	
+   \   00002C   F2D0F0000602 BIS.B   #0xf0, &0x206
+     87          }
+   \   000032   1001         RETA
+   \   000034                REQUIRE _A_PASEL0_L
+   \   000034                REQUIRE _A_PASEL1_L
+   \   000034                REQUIRE _A_PAOUT_L
+   \   000034                REQUIRE _A_PADIR_L
+   \   000034                REQUIRE _A_PAREN_L
+     88          
+     89          /*
+     90          Init_Port2
+     91          
+     92          DESC: Uses predefined macros to set up pins for the P2 port's assigned functions.
+     93          See project spec for full table of port/pin designations.
+     94          
+     95          2 	0 	USB_TXD 	Function 	UCA0TXD/UCA0SIMO 
+     96          2 	1 	USB_RXD 	Function 	UCA0RXD/UCA0SOMI
+     97          2 	2 	SPI_SCK 	Function 	UCB0CLK
+     98          2 	3 	UNKNOWN 	GP I/O 		Input
+     99          2 	4 	UNKNOWN 	GP I/O 		Input
+    100          2 	5 	CPU_TXD 	Function 	UCA1TXD/UCA1SIMO
+    101          2 	6 	CPU_RXD 	Function 	UCA1RXD/UCA1SOMI
+    102          2 	7 	UNKNOWN 	GP I/O 		Input
+    103          
+    104          ARGS: None
+    105          
+    106          RET: None
+    107          */
+
+   \                                 In  segment CODE, align 2
+    108          void Init_Port2(void)
+   \                     Init_Port2:
+    109          {
+    110          	P2SEL0 = STD_IO;
+   \   000000   C2430B02     MOV.B   #0x0, &0x20b
+    111          	P2SEL0 |= (USB_TXD * FUNC2_0) |
+    112          		(USB_RXD * FUNC2_0) |
+    113          		(SPI_SCK * FUNC2_0) |
+    114          		(CPU_TXD * FUNC2_0) |
+    115          		(CPU_RXD * FUNC2_0);
+   \   000004   D2420B020B02 MOV.B   &0x20b, &0x20b
+    116          		
+    117          	P2SEL1 = STD_IO;
+   \   00000A   C2430D02     MOV.B   #0x0, &0x20d
+    118          	P2SEL1 |= (USB_TXD * FUNC2_1) |
+    119          		(USB_RXD * FUNC2_1) |
+    120          		(SPI_SCK * FUNC2_1) |
+    121          		(CPU_TXD * FUNC2_1) |
+    122          		(CPU_RXD * FUNC2_1);
+   \   00000E   F2D067000D02 BIS.B   #0x67, &0x20d
+    123          	
+    124          	P2OUT = SET_LOW;
+   \   000014   C2430302     MOV.B   #0x0, &0x203
+    125          	P2OUT |= (SPI_SCK * SET_HIGH);
+   \   000018   E2D20302     BIS.B   #0x4, &0x203
+    126          	
+    127          	P2DIR = INPUT;
+   \   00001C   C2430502     MOV.B   #0x0, &0x205
+    128          	P2DIR |= (USB_TXD * OUTPUT) |
+    129          		(SPI_SCK * OUTPUT) | 
+    130          		(CPU_TXD * OUTPUT);
+   \   000020   F2D025000502 BIS.B   #0x25, &0x205
+    131          	
+    132          	P2REN = NO_RESIST;
+   \   000026   C2430702     MOV.B   #0x0, &0x207
+    133          	P2REN |= (SPI_SCK * RESIST);	
+   \   00002A   E2D20702     BIS.B   #0x4, &0x207
+    134          }
+   \   00002E   1001         RETA
+   \   000030                REQUIRE _A_PASEL0_L
+   \   000030                REQUIRE _A_PASEL1_L
+   \   000030                REQUIRE _A_PAOUT_L
+   \   000030                REQUIRE _A_PADIR_L
+   \   000030                REQUIRE _A_PAREN_L
+    135          
+    136          /*
+    137          Init_Port3
+    138          
+    139          DESC: Uses predefined macros to set up pins for the P3 port's assigned functions.
+    140          See project spec for full table of port/pin designations.
+    141          
+    142          IF USING AS MOTOR OUTPUT:
+    143          
+    144          3 	0 	ACEL_X 			GP I/O 	Input
+    145          3 	1 	ACEL_Y 			GP I/O 	Input
+    146          3 	2 	ACEL_Z 			GP I/O 	Input
+    147          3 	3 	TEST_PROBE 		GP I/O 	Output
+    148          3 	4 	R_FORWARD 		GP I/O 	Output
+    149          3 	5 	R_REVERSE 		GP I/O 	Output
+    150          3 	6 	L_FORWARD 		GP I/O 	Output
+    151          3 	7 	L_REVERSE 		GP I/O 	Output
+    152          
+    153          IF USING AS SMCLK OUTPUT:
+    154          
+    155          3       4       LED5                    SMCLK   Output
+    156          
+    157          ARGS: None
+    158          
+    159          RET: None
+    160          */
+
+   \                                 In  segment CODE, align 2
+    161          void Init_Port3(void)
+   \                     Init_Port3:
+    162          {
+    163          	
+    164          	P3SEL0 = STD_IO;
+   \   000000   C2432A02     MOV.B   #0x0, &0x22a
+    165          	P3SEL1 = STD_IO;
+   \   000004   C2432C02     MOV.B   #0x0, &0x22c
+    166          	
+    167          	P3OUT = SET_LOW;
+   \   000008   C2432202     MOV.B   #0x0, &0x222
+    168          	
+    169          	P3DIR = INPUT;
+   \   00000C   C2432402     MOV.B   #0x0, &0x224
+    170          	P3DIR |= (TEST_PROBE * OUTPUT) |
+    171          		(R_FORWARD * OUTPUT) |
+    172          		(R_REVERSE * OUTPUT) |
+    173          		(L_FORWARD * OUTPUT) |
+    174          		(L_REVERSE * OUTPUT);
+   \   000010   F2D0F8002402 BIS.B   #0xf8, &0x224
+    175          
+    176          	P3REN = NO_RESIST;
+   \   000016   C2432602     MOV.B   #0x0, &0x226
+    177          	
+    178          	//P3OUT = SET_LOW;
+    179          	//P3OUT |= LED5;
+    180          	
+    181          	//P3REN = NO_RESIST;	
+    182          }
+   \   00001A   1001         RETA
+   \   00001C                REQUIRE _A_PBSEL0_L
+   \   00001C                REQUIRE _A_PBSEL1_L
+   \   00001C                REQUIRE _A_PBOUT_L
+   \   00001C                REQUIRE _A_PBDIR_L
+   \   00001C                REQUIRE _A_PBREN_L
+    183          
+    184          /*
+    185          Init_Port4
+    186          
+    187          DESC: Uses predefined macros to set up pins for the P4 port's assigned functions.
+    188          See project spec for full table of port/pin designations.
+    189          
+    190          4 	0 	SW1 	GP I/O 	Input 	
+    191          4 	1 	SW2 	GP I/O 	Input
+    192          
+    193          ARGS: None
+    194          
+    195          RET: None
+    196          */
+
+   \                                 In  segment CODE, align 2
+    197          void Init_Port4(void)
+   \                     Init_Port4:
+    198          {
+    199          	P4SEL0 = STD_IO;
+   \   000000   C2432B02     MOV.B   #0x0, &0x22b
+    200          	P4SEL1= STD_IO;
+   \   000004   C2432D02     MOV.B   #0x0, &0x22d
+    201          	
+    202          	P4OUT = SET_LOW;
+   \   000008   C2432302     MOV.B   #0x0, &0x223
+    203          	P4OUT |= (SW1 * SET_HIGH) |
+    204          		(SW2 * SET_HIGH);
+   \   00000C   F2D003002302 BIS.B   #0x3, &0x223
+    205          	
+    206          	P4DIR = INPUT;
+   \   000012   C2432502     MOV.B   #0x0, &0x225
+    207          		
+    208          	P4REN = NO_RESIST;
+   \   000016   C2432702     MOV.B   #0x0, &0x227
+    209          	P4REN = (SW1 * RESIST) |
+    210          		(SW2 * RESIST);
+   \   00001A   F24003002702 MOV.B   #0x3, &0x227
+    211          }
+   \   000020   1001         RETA
+   \   000022                REQUIRE _A_PBSEL0_L
+   \   000022                REQUIRE _A_PBSEL1_L
+   \   000022                REQUIRE _A_PBOUT_L
+   \   000022                REQUIRE _A_PBDIR_L
+   \   000022                REQUIRE _A_PBREN_L
+    212          
+    213          /*
+    214          Init_PortJ
+    215          
+    216          DESC: Uses predefined macros to set up pins for the PJ port's assigned functions.
+    217          See project spec for full table of port/pin designations.
+    218          
+    219          J 	0 	GPS_PWR 		GP I/O 	Output  	
+    220          J 	1 	GPS_RESET 		GP I/O 	Output
+    221          J 	2 	GPS_PWRCNTL 	GP I/O 	Output	
+    222          J 	3 	GPS_PWRCHK 		GP I/O 	Input
+    223          
+    224          ARGS: None
+    225          
+    226          RET: None
+    227          */
+
+   \                                 In  segment CODE, align 2
+    228          void Init_PortJ(void)
+   \                     Init_PortJ:
+    229          {
+    230          	PJSEL0 = STD_IO;
+   \   000000   82432A03     MOV.W   #0x0, &0x32a
+    231          	PJSEL1 = STD_IO;
+   \   000004   82432C03     MOV.W   #0x0, &0x32c
+    232          	
+    233          	PJOUT = SET_LOW;
+   \   000008   82432203     MOV.W   #0x0, &0x322
+    234          	
+    235          	PJDIR = INPUT;
+   \   00000C   82432403     MOV.W   #0x0, &0x324
+    236          	PJDIR = (GPS_PWR * OUTPUT) |
+    237          		(GPS_RESET * OUTPUT) |
+    238          		(GPS_PWRCNTL * OUTPUT);
+   \   000010   B24007002403 MOV.W   #0x7, &0x324
+    239          		
+    240          	PJREN = NO_RESIST;
+   \   000016   82432603     MOV.W   #0x0, &0x326
+    241          }
+   \   00001A   1001         RETA
+   \   00001C                REQUIRE _A_PJSEL0_L
+   \   00001C                REQUIRE _A_PJSEL1_L
+   \   00001C                REQUIRE _A_PJOUT_L
+   \   00001C                REQUIRE _A_PJDIR_L
+   \   00001C                REQUIRE _A_PJREN_L
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Init_Port1
+      4   Init_Port2
+      4   Init_Port3
+      4   Init_Port4
+      4   Init_PortJ
+      4   Init_Ports
+        4   -> Init_Port1
+        4   -> Init_Port2
+        4   -> Init_Port3
+        4   -> Init_Port4
+        4   -> Init_PortJ
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      52  Init_Port1
+      48  Init_Port2
+      28  Init_Port3
+      34  Init_Port4
+      28  Init_PortJ
+      20  Init_Ports
+       2  _A_PADIR_L
+       2  _A_PAOUT_L
+       2  _A_PAREN_L
+       2  _A_PASEL0_L
+       2  _A_PASEL1_L
+       2  _A_PBDIR_L
+       2  _A_PBOUT_L
+       2  _A_PBREN_L
+       2  _A_PBSEL0_L
+       2  _A_PBSEL1_L
+       2  _A_PJDIR_L
+       2  _A_PJOUT_L
+       2  _A_PJREN_L
+       2  _A_PJSEL0_L
+       2  _A_PJSEL1_L
+
+ 
+ 210 bytes in segment CODE
+  30 bytes in segment DATA16_AN
+ 
+ 210 bytes of CODE memory
+   0 bytes of DATA memory (+ 30 bytes shared)
+
+Errors: none
+Warnings: none

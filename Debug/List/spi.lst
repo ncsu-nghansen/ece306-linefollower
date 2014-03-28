@@ -1,0 +1,267 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       06/Jan/2014  22:27:45 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\spi.c                                #
+#    Command line  =  "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\spi.c" -lC                           #
+#                     "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\Debug\List\" -o                      #
+#                     "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\Debug\Obj\" --no_cse --no_unroll     #
+#                     --no_inline --no_code_motion --no_tbaa --debug          #
+#                     -D__MSP430FR5739__ -e --double=32 --dlib_config         #
+#                     "C:\Program Files (x86)\IAR Systems\Embedded Workbench  #
+#                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\Debug\List\spi.lst                   #
+#    Object file   =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\Debug\Obj\spi.r43                    #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\Jim\NCSU\Current\Software Tools\Code Master\Homework_01\spi.c
+      1          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x640
+   \   union <unnamed> _A_UCB0CTLW0_L
+   \                     _A_UCB0CTLW0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x646
+   \   union <unnamed> _A_UCB0BRW_L
+   \                     _A_UCB0BRW_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x64e
+   \   union <unnamed> _A_UCB0TXBUF_L
+   \                     _A_UCB0TXBUF_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x66c
+   \   union <unnamed> _A_UCB0IFG_L
+   \                     _A_UCB0IFG_L:
+   \   000000                DS8 2
+      2          #include  "my_macros.h"
+      3          #include  "functions.h"
+      4          //------------------------------------------------------------------------------
+      5          // SPI Configurations
+      6          // Initialize SPI on eUSCI_B0
+      7          // Port 1 SIMO_B               (0x40)// SPI mode - slave in/master out of USCI_B0
+      8          // Port 1 SOMI_B               (0x80)// SPI mode - slave out/master in of USCI_B0
+      9          // Port 2 SPI_SCK_B0              (0x04)// SPI mode - clock output—USCI_B0
+     10          // UCxxCTLW0 SPI-Mode Control Bits
+     11          // UCCKPH              (0x8000u)    /* Sync. Mode: Clock Phase */
+     12          // UCCKPL              (0x4000u)    /* Sync. Mode: Clock Polarity */
+     13          // UCMST               (0x0800u)    /* Sync. Mode: Master Select */
+     14          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     15          volatile unsigned char SPI_Char;
+   \                     SPI_Char:
+   \   000000                DS8 1
+     16          extern volatile unsigned char current_character;
+     17          
+     18          // Initialization sequence as described in MSP430FR57xx User Guide, 19.3.1  
+     19          // Peripheral defaults to 3-pin SPI mode  
+
+   \                                 In  segment CODE, align 2
+     20          void Init_SPI_B0(void){
+   \                     Init_SPI_B0:
+     21          // Reset peripheral  
+     22              UCB0CTLW0 = UCSWRST;
+   \   000000   92434006     MOV.W   #0x1, &0x640
+     23          // ACLK is clock source  
+     24              UCB0CTLW0 |= UCSSEL__SMCLK;
+   \   000004   B2D080004006 BIS.W   #0x80, &0x640
+     25          // master mode, MSB transmitted first  
+     26          //    UCB0CTLW0 |= UCMST | UCMSB | UCSYNC;
+     27              UCB0CTLW0 |= UCMST | UCMSB | UCSYNC | UCCKPL;
+   \   00000A   B2D000694006 BIS.W   #0x6900, &0x640
+     28          //    UCB0CTLW0 |= UCMST | UCMSB | UCSYNC | UCCKPH;
+     29          //    UCB0CTLW0 |= UCMST | UCMSB | UCSYNC | UCCKPL | UCCKPH;
+     30              UCB0BRW = SPI_CLK_PRESCALER;
+   \   000010   B24050004606 MOV.W   #0x50, &0x646
+     31          // Enable peripheral  
+     32              UCB0CTLW0 &= ~(UCSWRST);
+   \   000016   92C34006     BIC.W   #0x1, &0x640
+     33          // Wait to ensure the peripheral is up  
+     34              __delay_cycles(100);
+   \   00001A                ////////////// Start of 100 cycles delay.
+   \   00001A   003C         JMP     ??Init_SPI_B0_1
+   \                     ??Init_SPI_B0_1:
+   \   00001C   3F401F00     MOV.W   #0x1f, R15
+   \                     ??Init_SPI_B0_0:
+   \   000020   3F53         ADD.W   #0xffff, R15
+   \   000022   FE2F         JC      ??Init_SPI_B0_0
+   \   000024                ////////////// End of delay code.
+     35          }
+   \   000024   1001         RETA
+   \   000026                REQUIRE _A_UCB0CTLW0_L
+   \   000026                REQUIRE _A_UCB0BRW_L
+     36          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+     37          void SPI_test(void){
+   \                     SPI_test:
+     38          //  if(wait_for_character()){
+     39          //    print_CR();
+     40          //    return;
+     41          //  }
+     42          //  outchar(current_character);
+     43            current_character = 0x30;
+   \   000000   F2403000.... MOV.B   #0x30, &current_character
+     44            switch (current_character){
+   \   000006   5E42....     MOV.B   &current_character, R14
+   \   00000A   7E803000     SUB.B   #0x30, R14
+   \   00000E   2024         JEQ     ??SPI_test_17
+   \   000010   5E83         SUB.B   #0x1, R14
+   \   000012   1E24         JEQ     ??SPI_test_17
+   \   000014   5E83         SUB.B   #0x1, R14
+   \   000016   1C24         JEQ     ??SPI_test_17
+   \   000018   5E83         SUB.B   #0x1, R14
+   \   00001A   1A24         JEQ     ??SPI_test_17
+   \   00001C   5E83         SUB.B   #0x1, R14
+   \   00001E   1824         JEQ     ??SPI_test_17
+   \   000020   5E83         SUB.B   #0x1, R14
+   \   000022   1624         JEQ     ??SPI_test_17
+   \   000024   5E83         SUB.B   #0x1, R14
+   \   000026   1424         JEQ     ??SPI_test_17
+   \   000028   5E83         SUB.B   #0x1, R14
+   \   00002A   1224         JEQ     ??SPI_test_17
+   \   00002C   5E83         SUB.B   #0x1, R14
+   \   00002E   1024         JEQ     ??SPI_test_17
+   \   000030   5E83         SUB.B   #0x1, R14
+   \   000032   0E24         JEQ     ??SPI_test_17
+   \   000034   7E82         SUB.B   #0x8, R14
+   \   000036   0C24         JEQ     ??SPI_test_17
+   \   000038   5E83         SUB.B   #0x1, R14
+   \   00003A   0A24         JEQ     ??SPI_test_17
+   \   00003C   6E83         SUB.B   #0x2, R14
+   \   00003E   0824         JEQ     ??SPI_test_17
+   \   000040   6E82         SUB.B   #0x4, R14
+   \   000042   0624         JEQ     ??SPI_test_17
+   \   000044   7E800A00     SUB.B   #0xa, R14
+   \   000048   0324         JEQ     ??SPI_test_17
+   \   00004A   5E83         SUB.B   #0x1, R14
+   \   00004C   0124         JEQ     ??SPI_test_17
+   \   00004E   6E82         SUB.B   #0x4, R14
+     45              case 0x30:  // 
+     46                break;
+     47              case 0x31:  // 
+     48                break;
+     49              case 0x32:  // 
+     50                break;
+     51              case 0x33:  // 
+     52                break;
+     53              case 0x34:  // 
+     54                break;
+     55              case 0x35:  // 
+     56                break;
+     57              case 0x36:  // 
+     58                break;
+     59              case 0x37:  // 
+     60                break;
+     61              case 0x38:  // 
+     62                break;
+     63              case 0x39:  // 9 - 
+     64                break;
+     65              case 0x41:  // A - 
+     66                break;
+     67              case 0x42:  // B - 
+     68                break;
+     69              case 0x44:  // D - 
+     70                break;
+     71              case 0x48:  // H - 
+     72                break;
+     73              case 0x52:  // R - 
+     74                break;
+     75              case 0x53:  // S - 
+     76                break;
+     77              case 0x57:  // W - 
+     78                break;
+     79              default:  // DEFAULT
+     80                break;
+     81            }
+     82            SPI_Char = 0x00;
+   \                     ??SPI_test_17:
+   \   000050   C243....     MOV.B   #0x0, &SPI_Char
+     83          //  print_CR();
+     84          }
+   \   000054   1001         RETA
+     85          //------------------------------------------------------------------------------
+     86          
+     87          //------------------------------------------------------------------------------
+     88          // Writes a byte out of SPIB, assumes CSB already low  
+
+   \                                 In  segment CODE, align 2
+     89          void SPI_B0_write(char byte){
+   \                     SPI_B0_write:
+   \                     ??SPI_B0_write_0:
+     90          // Wait for TX empty  
+     91          //=  usleep(10); // delay_ms(1);
+     92            while (!(UCB0IFG & UCTXIFG));
+   \   000000   A2B36C06     BIT.W   #0x2, &0x66c
+   \   000004   FD2B         JNC     ??SPI_B0_write_0
+     93            UCB0TXBUF = byte;
+   \   000006   4C4C         MOV.B   R12, R12
+   \   000008   824C4E06     MOV.W   R12, &0x64e
+     94          // Wait for TX empty  
+     95          //=  usleep(10); // delay_ms(1);
+     96            while (!(UCB0IFG & UCTXIFG));
+   \                     ??SPI_B0_write_1:
+   \   00000C   A2B36C06     BIT.W   #0x2, &0x66c
+   \   000010   FD2B         JNC     ??SPI_B0_write_1
+     97          }
+   \   000012   1001         RETA
+   \   000014                REQUIRE _A_UCB0IFG_L
+   \   000014                REQUIRE _A_UCB0TXBUF_L
+     98          //------------------------------------------------------------------------------
+     99          
+    100          
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Init_SPI_B0
+      4   SPI_B0_write
+      4   SPI_test
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      38  Init_SPI_B0
+      20  SPI_B0_write
+       1  SPI_Char
+      86  SPI_test
+       2  _A_UCB0BRW_L
+       2  _A_UCB0CTLW0_L
+       2  _A_UCB0IFG_L
+       2  _A_UCB0TXBUF_L
+
+ 
+ 144 bytes in segment CODE
+   8 bytes in segment DATA16_AN
+   1 byte  in segment DATA16_Z
+ 
+ 144 bytes of CODE memory
+   1 byte  of DATA memory (+ 8 bytes shared)
+
+Errors: none
+Warnings: none

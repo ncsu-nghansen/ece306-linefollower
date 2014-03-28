@@ -1,0 +1,306 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       06/Jan/2014  22:27:44 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\interrupts_serial.c                  #
+#    Command line  =  "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\interrupts_serial.c" -lC             #
+#                     "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\Debug\List\" -o                      #
+#                     "D:\Jim\NCSU\Current\Software Tools\Code                #
+#                     Master\Homework_01\Debug\Obj\" --no_cse --no_unroll     #
+#                     --no_inline --no_code_motion --no_tbaa --debug          #
+#                     -D__MSP430FR5739__ -e --double=32 --dlib_config         #
+#                     "C:\Program Files (x86)\IAR Systems\Embedded Workbench  #
+#                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\Debug\List\interrupts_serial.lst     #
+#    Object file   =  D:\Jim\NCSU\Current\Software Tools\Code                 #
+#                     Master\Homework_01\Debug\Obj\interrupts_serial.r43      #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\Jim\NCSU\Current\Software Tools\Code Master\Homework_01\interrupts_serial.c
+      1          //******************************************************************************
+      2          //
+      3          // Description: This file contains the Interrupt Routines for Communication Ports
+      4          //               
+      5          //
+      6          //  Jim Carlson
+      7          //  Aug 2013
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //******************************************************************************
+     10          
+     11          //------------------------------------------------------------------------------
+     12          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x5cc
+   \   union <unnamed> _A_UCA0RXBUF_L
+   \                     _A_UCA0RXBUF_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5de
+   \   unsigned short volatile UCA0IV
+   \                     UCA0IV:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x66e
+   \   unsigned short volatile UCB0IV
+   \                     UCB0IV:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5ec
+   \   union <unnamed> _A_UCA1RXBUF_L
+   \                     _A_UCA1RXBUF_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5fe
+   \   unsigned short volatile UCA1IV
+   \                     UCA1IV:
+   \   000000                DS8 2
+     13          #include  "functions.h"
+     14          #include  "my_macros.h"
+     15          
+     16          //------------------------------------------------------------------------------
+     17          
+     18          //******************************************************************************
+     19          //Globals Defined in interrupts_serial.c
+     20          // Serial
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     21          volatile char test_character;
+   \                     test_character:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     22          volatile char character_count;
+   \                     character_count:
+   \   000000                DS8 1
+     23          // GPS
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     24          unsigned int gps_message_process;
+   \                     gps_message_process:
+   \   000000                DS8 2
+     25          
+     26          //Globals Defined in other files
+     27          // Serial
+     28          extern volatile unsigned char GPS_Char_Rx[SMALL_RING_SIZE];  // 
+     29          extern volatile unsigned int gps_rx_ring_wr;
+     30          extern volatile unsigned char USB_Char_Rx[SMALL_RING_SIZE];  // 
+     31          extern volatile unsigned int usb_rx_ring_wr;
+     32          // SPI - LCD
+     33          extern volatile unsigned char SPI_Char;
+     34          //******************************************************************************
+     35          
+     36          
+     37          //******************************************************************************
+     38          //------------------------------------------------------------------------------
+     39          // Echo back RXed character, confirm TX buffer is ready first
+     40          #pragma vector=USCI_A0_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     41          __interrupt void USCI_A0_ISR(void){
+   \                     USCI_A0_ISR:
+   \   000000   1F15         PUSHM.W #0x2, R15
+     42            unsigned int temp;
+     43            switch(__even_in_range(UCA0IV,0x08)){
+   \   000002   1F42DE05     MOV.W   &0x5de, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for USCI_A0_ISR>_0`:
+   \   000008   143C         JMP     ??USCI_A0_ISR_2
+   \   00000A   033C         JMP     ??USCI_A0_ISR_3
+   \   00000C   123C         JMP     ??USCI_A0_ISR_2
+   \   00000E   113C         JMP     ??USCI_A0_ISR_2
+   \   000010   103C         JMP     ??USCI_A0_ISR_2
+     44            case 0:break;                             // Vector 0 - no interrupt
+     45            case 2:                                   // Vector 2 - RXIFG
+     46              temp = usb_rx_ring_wr++;
+   \                     ??USCI_A0_ISR_3:
+   \   000012   1F42....     MOV.W   &usb_rx_ring_wr, R15
+   \   000016   0E4F         MOV.W   R15, R14
+   \   000018   1E53         ADD.W   #0x1, R14
+   \   00001A   824E....     MOV.W   R14, &usb_rx_ring_wr
+     47              USB_Char_Rx[temp] = UCA0RXBUF; // RX -> USB_Char_Rx character
+   \   00001E   1E42CC05     MOV.W   &0x5cc, R14
+   \   000022   CF4E....     MOV.B   R14, USB_Char_Rx(R15)
+     48              if (usb_rx_ring_wr >= (SMALL_RING_SIZE)){
+   \   000026   B2902000.... CMP.W   #0x20, &usb_rx_ring_wr
+   \   00002C   0228         JNC     ??USCI_A0_ISR_2
+     49                usb_rx_ring_wr = BEGINNING;              // Circular buffer back to beginning
+   \   00002E   8243....     MOV.W   #0x0, &usb_rx_ring_wr
+     50              }
+     51          
+     52          //    while (!(UCA0IFG&UCTXIFG));             // USCI_A0 TX buffer ready?
+     53          //    UCA0TXBUF = UCA0RXBUF;                  // TX -> RXed character
+     54              break;
+     55            case 4:break;                             // Vector 4 - TXIFG
+     56            default: break;  
+     57            }
+     58          }
+   \                     ??USCI_A0_ISR_2:
+   \   000032   1E17         POPM.W  #0x2, R15
+   \   000034   0013         RETI
+   \   000036                REQUIRE _A_UCA0RXBUF_L
+   \   000036                REQUIRE UCA0IV
+     59          //------------------------------------------------------------------------------
+     60          //******************************************************************************
+     61          
+     62          //******************************************************************************
+     63          //------------------------------------------------------------------------------
+     64          // Echo back RXed character, confirm TX buffer is ready first
+     65          #pragma vector=USCI_A1_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     66          __interrupt void USCI_A1_ISR(void){
+   \                     USCI_A1_ISR:
+   \   000000   1F15         PUSHM.W #0x2, R15
+     67            unsigned int temp;
+     68            switch(__even_in_range(UCA1IV,0x08)){
+   \   000002   1F42FE05     MOV.W   &0x5fe, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for USCI_A1_ISR>_0`:
+   \   000008   143C         JMP     ??USCI_A1_ISR_2
+   \   00000A   033C         JMP     ??USCI_A1_ISR_3
+   \   00000C   123C         JMP     ??USCI_A1_ISR_2
+   \   00000E   113C         JMP     ??USCI_A1_ISR_2
+   \   000010   103C         JMP     ??USCI_A1_ISR_2
+     69            case 0:break;                             // Vector 0 - no interrupt
+     70            case 2:                                   // Vector 2 - RXIFG
+     71              temp = gps_rx_ring_wr++;
+   \                     ??USCI_A1_ISR_3:
+   \   000012   1F42....     MOV.W   &gps_rx_ring_wr, R15
+   \   000016   0E4F         MOV.W   R15, R14
+   \   000018   1E53         ADD.W   #0x1, R14
+   \   00001A   824E....     MOV.W   R14, &gps_rx_ring_wr
+     72              GPS_Char_Rx[temp] = UCA1RXBUF; // RX -> USB_Char_Rx character
+   \   00001E   1E42EC05     MOV.W   &0x5ec, R14
+   \   000022   CF4E....     MOV.B   R14, GPS_Char_Rx(R15)
+     73              if (gps_rx_ring_wr >= (SMALL_RING_SIZE)){
+   \   000026   B2902000.... CMP.W   #0x20, &gps_rx_ring_wr
+   \   00002C   0228         JNC     ??USCI_A1_ISR_2
+     74                gps_rx_ring_wr = BEGINNING;              // Circular buffer back to beginning
+   \   00002E   8243....     MOV.W   #0x0, &gps_rx_ring_wr
+     75              }
+     76          
+     77          //    while (!(UCA1IFG&UCTXIFG));             // USCI_A0 TX buffer ready?
+     78          //    UCA1TXBUF = UCA1RXBUF;                  // TX -> RXed character
+     79              break;
+     80            case 4:break;                             // Vector 4 - TXIFG
+     81            default: break;  
+     82            }
+     83          }
+   \                     ??USCI_A1_ISR_2:
+   \   000032   1E17         POPM.W  #0x2, R15
+   \   000034   0013         RETI
+   \   000036                REQUIRE _A_UCA1RXBUF_L
+   \   000036                REQUIRE UCA1IV
+     84          //------------------------------------------------------------------------------
+     85          //******************************************************************************
+     86          
+     87          //******************************************************************************
+     88          //------------------------------------------------------------------------------
+     89          #pragma vector=USCI_B0_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     90          __interrupt void USCI_B0_ISR(void){
+   \                     USCI_B0_ISR:
+   \   000000   0F12         PUSH.W  R15
+     91            volatile unsigned int i;
+     92            switch(__even_in_range(UCB0IV,0x04)){
+   \   000002   1F426E06     MOV.W   &0x66e, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for USCI_B0_ISR>_0`:
+   \   000008   023C         JMP     ??USCI_B0_ISR_1
+   \   00000A   013C         JMP     ??USCI_B0_ISR_1
+   \   00000C   003C         JMP     ??USCI_B0_ISR_1
+     93              case 0: break;                          // Vector 0 - no interrupt
+     94              case 2: 
+     95          //      SPI_Char = UCB0RXBUF; 
+     96          //      UCB0IFG &= ~UCRXIFG;
+     97          //      __bic_SR_register_on_exit(CPUOFF);// Wake up to setup next TX
+     98                break;
+     99              case 4: 
+    100          //      UCB0TXBUF = TXData;             // Transmit characters
+    101          //      UCB0IE &= ~UCTXIE; 
+    102                break;
+    103              default: break;
+    104            }
+    105          }
+   \                     ??USCI_B0_ISR_1:
+   \   00000E   3F41         POP.W   R15
+   \   000010   0013         RETI
+   \   000012                REQUIRE UCB0IV
+
+   \                                 In  segment INTVEC, offset 0x56, root
+   \                     `??USCI_A1_ISR??INTVEC 86`:
+   \   000056   ....         DC16    USCI_A1_ISR
+
+   \                                 In  segment INTVEC, offset 0x5e, root
+   \                     `??USCI_B0_ISR??INTVEC 94`:
+   \   00005E   ....         DC16    USCI_B0_ISR
+
+   \                                 In  segment INTVEC, offset 0x60, root
+   \                     `??USCI_A0_ISR??INTVEC 96`:
+   \   000060   ....         DC16    USCI_A0_ISR
+    106          //------------------------------------------------------------------------------
+    107          //******************************************************************************
+    108          
+    109          
+    110              
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      8   USCI_A0_ISR
+      8   USCI_A1_ISR
+      6   USCI_B0_ISR
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  ??USCI_A0_ISR??INTVEC 96
+       2  ??USCI_A1_ISR??INTVEC 86
+       2  ??USCI_B0_ISR??INTVEC 94
+       2  UCA0IV
+       2  UCA1IV
+       2  UCB0IV
+      54  USCI_A0_ISR
+      54  USCI_A1_ISR
+      18  USCI_B0_ISR
+       2  _A_UCA0RXBUF_L
+       2  _A_UCA1RXBUF_L
+       1  character_count
+       2  gps_message_process
+       1  test_character
+
+ 
+  10 bytes in segment DATA16_AN
+   4 bytes in segment DATA16_Z
+   6 bytes in segment INTVEC
+ 126 bytes in segment ISR_CODE
+ 
+ 126 bytes of CODE  memory
+   0 bytes of CONST memory (+  6 bytes shared)
+   4 bytes of DATA  memory (+ 10 bytes shared)
+
+Errors: none
+Warnings: none

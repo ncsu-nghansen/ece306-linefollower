@@ -1,0 +1,172 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       10/Jan/2014  21:58:29 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  D:\NCSU\Current\Software Tools\Code                     #
+#                     Master\Homework_01\interrupts_ports.c                   #
+#    Command line  =  "D:\NCSU\Current\Software Tools\Code                    #
+#                     Master\Homework_01\interrupts_ports.c" -lC              #
+#                     "D:\NCSU\Current\Software Tools\Code                    #
+#                     Master\Homework_01\Debug\List\" -o                      #
+#                     "D:\NCSU\Current\Software Tools\Code                    #
+#                     Master\Homework_01\Debug\Obj\" --no_cse --no_unroll     #
+#                     --no_inline --no_code_motion --no_tbaa --debug          #
+#                     -D__MSP430FR5739__ -e --double=32 --dlib_config         #
+#                     "C:\Program Files (x86)\IAR Systems\Embedded Workbench  #
+#                     6.5_2\430\LIB\DLIB\dl430xsfn.h" --core=430X             #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  D:\NCSU\Current\Software Tools\Code                     #
+#                     Master\Homework_01\Debug\List\interrupts_ports.lst      #
+#    Object file   =  D:\NCSU\Current\Software Tools\Code                     #
+#                     Master\Homework_01\Debug\Obj\interrupts_ports.r43       #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\NCSU\Current\Software Tools\Code Master\Homework_01\interrupts_ports.c
+      1          //******************************************************************************
+      2          //
+      3          // Description: This file contains the Interrupt Routines for the Ports
+      4          //               
+      5          //
+      6          //  Jim Carlson
+      7          //  Aug 2013
+      8          //  Built with IAR Embedded Workbench Version: V4.10A/W32 (5.40.1)
+      9          //******************************************************************************
+     10          
+     11          //------------------------------------------------------------------------------
+     12          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x23c
+   \   union <unnamed> _A_PBIFG_L
+   \                     _A_PBIFG_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x382
+   \   unsigned short volatile TA1CCTL0
+   \                     TA1CCTL0:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x390
+   \   unsigned short volatile TA1R
+   \                     TA1R:
+   \   000000                DS8 2
+     13          #include  "functions.h"
+     14          #include  "my_macros.h"
+     15          
+     16          //------------------------------------------------------------------------------
+     17          
+     18          //******************************************************************************
+     19          //Globals Defined in interrupts_serial.c
+     20          
+     21          //Globals Defined in other files
+     22          // Swithes
+     23          extern volatile char switch_states;
+     24          extern volatile unsigned int count_debounce_SW1;
+     25          extern volatile unsigned int count_debounce_SW2;
+     26          
+     27          //******************************************************************************
+     28          //------------------------------------------------------------------------------
+     29          // Port 4 interrupt. For switches, they are disabled for the duration
+     30          // of the debounce timer.  Flag is set that user space can check. 
+     31          #pragma vector=PORT4_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     32          __interrupt void switch_interrupt(void) {
+   \                     switch_interrupt:
+   \   000000   3F15         PUSHM.W #0x4, R15
+     33          
+     34          // Switch 1 
+     35            if (P4IFG & SW1) {
+   \   000002   D2B33D02     BIT.B   #0x1, &0x23d
+   \   000006   0D28         JNC     ??switch_interrupt_0
+     36              switch_states |= SW1;
+   \   000008   D2D3....     BIS.B   #0x1, &switch_states
+     37              switch_states |= SW1_DEBOUNCE;
+   \   00000C   F2D01000.... BIS.B   #0x10, &switch_states
+     38              count_debounce_SW1 = 0;
+   \   000012   8243....     MOV.W   #0x0, &count_debounce_SW1
+     39              disable_switch_SW1();
+   \   000016   ........     CALLA   #disable_switch_SW1
+     40              TA1CCTL0 &= ~CCIFG;
+   \   00001A   92C38203     BIC.W   #0x1, &0x382
+     41              TA1R = 0;
+   \   00001E   82439003     MOV.W   #0x0, &0x390
+     42            }
+     43            
+     44          // Switch 2 
+     45            if (P4IFG & SW2) {
+   \                     ??switch_interrupt_0:
+   \   000022   E2B33D02     BIT.B   #0x2, &0x23d
+   \   000026   0D28         JNC     ??switch_interrupt_1
+     46              switch_states |= SW2;
+   \   000028   E2D3....     BIS.B   #0x2, &switch_states
+     47              switch_states |= SW2_DEBOUNCE;
+   \   00002C   F2D02000.... BIS.B   #0x20, &switch_states
+     48              count_debounce_SW2 = 0;
+   \   000032   8243....     MOV.W   #0x0, &count_debounce_SW2
+     49              disable_switch_SW2();
+   \   000036   ........     CALLA   #disable_switch_SW2
+     50              TA1CCTL0 &= ~CCIFG;
+   \   00003A   92C38203     BIC.W   #0x1, &0x382
+     51              TA1R = 0;
+   \   00003E   82439003     MOV.W   #0x0, &0x390
+     52            }
+     53            
+     54              TA1CCTL0 |= CCIE;                    // CCR0 enable interrupt
+   \                     ??switch_interrupt_1:
+   \   000042   B2D010008203 BIS.W   #0x10, &0x382
+     55          //    P2OUT |= TEST_SIG;
+     56            
+     57          }
+   \   000048   3C17         POPM.W  #0x4, R15
+   \   00004A   0013         RETI
+   \   00004C                REQUIRE _A_PBIFG_L
+   \   00004C                REQUIRE TA1CCTL0
+   \   00004C                REQUIRE TA1R
+
+   \                                 In  segment INTVEC, offset 0x40, root
+   \                     `??switch_interrupt??INTVEC 64`:
+   \   000040   ....         DC16    switch_interrupt
+     58          //------------------------------------------------------------------------------
+     59          //******************************************************************************
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+     12   switch_interrupt
+       12   -> disable_switch_SW1
+       12   -> disable_switch_SW2
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  ??switch_interrupt??INTVEC 64
+       2  TA1CCTL0
+       2  TA1R
+       2  _A_PBIFG_L
+      76  switch_interrupt
+
+ 
+  6 bytes in segment DATA16_AN
+  2 bytes in segment INTVEC
+ 76 bytes in segment ISR_CODE
+ 
+ 76 bytes of CODE  memory
+  0 bytes of CONST memory (+ 2 bytes shared)
+  0 bytes of DATA  memory (+ 6 bytes shared)
+
+Errors: none
+Warnings: none

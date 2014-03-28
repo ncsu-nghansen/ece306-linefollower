@@ -133,8 +133,8 @@ void Control_Process(void)
 			case 1: 
 				//allStop();
 				MotorTimer = 1;
-				LeftMotorPower = 50;
-				RightMotorPower = 0;
+				LeftMotorPower = LPOWER;
+				RightMotorPower = -50;
               
 				//          "0123456789abcdef"
 				display_1 = "  Turning Right ";
@@ -142,8 +142,8 @@ void Control_Process(void)
             case 2:
 				//allStop();
 				MotorTimer = 1;
-				LeftMotorPower = 0;
-				RightMotorPower = 50;
+				LeftMotorPower = -50;
+				RightMotorPower = RPOWER;
 				              
 				//          "0123456789abcdef"
 				display_1 = "  Turning Left  ";

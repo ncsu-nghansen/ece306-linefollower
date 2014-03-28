@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       26/Mar/2014  23:46:53 #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       27/Mar/2014  23:12:26 #
 # Copyright 1996-2013 IAR Systems AB.                                         #
 #                                                                             #
 #    __rt_version  =  3                                                       #
@@ -10,25 +10,28 @@
 #    __pic         =  no                                                      #
 #    __core        =  430X                                                    #
 #    __data_model  =  small                                                   #
-#    Source file   =  K:\ece306\Projects\Project8\motor_control.c             #
-#    Command line  =  K:\ece306\Projects\Project8\motor_control.c -lC         #
-#                     K:\ece306\Projects\Project8\Debug\List\ -o              #
-#                     K:\ece306\Projects\Project8\Debug\Obj\ --no_cse         #
-#                     --no_unroll --no_inline --no_code_motion --no_tbaa      #
-#                     --debug -D__MSP430FR5739__ -e --double=32               #
-#                     --dlib_config "C:\Program Files (x86)\IAR               #
-#                     Systems\Embedded Workbench                              #
+#    Source file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\mo #
+#                     tor_control.c                                           #
+#    Command line  =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\mo #
+#                     tor_control.c -lC C:\Users\Nathan\Documents\GitHub\ece3 #
+#                     06-linefollower\Debug\List\ -o                          #
+#                     C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\Obj\ --no_cse --no_unroll --no_inline               #
+#                     --no_code_motion --no_tbaa --debug -D__MSP430FR5739__   #
+#                     -e --double=32 --dlib_config "C:\Program Files          #
+#                     (x86)\IAR Systems\Embedded Workbench                    #
 #                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
 #                     --data_model=small -Ol --multiplier=32                  #
 #                     --multiplier_location=4C0 --hw_workaround=CPU40         #
-#    List file     =  K:\ece306\Projects\Project8\Debug\List\motor_control.ls #
-#                     t                                                       #
-#    Object file   =  K:\ece306\Projects\Project8\Debug\Obj\motor_control.r43 #
+#    List file     =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\List\motor_control.lst                              #
+#    Object file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\Obj\motor_control.r43                               #
 #                                                                             #
 #                                                                             #
 ###############################################################################
 
-K:\ece306\Projects\Project8\motor_control.c
+C:\Users\Nathan\Documents\GitHub\ece306-linefollower\motor_control.c
       1          /******************************************************************************
       2          Main
       3          
@@ -83,29 +86,59 @@ Warning[Pa082]: undefined behavior: the order of volatile accesses is
    \   000024   022C         JC      ??Motors_Process_2
      30          			leftForward();
    \   000026   ........     CALLA   #leftForward
-     31          	/*else
-     32          		if(TimeMsec % MAX_POWER < -LeftMotorPower)
-     33          			leftReverse();*/
-     34          	
-     35          	if(RightMotorPower > 0)
+     31                  if(LeftMotorPower < 0)
    \                     ??Motors_Process_2:
-   \   00002A   9293....     CMP.W   #0x1, &RightMotorPower
-   \   00002E   0B38         JL      ??Motors_Process_0
-     36          		if(TimeMsec % MAX_POWER < RightMotorPower)
+   \   00002A   8293....     CMP.W   #0x0, &LeftMotorPower
+   \   00002E   0E34         JGE     ??Motors_Process_3
+     32          		if(TimeMsec % MAX_POWER < -LeftMotorPower)
                  		^
 Warning[Pa082]: undefined behavior: the order of volatile accesses is
           undefined in this statement
    \   000030   1C42....     MOV.W   &TimeMsec, R12
    \   000034   3E406400     MOV.W   #0x64, R14
    \   000038   ........     CALLA   #?DivMod16u
-   \   00003C   1E92....     CMP.W   &RightMotorPower, R14
-   \   000040   022C         JC      ??Motors_Process_0
+   \   00003C   1F42....     MOV.W   &LeftMotorPower, R15
+   \   000040   3FE3         XOR.W   #0xffff, R15
+   \   000042   1F53         ADD.W   #0x1, R15
+   \   000044   0E9F         CMP.W   R15, R14
+   \   000046   022C         JC      ??Motors_Process_3
+     33          			leftReverse();
+   \   000048   ........     CALLA   #leftReverse
+     34          	
+     35          	if(RightMotorPower > 0)
+   \                     ??Motors_Process_3:
+   \   00004C   9293....     CMP.W   #0x1, &RightMotorPower
+   \   000050   0B38         JL      ??Motors_Process_4
+     36          		if(TimeMsec % MAX_POWER < RightMotorPower)
+                 		^
+Warning[Pa082]: undefined behavior: the order of volatile accesses is
+          undefined in this statement
+   \   000052   1C42....     MOV.W   &TimeMsec, R12
+   \   000056   3E406400     MOV.W   #0x64, R14
+   \   00005A   ........     CALLA   #?DivMod16u
+   \   00005E   1E92....     CMP.W   &RightMotorPower, R14
+   \   000062   022C         JC      ??Motors_Process_4
      37          			rightForward();
-   \   000042   ........     CALLA   #rightForward
-     38          	/*else
+   \   000064   ........     CALLA   #rightForward
+     38          	if(RightMotorPower < 0)
+   \                     ??Motors_Process_4:
+   \   000068   8293....     CMP.W   #0x0, &RightMotorPower
+   \   00006C   0E34         JGE     ??Motors_Process_0
      39          		if(TimeMsec % MAX_POWER < -RightMotorPower)
+                 		^
+Warning[Pa082]: undefined behavior: the order of volatile accesses is
+          undefined in this statement
+   \   00006E   1C42....     MOV.W   &TimeMsec, R12
+   \   000072   3E406400     MOV.W   #0x64, R14
+   \   000076   ........     CALLA   #?DivMod16u
+   \   00007A   1F42....     MOV.W   &RightMotorPower, R15
+   \   00007E   3FE3         XOR.W   #0xffff, R15
+   \   000080   1F53         ADD.W   #0x1, R15
+   \   000082   0E9F         CMP.W   R15, R14
+   \   000084   022C         JC      ??Motors_Process_0
      40          			rightReverse();
-     41          	*/
+   \   000086   ........     CALLA   #rightReverse
+     41          	
      42          
      43          	/*	
      44          	leftReverse();
@@ -138,7 +171,7 @@ Warning[Pa082]: undefined behavior: the order of volatile accesses is
      71                  //  MotorTimer--;	
      72          }
    \                     ??Motors_Process_0:
-   \   000046   1001         RETA
+   \   00008A   1001         RETA
      73          
 
    \                                 In  segment CODE, align 2
@@ -388,7 +421,9 @@ Warning[Pa082]: undefined behavior: the order of volatile accesses is
       4   Motors_Process
         4   -> allStop
         4   -> leftForward
+        4   -> leftReverse
         4   -> rightForward
+        4   -> rightReverse
       4   allStop
         4   -> leftStop
         4   -> rightStop
@@ -422,7 +457,7 @@ Warning[Pa082]: undefined behavior: the order of volatile accesses is
 
    Bytes  Function/Label
    -----  --------------
-      72  Motors_Process
+     140  Motors_Process
        2  _A_PBOUT_L
        8  allStop
       20  circleCCW
@@ -443,11 +478,11 @@ Warning[Pa082]: undefined behavior: the order of volatile accesses is
       42  triangle
 
  
- 350 bytes in segment CODE
+ 418 bytes in segment CODE
    2 bytes in segment DATA16_AN
  
- 350 bytes of CODE memory
+ 418 bytes of CODE memory
    0 bytes of DATA memory (+ 2 bytes shared)
 
 Errors: none
-Warnings: 2
+Warnings: 4

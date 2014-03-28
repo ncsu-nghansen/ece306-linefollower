@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       26/Mar/2014  23:59:56 #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       27/Mar/2014  23:08:24 #
 # Copyright 1996-2013 IAR Systems AB.                                         #
 #                                                                             #
 #    __rt_version  =  3                                                       #
@@ -10,24 +10,27 @@
 #    __pic         =  no                                                      #
 #    __core        =  430X                                                    #
 #    __data_model  =  small                                                   #
-#    Source file   =  K:\ece306\Projects\Project8\main.c                      #
-#    Command line  =  K:\ece306\Projects\Project8\main.c -lC                  #
-#                     K:\ece306\Projects\Project8\Debug\List\ -o              #
-#                     K:\ece306\Projects\Project8\Debug\Obj\ --no_cse         #
-#                     --no_unroll --no_inline --no_code_motion --no_tbaa      #
-#                     --debug -D__MSP430FR5739__ -e --double=32               #
-#                     --dlib_config "C:\Program Files (x86)\IAR               #
-#                     Systems\Embedded Workbench                              #
+#    Source file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\ma #
+#                     in.c                                                    #
+#    Command line  =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\ma #
+#                     in.c -lC C:\Users\Nathan\Documents\GitHub\ece306-linefo #
+#                     llower\Debug\List\ -o C:\Users\Nathan\Documents\GitHub\ #
+#                     ece306-linefollower\Debug\Obj\ --no_cse --no_unroll     #
+#                     --no_inline --no_code_motion --no_tbaa --debug          #
+#                     -D__MSP430FR5739__ -e --double=32 --dlib_config         #
+#                     "C:\Program Files (x86)\IAR Systems\Embedded Workbench  #
 #                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
 #                     --data_model=small -Ol --multiplier=32                  #
 #                     --multiplier_location=4C0 --hw_workaround=CPU40         #
-#    List file     =  K:\ece306\Projects\Project8\Debug\List\main.lst         #
-#    Object file   =  K:\ece306\Projects\Project8\Debug\Obj\main.r43          #
+#    List file     =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\List\main.lst                                       #
+#    Object file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\Obj\main.r43                                        #
 #                                                                             #
 #                                                                             #
 ###############################################################################
 
-K:\ece306\Projects\Project8\main.c
+C:\Users\Nathan\Documents\GitHub\ece306-linefollower\main.c
       1          /******************************************************************************
       2          Main
       3          
@@ -351,94 +354,96 @@ Warning[Pa082]: undefined behavior: the order of volatile accesses is
     126          	if(StateTransitions >= 100)
     127          		ProgramState = 0;
     128          	  */
-    129          	if(ALWAYS || MotorTimer <= 0)
+    129          	if(MotorTimer <= 0)
+   \                     ??Control_Process_6:
+   \   000058   9293....     CMP.W   #0x1, &MotorTimer
+   \   00005C   3B34         JGE     ??Control_Process_7
     130          	{
     131          		switch(ProgramState)
-   \                     ??Control_Process_6:
-   \   000058   1F42....     MOV.W   &ProgramState, R15
-   \   00005C   1F83         SUB.W   #0x1, R15
-   \   00005E   0524         JEQ     ??Control_Process_7
-   \   000060   1F83         SUB.W   #0x1, R15
-   \   000062   0F24         JEQ     ??Control_Process_8
-   \   000064   1F83         SUB.W   #0x1, R15
-   \   000066   1924         JEQ     ??Control_Process_9
-   \   000068   233C         JMP     ??Control_Process_10
+   \   00005E   1F42....     MOV.W   &ProgramState, R15
+   \   000062   1F83         SUB.W   #0x1, R15
+   \   000064   0524         JEQ     ??Control_Process_8
+   \   000066   1F83         SUB.W   #0x1, R15
+   \   000068   0F24         JEQ     ??Control_Process_9
+   \   00006A   1F83         SUB.W   #0x1, R15
+   \   00006C   1924         JEQ     ??Control_Process_10
+   \   00006E   233C         JMP     ??Control_Process_11
     132          		{
     133          			case 1: 
     134          				//allStop();
     135          				MotorTimer = 1;
-   \                     ??Control_Process_7:
-   \   00006A   9243....     MOV.W   #0x1, &MotorTimer
-    136          				LeftMotorPower = 50;
-   \   00006E   B2403200.... MOV.W   #0x32, &LeftMotorPower
-    137          				RightMotorPower = 5;
-   \   000074   B2400500.... MOV.W   #0x5, &RightMotorPower
+   \                     ??Control_Process_8:
+   \   000070   9243....     MOV.W   #0x1, &MotorTimer
+    136          				LeftMotorPower = LPOWER;
+   \   000074   B2406400.... MOV.W   #0x64, &LeftMotorPower
+    137          				RightMotorPower = -50;
+   \   00007A   B240CEFF.... MOV.W   #0xffce, &RightMotorPower
     138                        
     139          				//          "0123456789abcdef"
     140          				display_1 = "  Turning Right ";
-   \   00007A   B240........ MOV.W   #`?<Constant "  Turning Right ">`, &display_1
+   \   000080   B240........ MOV.W   #`?<Constant "  Turning Right ">`, &display_1
     141          				break;
-   \   000080   1C3C         JMP     ??Control_Process_11
+   \   000086   1C3C         JMP     ??Control_Process_12
     142                      case 2:
     143          				//allStop();
     144          				MotorTimer = 1;
-   \                     ??Control_Process_8:
-   \   000082   9243....     MOV.W   #0x1, &MotorTimer
-    145          				LeftMotorPower = 5;
-   \   000086   B2400500.... MOV.W   #0x5, &LeftMotorPower
-    146          				RightMotorPower = 50;
-   \   00008C   B2403200.... MOV.W   #0x32, &RightMotorPower
+   \                     ??Control_Process_9:
+   \   000088   9243....     MOV.W   #0x1, &MotorTimer
+    145          				LeftMotorPower = -50;
+   \   00008C   B240CEFF.... MOV.W   #0xffce, &LeftMotorPower
+    146          				RightMotorPower = RPOWER;
+   \   000092   B2405F00.... MOV.W   #0x5f, &RightMotorPower
     147          				              
     148          				//          "0123456789abcdef"
     149          				display_1 = "  Turning Left  ";
-   \   000092   B240........ MOV.W   #`?<Constant "  Turning Left  ">`, &display_1
+   \   000098   B240........ MOV.W   #`?<Constant "  Turning Left  ">`, &display_1
     150          				break;
-   \   000098   103C         JMP     ??Control_Process_11
+   \   00009E   103C         JMP     ??Control_Process_12
     151          			case 3: 
     152          				allStop();
-   \                     ??Control_Process_9:
-   \   00009A   ........     CALLA   #allStop
+   \                     ??Control_Process_10:
+   \   0000A0   ........     CALLA   #allStop
     153          				MotorTimer = 1000;
-   \   00009E   B240E803.... MOV.W   #0x3e8, &MotorTimer
+   \   0000A4   B240E803.... MOV.W   #0x3e8, &MotorTimer
     154          				LeftMotorPower = -LPOWER;
-   \   0000A4   B2409CFF.... MOV.W   #0xff9c, &LeftMotorPower
+   \   0000AA   B2409CFF.... MOV.W   #0xff9c, &LeftMotorPower
     155          				RightMotorPower = RPOWER;
-   \   0000AA   B2405F00.... MOV.W   #0x5f, &RightMotorPower
+   \   0000B0   B2405F00.... MOV.W   #0x5f, &RightMotorPower
     156                      default:
     157                        allStop();
-   \                     ??Control_Process_10:
-   \   0000B0   ........     CALLA   #allStop
+   \                     ??Control_Process_11:
+   \   0000B6   ........     CALLA   #allStop
     158                        //MotorTimer = 6000;              
     159                        //          "0123456789abcdef"
     160                        display_1 = "     Default    ";
-   \   0000B4   B240........ MOV.W   #`?<Constant "     Default    ">`, &display_1
+   \   0000BA   B240........ MOV.W   #`?<Constant "     Default    ">`, &display_1
     161                        break;
     162          			}
     163          			
     164          			
     165          			if(!IsLight)
-   \                     ??Control_Process_11:
-   \   0000BA   C293....     CMP.B   #0x0, &IsLight
-   \   0000BE   0220         JNE     ??Control_Process_12
+   \                     ??Control_Process_12:
+   \   0000C0   C293....     CMP.B   #0x0, &IsLight
+   \   0000C4   0220         JNE     ??Control_Process_13
     166          				ProgramState = 1;
-   \   0000C0   9243....     MOV.W   #0x1, &ProgramState
+   \   0000C6   9243....     MOV.W   #0x1, &ProgramState
     167          		
     168          			if(IsLight)
-   \                     ??Control_Process_12:
-   \   0000C4   C293....     CMP.B   #0x0, &IsLight
-   \   0000C8   0224         JEQ     ??Control_Process_13
+   \                     ??Control_Process_13:
+   \   0000CA   C293....     CMP.B   #0x0, &IsLight
+   \   0000CE   0224         JEQ     ??Control_Process_7
     169          				ProgramState = 2;
-   \   0000CA   A243....     MOV.W   #0x2, &ProgramState
+   \   0000D0   A243....     MOV.W   #0x2, &ProgramState
     170                       
     171          		}
     172                  
     173          	WasLight = IsLight;
-   \                     ??Control_Process_13:
-   \   0000CE   D242........ MOV.B   &IsLight, &WasLight
+   \                     ??Control_Process_7:
+   \   0000D4   D242........ MOV.B   &IsLight, &WasLight
     174          	OldState = ProgramState;
-   \   0000D4   9242........ MOV.W   &ProgramState, &OldState
+   \   0000DA   9242........ MOV.W   &ProgramState, &OldState
     175          }
-   \   0000DA   1001         RETA
+   \   0000E0   1001         RETA
     176          
 
    \                                 In  segment CODE, align 2
@@ -561,7 +566,7 @@ Warning[Pa082]: undefined behavior: the order of volatile accesses is
        2  ADC_RightIR
        2  ADC_Thumb
        2  AdcChannel
-     220  Control_Process
+     226  Control_Process
        1  IsLight
        1  Last_SW1_State
        1  Last_SW2_State
@@ -584,14 +589,14 @@ Warning[Pa082]: undefined behavior: the order of volatile accesses is
        1  one_time
 
  
- 336 bytes in segment CODE
+ 342 bytes in segment CODE
    6 bytes in segment DATA16_AN
  119 bytes in segment DATA16_C
    8 bytes in segment DATA16_I
    8 bytes in segment DATA16_ID
   27 bytes in segment DATA16_Z
  
- 336 bytes of CODE  memory
+ 342 bytes of CODE  memory
  127 bytes of CONST memory
   35 bytes of DATA  memory (+ 6 bytes shared)
 

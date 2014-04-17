@@ -9,7 +9,7 @@ Warning[w6]: Type conflict for external/entry "timedSpinCW", in module prgm_cont
 #                                                                              #
 #      IAR Universal Linker V5.7.0.39                                          #
 #                                                                              #
-#           Link time     =  15/Apr/2014  16:21:59                             #
+#           Link time     =  17/Apr/2014  13:20:10                             #
 #           Target CPU    =  MSP430                                            #
 #           List file     =  C:\Users\Nathan\Documents\GitHub\ece306-linefollo #
 #                            wer\Debug\List\Project_08.map                     #
@@ -99,7 +99,7 @@ Warning[w6]: Type conflict for external/entry "timedSpinCW", in module prgm_cont
                 *                                      *
                 ****************************************
 
-       Program entry at :           C258  Relocatable, from module : ?cstart
+       Program entry at :           C268  Relocatable, from module : ?cstart
 
 
 
@@ -160,11 +160,11 @@ adc ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\adc.r43 )
         leftThreshold                       1C0E
         rightThreshold                      1C10
         AdcChannel                          1C12
-        ADC10_ISR                           C280
-        ADC_Process                         CAA0
-        CalibrateIR                         C90E
-        IsRightIrLight                      CAF8
-        IsLeftIrLight                       CAE8
+        ADC10_ISR                           C290
+        ADC_Process                         CB2A
+        CalibrateIR                         C998
+        IsRightIrLight                      CB82
+        IsLeftIrLight                       CB72
         ADC10_ISR::??INTVEC 92              FFEC
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
@@ -192,7 +192,7 @@ clocks ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\clocks.r
         _A_CSCTL2_L                         0164
         _A_CSCTL3_L                         0166
         _A_WDTCTL_L                         015C
-        Init_Clocks                         C9A0
+        Init_Clocks                         CA2A
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         CSCTL0                              0160
@@ -227,7 +227,7 @@ gps ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\gps.r43 )
         PJOUT_H                             0323
         PJOUT_L                             0322
 init ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\init.r43 )
-        Init_Conditions                     CBB0
+        Init_Conditions                     CC3A
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
 interrupts ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\interrupts.r43 )
@@ -248,7 +248,7 @@ interrupts ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\inte
         TA1EX0                              03A0
         sw1Debounce                         NOT NEEDED
         sw2Debounce                         NOT NEEDED
-        Init_Interrupts                     C530
+        Init_Interrupts                     C5BA
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         ADC10CTL0                           0700
@@ -287,24 +287,24 @@ LCD ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\LCD.r43 )
         display_1                           1C14
         display_2                           1C16
         char_count                          1C18
-        current_line                        1C34
+        current_line                        1C36
         update_display_count                NOT NEEDED
         display_update_time                 NOT NEEDED
-        Init_SPI_B0                         C934
-        SPI_B0_write                        CA8C
-        spi_rs_data                         CB94
-        spi_rs_command                      CB6C
-        spi_chipselect_idle                 CB64
-        spi_chipselect_active               CB8C
-        spi_reset_idle                      CB84
-        spi_reset_active                    CB7C
-        Init_LCD                            C610
-        lcd_write                           C7DC
+        Init_SPI_B0                         C9BE
+        SPI_B0_write                        CB16
+        spi_rs_data                         CC1E
+        spi_rs_command                      CBF6
+        spi_chipselect_idle                 CBEE
+        spi_chipselect_active               CC16
+        spi_reset_idle                      CC0E
+        spi_reset_active                    CC06
+        Init_LCD                            C69A
+        lcd_write                           C866
         lcd_command                         NOT NEEDED
-        lcd_putc                            C884
+        lcd_putc                            C90E
         lcd_puts                            NOT NEEDED
-        lcd_out                             C95A
-        Display_Process                     CA48
+        lcd_out                             C9E4
+        Display_Process                     CAD2
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         PAOUT                               0202
@@ -326,25 +326,25 @@ main ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\main.r43 )
         control_state                       NOT NEEDED
         Time_Sequence                       1C1A
         led_smclk                           NOT NEEDED
-        one_time                            1C35
-        main                                C78C
+        one_time                            1C37
+        main                                C816
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
 motor_control ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\motor_control.r43 )
         _A_PBOUT_L                          0222
-        Motors_Process                      C69E
-        leftForward                         CB58
-        leftReverse                         CB4C
-        rightForward                        CB40
-        rightReverse                        CB34
-        rightStop                           CB18
-        leftStop                            CB26
-        allStop                             CB74
+        Motors_Process                      C728
+        leftForward                         CBE2
+        leftReverse                         CBD6
+        rightForward                        CBCA
+        rightReverse                        CBBE
+        rightStop                           CBA2
+        leftStop                            CBB0
+        allStop                             CBFE
         timedForward                        NOT NEEDED
         timedReverse                        NOT NEEDED
         timedLeft                           NOT NEEDED
         timedRight                          NOT NEEDED
-        timedSpinCW                         CAD6
+        timedSpinCW                         CB60
         timedSpinCCW                        NOT NEEDED
         circleCW                            NOT NEEDED
         circleCCW                           NOT NEEDED
@@ -371,12 +371,12 @@ ports ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\ports.r43
         _A_PJREN_L                          0326
         _A_PJSEL0_L                         032A
         _A_PJSEL1_L                         032C
-        Init_Ports                          CA78
-        Init_Port1                          C81C
-        Init_Port2                          C8B4
-        Init_Port3                          C9C2
-        Init_Port4                          C97E
-        Init_PortJ                          C9FA
+        Init_Ports                          CB02
+        Init_Port1                          C8A6
+        Init_Port2                          C93E
+        Init_Port3                          CA4C
+        Init_Port4                          CA08
+        Init_PortJ                          CA84
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
         PAOUT                               0202
@@ -427,12 +427,12 @@ ports ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\ports.r43
 prgm_control ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\prgm_control.r43 )
         LeftMotorPower                      1C1C
         RightMotorPower                     1C1E
-        ProgramState                        NOT NEEDED
+        ProgramState                        1C20
         OldState                            NOT NEEDED
         StateTransitions                    NOT NEEDED
         IsLight                             NOT NEEDED
         WasLight                            NOT NEEDED
-        Control_Process                     C444
+        Control_Process                     C454
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
 serial_io ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\serial_io.r43 )
@@ -450,23 +450,23 @@ serial_io ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\seria
         _A_UCA1TXBUF_L                      05EE
         _A_UCA1IE_L                         05FA
         UCA1IV                              05FE
-        UsbRx                               1C36
+        UsbRx                               1C38
         usbRx_R                             NOT NEEDED
-        usbRx_W                             1C20
-        UsbTx                               1CB6
+        usbRx_W                             1C22
+        UsbTx                               1CB8
         usbTx_R                             NOT NEEDED
-        usbTx_W                             1C22
-        SerialRx                            1D36
+        usbTx_W                             1C24
+        SerialRx                            1D38
         serialRx_R                          NOT NEEDED
-        serialRx_W                          1C24
-        SerialTx                            1DB6
+        serialRx_W                          1C26
+        SerialTx                            1DB8
         serialTx_R                          NOT NEEDED
         serialTx_W                          NOT NEEDED
         GpsCounter                          NOT NEEDED
-        USCI_A0_ISR                         C2E6
-        USCI_A1_ISR                         C31C
-        Serial_Init                         C72A
-        writeUsb                            C8E4
+        USCI_A0_ISR                         C2F6
+        USCI_A1_ISR                         C32C
+        Serial_Init                         C7B4
+        writeUsb                            C96E
         readUsb                             NOT NEEDED
         writeSerial                         NOT NEEDED
         readSerial                          NOT NEEDED
@@ -513,7 +513,7 @@ serial_io ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\seria
 switch ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\switch.r43 )
         _A_PBIN_L                           0220
         _A_PBIFG_L                          NOT NEEDED
-        Port_4                              C35E
+        Port_4                              C36E
         Switches_Process                    NOT NEEDED
         isPressed                           NOT NEEDED
         Port_4::??INTVEC 64                 FFD0
@@ -526,20 +526,20 @@ switch ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\switch.r
         PBIFG_H                             023D
         PBIFG_L                             023C
 system ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\system.r43 )
-        enable_interrupts                   CBA4
+        enable_interrupts                   CC2E
         ?setjmp_save_r4                     NOT NEEDED
         ?setjmp_save_r5                     NOT NEEDED
 timers ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\timers.r43 )
         _A_PBOUT_L                          NOT NEEDED
-        TimeMsec                            1C26
-        TimeUsec                            1C28
-        CommTimer                           1C2A
-        MotorTimer                          1C2C
-        DebounceTimer                       1C2E
-        SecTimer                            1C30
-        Timer0_A0                           C3B0
-        Timer1_A0                           C3F6
-        Init_Timers                         CBA0
+        TimeMsec                            1C28
+        TimeUsec                            1C2A
+        CommTimer                           1C2C
+        MotorTimer                          1C2E
+        DebounceTimer                       1C30
+        SecTimer                            1C32
+        Timer0_A0                           C3C0
+        Timer1_A0                           C406
+        Init_Timers                         CC2A
         waitMsec                            NOT NEEDED
         Timer1_A0::??INTVEC 82              FFE2
         Timer0_A0::??INTVEC 90              FFEA
@@ -556,21 +556,21 @@ timersB2 ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\timers
         TB2CCR2                             0456
         TB2IV                               046E
         TB2EX0                              0460
-        five_msec_count                     1C32
+        five_msec_count                     1C34
         sleeping                            NOT NEEDED
         sleeptime                           NOT NEEDED
-        Init_Timer_B2                       CA16
+        Init_Timer_B2                       CAA0
         measure_delay                       NOT NEEDED
-        usleep10                            CA60
-        five_msec_sleep                     CB08
+        usleep10                            CAEA
+        five_msec_sleep                     CB92
         led_blink                           NOT NEEDED
         gps_resetting                       NOT NEEDED
         gps_2b_reset                        NOT NEEDED
         reset_gps_time                      NOT NEEDED
         transmit_delay                      NOT NEEDED
         transmit_time                       NOT NEEDED
-        Timer2_B0_ISR                       C3FE
-        TIMER2_B1_ISR                       C41A
+        Timer2_B0_ISR                       C40E
+        TIMER2_B1_ISR                       C42A
         TIMER2_B1_ISR::??INTVEC 68          FFD4
         Timer2_B0_ISR::??INTVEC 70          FFD6
         ?setjmp_save_r4                     NOT NEEDED
@@ -578,15 +578,15 @@ timersB2 ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\timers
 ?abort ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\LIB\DLIB\dl430xsfn.r43 )
         abort                               NOT NEEDED
 ?__dbg_break ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\LIB\DLIB\dl430xsfn.r43 )
-        __DebugBreak                        CBB4
+        __DebugBreak                        CC3E
 ?__dwrite ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\LIB\DLIB\dl430xsfn.r43 )
         __dwrite                            NOT NEEDED
 ?__exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\LIB\DLIB\dl430xsfn.r43 )
-        __exit                              CA30
+        __exit                              CABA
 ?__write ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\LIB\DLIB\dl430xsfn.r43 )
         __write                             NOT NEEDED
 ?_exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\LIB\DLIB\dl430xsfn.r43 )
-        _exit                               CBA8
+        _exit                               CC32
         __cstart_call_dtors                 NOT NEEDED
         __cstart_closeall                   NOT NEEDED
         __cstart_clearlocks                 NOT NEEDED
@@ -597,39 +597,39 @@ timersB2 ( C:\Users\Nathan\Documents\GitHub\ece306-linefollower\Debug\Obj\timers
         __call_dtors                        NOT NEEDED
         __data16_vec_cctor                  NOT NEEDED
 ?cstart ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\LIB\DLIB\dl430xsfn.r43 )
-        __program_start                     C258
-        ?cstart_begin                       C258
+        __program_start                     C268
+        ?cstart_begin                       C268
         ?cstart_call_low_level_init         NOT NEEDED
         ?cstart_init_copy_ramfunc           NOT NEEDED
-        ?cstart_init_zero                   C25C
-        ?cstart_init_copy                   C268
+        ?cstart_init_zero                   C26C
+        ?cstart_init_copy                   C278
         ?cstart_init_zero20                 NOT NEEDED
         ?cstart_init_copy20                 NOT NEEDED
         __cstart_init_tls                   NOT NEEDED
         ?cstart_call_ctors                  NOT NEEDED
-        ?cstart_call_main                   C278
-        ?cstart_end                         C280
+        ?cstart_call_main                   C288
+        ?cstart_end                         C290
 lowinit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\LIB\DLIB\dl430xsfn.r43 )
         __low_level_init                    NOT NEEDED
 ?reset_vector ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\LIB\DLIB\dl430xsfn.r43 )
         ?reset_vector                       FFFE
 ?exit ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\LIB\DLIB\dl430xsfn.r43 )
-        exit                                CB9C
+        exit                                CC26
 ?malloc ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\LIB\DLIB\dl430xsfn.r43 )
         malloc                              NOT NEEDED
 ?DivMod816u ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\LIB\DLIB\dl430xsfn.r43 )
-        ?DivMod8u                           C9DE
-        ?DivMod16u                          C9E2
+        ?DivMod8u                           CA68
+        ?DivMod16u                          CA6C
 ?DivMod816s ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\LIB\DLIB\dl430xsfn.r43 )
-        ?DivMod8s                           C850
-        ?DivMod16s                          C854
+        ?DivMod8s                           C8DA
+        ?DivMod16s                          C8DE
 ?memcpy ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\LIB\DLIB\dl430xsfn.r43 )
-        memcpy                              CAB2
+        memcpy                              CB3C
 ?memmove ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\LIB\DLIB\dl430xsfn.r43 )
         memmove                             NOT NEEDED
 ?memzero ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\LIB\DLIB\dl430xsfn.r43 )
-        __data16_memzero                    CAC4
-        __data16_memcpy                     CBAC
+        __data16_memzero                    CB4E
+        __data16_memcpy                     CC36
         __data16_memmove                    NOT NEEDED
 ?setjmp ( C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\LIB\DLIB\dl430xsfn.r43 )
         setjmp                              NOT NEEDED
@@ -690,7 +690,7 @@ main                   80      3            34
 motor_control         242
   + shared                            2
 ports                 210            24
-prgm_control          236      4            51
+prgm_control          358      6            68
 serial_io             260    518     28
   + common             98
 switch                 82             2
@@ -702,8 +702,8 @@ timersB2              136      2     14
   + common             72
 N/A (command line)           160
 N/A (alignment)
-----------          -----    ---    ---     --
-Total:              2 400    726    128     87
+----------          -----    ---    ---    ---
+Total:              2 522    728    128    104
   + common             98
 
 
@@ -754,13 +754,13 @@ DATA16_AN                              015C - 015D               2   rel    0
                                        071A - 071B               2 
                                        071E - 071F               2 
 DATA16_I                               1C00 - 1C01               2   rel    1
-DATA16_Z                               1C02 - 1E35             234   rel    1
+DATA16_Z                               1C02 - 1E37             236   rel    1
 CSTACK                                 1F60 - 1FFF              A0   rel    1
-DATA16_C                               C200 - C254              55   rel    0
-DATA16_ID                              C256 - C257               2   rel    1
-CSTART                                 C258 - C27F              28   rel    1
-ISR_CODE                               C280 - C443             1C4   rel    1
-<CODE> 1                               C444 - CBB5             772   rel    1
+DATA16_C                               C200 - C265              66   rel    0
+DATA16_ID                              C266 - C267               2   rel    1
+CSTART                                 C268 - C28F              28   rel    1
+ISR_CODE                               C290 - C453             1C4   rel    1
+<CODE> 1                               C454 - CC3F             7EC   rel    1
 INTVEC                                 FF90 - FFF1              62   com    1
 RESET                                  FFFE - FFFF               2   rel    1
 
@@ -770,9 +770,9 @@ RESET                                  FFFE - FFFF               2   rel    1
                 *                                      *
                 ****************************************
 
- 2 498 bytes of CODE  memory
-   726 bytes of DATA  memory (+ 128 absolute )
-    87 bytes of CONST memory
+ 2 620 bytes of CODE  memory
+   728 bytes of DATA  memory (+ 128 absolute )
+   104 bytes of CONST memory
 
 Errors: none
 Warnings: 1

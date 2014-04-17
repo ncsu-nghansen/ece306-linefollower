@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       15/Apr/2014  16:21:59 #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       17/Apr/2014  13:20:10 #
 # Copyright 1996-2013 IAR Systems AB.                                         #
 #                                                                             #
 #    __rt_version  =  3                                                       #
@@ -84,121 +84,244 @@ C:\Users\Nathan\Documents\GitHub\ece306-linefollower\prgm_control.c
    \   000000                DS8 1
    \   000001                REQUIRE `?<Initializer for WasLight>`
      14          
+     15          #define OFF_RIGHT (0)
+     16          #define RIGHT_EDGE (1)
+     17          #define CENTER (2)
+     18          #define LEFT_EDGE (3)
+     19          #define OFF_LEFT (4)
+     20          
 
    \                                 In  segment CODE, align 2
-     15          void Control_Process(void)
+     21          void Control_Process(void)
    \                     Control_Process:
-     16          {
-     17          	if(ADC_Thumb > 200)  //Disables motors while calibrating
+     22          {
+     23          	if(ADC_Thumb > 200)  //Disables motors while calibrating
    \   000000   B290C900.... CMP.W   #0xc9, &ADC_Thumb
-   \   000006   0D38         JL      ??Control_Process_1
-     18          	{
-     19          		LeftMotorPower = 0;
+   \   000006   0D38         JL      ??Control_Process_6
+     24          	{
+     25          		LeftMotorPower = 0;
    \   000008   8243....     MOV.W   #0x0, &LeftMotorPower
-     20          		RightMotorPower = 0;
+     26          		RightMotorPower = 0;
    \   00000C   8243....     MOV.W   #0x0, &RightMotorPower
-     21          		MotorTimer = 0;
+     27          		MotorTimer = 0;
    \   000010   8243....     MOV.W   #0x0, &MotorTimer
-     22                          SecTimer = 180;
-   \   000014   B240B400.... MOV.W   #0xb4, &SecTimer
-     23          		
-     24          		//          "0123456789abcdef"   
-     25          		display_2 = "Motors  Disabled";
+     28                          SecTimer = 120;
+   \   000014   B2407800.... MOV.W   #0x78, &SecTimer
+     29          		
+     30          		//          "0123456789abcdef"   
+     31          		display_2 = "Motors  Disabled";
    \   00001A   B240........ MOV.W   #`?<Constant "Motors  Disabled">`, &display_2
-     26          		
-     27          		return;
+     32          		
+     33          		return;
    \   000020   1001         RETA
-     28          	}
-     29          
-     30          	if(MotorTimer == 0)
-   \                     ??Control_Process_1:
-   \   000022   8293....     CMP.W   #0x0, &MotorTimer
-   \   000026   5020         JNE     ??Control_Process_2
-     31          	{
-     32          		if(IsRightIrLight() && IsLeftIrLight()) //Quickly turn left when off line
-   \   000028   ........     CALLA   #IsRightIrLight
-   \   00002C   4C93         CMP.B   #0x0, R12
-   \   00002E   0F24         JEQ     ??Control_Process_3
-   \   000030   ........     CALLA   #IsLeftIrLight
-   \   000034   4C93         CMP.B   #0x0, R12
-   \   000036   0B24         JEQ     ??Control_Process_3
-     33          			RightMotorPower = 100, LeftMotorPower = 0, display_2 = "       Light    ", display_1 = "       Light    ";
-   \   000038   B2406400.... MOV.W   #0x64, &RightMotorPower
-   \   00003E   8243....     MOV.W   #0x0, &LeftMotorPower
-   \   000042   B240........ MOV.W   #`?<Constant "       Light    ">`, &display_2
-   \   000048   B240........ MOV.W   #`?<Constant "       Light    ">`, &display_1
-     34          		if(IsRightIrLight() && !IsLeftIrLight()) //Slowly turn left when on edge
-   \                     ??Control_Process_3:
-   \   00004E   ........     CALLA   #IsRightIrLight
-   \   000052   4C93         CMP.B   #0x0, R12
-   \   000054   1024         JEQ     ??Control_Process_4
-   \   000056   ........     CALLA   #IsLeftIrLight
-   \   00005A   4C93         CMP.B   #0x0, R12
-   \   00005C   0C20         JNE     ??Control_Process_4
-     35          			RightMotorPower = 80, LeftMotorPower = 50, display_2 = "       Light    ", display_1 = "       Dark     ";
-   \   00005E   B2405000.... MOV.W   #0x50, &RightMotorPower
-   \   000064   B2403200.... MOV.W   #0x32, &LeftMotorPower
-   \   00006A   B240........ MOV.W   #`?<Constant "       Light    ">`, &display_2
-   \   000070   B240........ MOV.W   #`?<Constant "       Dark     ">`, &display_1
-     36          		if(!IsRightIrLight() && !IsLeftIrLight()) //Slowly turn right when on line
-   \                     ??Control_Process_4:
-   \   000076   ........     CALLA   #IsRightIrLight
-   \   00007A   4C93         CMP.B   #0x0, R12
-   \   00007C   1020         JNE     ??Control_Process_5
-   \   00007E   ........     CALLA   #IsLeftIrLight
-   \   000082   4C93         CMP.B   #0x0, R12
-   \   000084   0C20         JNE     ??Control_Process_5
-     37          			RightMotorPower = 50, LeftMotorPower = 80, display_2 = "       Dark     ", display_1 = "       Dark     ";
-   \   000086   B2403200.... MOV.W   #0x32, &RightMotorPower
-   \   00008C   B2405000.... MOV.W   #0x50, &LeftMotorPower
-   \   000092   B240........ MOV.W   #`?<Constant "       Dark     ">`, &display_2
-   \   000098   B240........ MOV.W   #`?<Constant "       Dark     ">`, &display_1
-     38          		if(!IsRightIrLight() && IsLeftIrLight()) //Quickly turn right when on far edge
-   \                     ??Control_Process_5:
-   \   00009E   ........     CALLA   #IsRightIrLight
-   \   0000A2   4C93         CMP.B   #0x0, R12
-   \   0000A4   0F20         JNE     ??Control_Process_6
-   \   0000A6   ........     CALLA   #IsLeftIrLight
-   \   0000AA   4C93         CMP.B   #0x0, R12
-   \   0000AC   0B24         JEQ     ??Control_Process_6
-     39          			RightMotorPower = 0, LeftMotorPower = 100, display_2 = "       Dark     ", display_1 = "       Light    ";
-   \   0000AE   8243....     MOV.W   #0x0, &RightMotorPower
-   \   0000B2   B2406400.... MOV.W   #0x64, &LeftMotorPower
-   \   0000B8   B240........ MOV.W   #`?<Constant "       Dark     ">`, &display_2
-   \   0000BE   B240........ MOV.W   #`?<Constant "       Light    ">`, &display_1
-     40          
-     41          		MotorTimer = 1;
+     34          	}
+     35          
+     36          	/*if(MotorTimer == 0)
+     37          	{
+     38          		if(IsRightIrLight() && IsLeftIrLight()) //Semi-Quickly turn left when off line
+     39          			RightMotorPower = 40, LeftMotorPower = 0, display_2 = "       Light    ", display_1 = "       Light    ";
+     40          		if(IsRightIrLight() && !IsLeftIrLight()) //Slowly turn left when on edge
+     41          			RightMotorPower = 40, LeftMotorPower = 40, display_2 = "       Light    ", display_1 = "       Dark     ";
+     42          		if(!IsRightIrLight() && !IsLeftIrLight()) //Slowly turn right when on line
+     43          			RightMotorPower = 30, LeftMotorPower = 80, display_2 = "       Dark     ", display_1 = "       Dark     ";
+     44          		if(!IsRightIrLight() && IsLeftIrLight()) //Quickly turn right when on far edge
+     45          			RightMotorPower = 0, LeftMotorPower = 100, display_2 = "       Dark     ", display_1 = "       Light    ";
+     46          	}*/
+     47                  
+     48                  switch(ProgramState)
    \                     ??Control_Process_6:
-   \   0000C4   9243....     MOV.W   #0x1, &MotorTimer
-     42          	}
-     43          		
-     44          	if(SecTimer == 90)  //If need to turn around
-   \                     ??Control_Process_2:
-   \   0000C8   B2905A00.... CMP.W   #0x5a, &SecTimer
-   \   0000CE   0620         JNE     ??Control_Process_7
-     45          	{
-     46          		SecTimer--;
-   \   0000D0   B253....     ADD.W   #0xffff, &SecTimer
-     47          		timedSpinCW(2000);
+   \   000022   1F42....     MOV.W   &ProgramState, R15
+   \   000026   0F83         SUB.W   #0x0, R15
+   \   000028   0924         JEQ     ??Control_Process_7
+   \   00002A   1F83         SUB.W   #0x1, R15
+   \   00002C   1224         JEQ     ??Control_Process_8
+   \   00002E   1F83         SUB.W   #0x1, R15
+   \   000030   2524         JEQ     ??Control_Process_9
+   \   000032   1F83         SUB.W   #0x1, R15
+   \   000034   3924         JEQ     ??Control_Process_10
+   \   000036   1F83         SUB.W   #0x1, R15
+   \   000038   4C24         JEQ     ??Control_Process_11
+   \   00003A   563C         JMP     ??Control_Process_0
+     49                  {
+     50                    case OFF_RIGHT:
+     51                      if(IsRightIrLight() && !IsLeftIrLight())
+   \                     ??Control_Process_7:
+   \   00003C   ........     CALLA   #IsRightIrLight
+   \   000040   4C93         CMP.B   #0x0, R12
+   \   000042   5224         JEQ     ??Control_Process_0
+   \   000044   ........     CALLA   #IsLeftIrLight
+   \   000048   4C93         CMP.B   #0x0, R12
+   \   00004A   4E20         JNE     ??Control_Process_0
+     52                        ProgramState = RIGHT_EDGE;
+   \   00004C   9243....     MOV.W   #0x1, &ProgramState
+     53                      break;
+   \   000050   4B3C         JMP     ??Control_Process_0
+     54                      
+     55                    case RIGHT_EDGE:
+     56                      if(IsRightIrLight() && IsLeftIrLight())
+   \                     ??Control_Process_8:
+   \   000052   ........     CALLA   #IsRightIrLight
+   \   000056   4C93         CMP.B   #0x0, R12
+   \   000058   0624         JEQ     ??Control_Process_12
+   \   00005A   ........     CALLA   #IsLeftIrLight
+   \   00005E   4C93         CMP.B   #0x0, R12
+   \   000060   0224         JEQ     ??Control_Process_12
+     57                        ProgramState = OFF_RIGHT;
+   \   000062   8243....     MOV.W   #0x0, &ProgramState
+     58                      if(!IsRightIrLight() && !IsLeftIrLight())
+   \                     ??Control_Process_12:
+   \   000066   ........     CALLA   #IsRightIrLight
+   \   00006A   4C93         CMP.B   #0x0, R12
+   \   00006C   3D20         JNE     ??Control_Process_0
+   \   00006E   ........     CALLA   #IsLeftIrLight
+   \   000072   4C93         CMP.B   #0x0, R12
+   \   000074   3920         JNE     ??Control_Process_0
+     59                        ProgramState = CENTER;
+   \   000076   A243....     MOV.W   #0x2, &ProgramState
+     60                      break;
+   \   00007A   363C         JMP     ??Control_Process_0
+     61                      
+     62                    case CENTER:
+     63                      if(IsRightIrLight() && !IsLeftIrLight())
+   \                     ??Control_Process_9:
+   \   00007C   ........     CALLA   #IsRightIrLight
+   \   000080   4C93         CMP.B   #0x0, R12
+   \   000082   0624         JEQ     ??Control_Process_13
+   \   000084   ........     CALLA   #IsLeftIrLight
+   \   000088   4C93         CMP.B   #0x0, R12
+   \   00008A   0220         JNE     ??Control_Process_13
+     64                        ProgramState = RIGHT_EDGE;
+   \   00008C   9243....     MOV.W   #0x1, &ProgramState
+     65                      if(!IsRightIrLight() && IsLeftIrLight())
+   \                     ??Control_Process_13:
+   \   000090   ........     CALLA   #IsRightIrLight
+   \   000094   4C93         CMP.B   #0x0, R12
+   \   000096   2820         JNE     ??Control_Process_0
+   \   000098   ........     CALLA   #IsLeftIrLight
+   \   00009C   4C93         CMP.B   #0x0, R12
+   \   00009E   2424         JEQ     ??Control_Process_0
+     66                        ProgramState = LEFT_EDGE;
+   \   0000A0   B2400300.... MOV.W   #0x3, &ProgramState
+     67                      break;
+   \   0000A6   203C         JMP     ??Control_Process_0
+     68                      
+     69                    case LEFT_EDGE:
+     70                      if(!IsRightIrLight() && !IsLeftIrLight())
+   \                     ??Control_Process_10:
+   \   0000A8   ........     CALLA   #IsRightIrLight
+   \   0000AC   4C93         CMP.B   #0x0, R12
+   \   0000AE   0620         JNE     ??Control_Process_14
+   \   0000B0   ........     CALLA   #IsLeftIrLight
+   \   0000B4   4C93         CMP.B   #0x0, R12
+   \   0000B6   0220         JNE     ??Control_Process_14
+     71                        ProgramState = CENTER;
+   \   0000B8   A243....     MOV.W   #0x2, &ProgramState
+     72                      if(IsRightIrLight() && IsLeftIrLight())
+   \                     ??Control_Process_14:
+   \   0000BC   ........     CALLA   #IsRightIrLight
+   \   0000C0   4C93         CMP.B   #0x0, R12
+   \   0000C2   1224         JEQ     ??Control_Process_0
+   \   0000C4   ........     CALLA   #IsLeftIrLight
+   \   0000C8   4C93         CMP.B   #0x0, R12
+   \   0000CA   0E24         JEQ     ??Control_Process_0
+     73                        ProgramState = OFF_LEFT;
+   \   0000CC   A242....     MOV.W   #0x4, &ProgramState
+     74                      break;
+   \   0000D0   0B3C         JMP     ??Control_Process_0
+     75                      
+     76                    case OFF_LEFT:
+     77                      if(!IsRightIrLight() && IsLeftIrLight())
+   \                     ??Control_Process_11:
+   \   0000D2   ........     CALLA   #IsRightIrLight
+   \   0000D6   4C93         CMP.B   #0x0, R12
+   \   0000D8   0720         JNE     ??Control_Process_0
+   \   0000DA   ........     CALLA   #IsLeftIrLight
+   \   0000DE   4C93         CMP.B   #0x0, R12
+   \   0000E0   0324         JEQ     ??Control_Process_0
+     78                        ProgramState = LEFT_EDGE;
+   \   0000E2   B2400300.... MOV.W   #0x3, &ProgramState
+     79                      break;            
+     80                  }
+     81                  
+     82                  if(MotorTimer == 0)
+   \                     ??Control_Process_0:
+   \   0000E8   8293....     CMP.W   #0x0, &MotorTimer
+   \   0000EC   2A20         JNE     ??Control_Process_15
+     83                  {
+     84                    MotorTimer = 1;
+   \   0000EE   9243....     MOV.W   #0x1, &MotorTimer
+     85                    
+     86                    switch(ProgramState)
+   \   0000F2   1F42....     MOV.W   &ProgramState, R15
+   \   0000F6   0F83         SUB.W   #0x0, R15
+   \   0000F8   0924         JEQ     ??Control_Process_16
+   \   0000FA   1F83         SUB.W   #0x1, R15
+   \   0000FC   1024         JEQ     ??Control_Process_17
+   \   0000FE   1F83         SUB.W   #0x1, R15
+   \   000100   0E24         JEQ     ??Control_Process_17
+   \   000102   1F83         SUB.W   #0x1, R15
+   \   000104   0C24         JEQ     ??Control_Process_17
+   \   000106   1F83         SUB.W   #0x1, R15
+   \   000108   1424         JEQ     ??Control_Process_18
+   \   00010A   1B3C         JMP     ??Control_Process_15
+     87                    {
+     88                    case OFF_RIGHT:
+     89                      RightMotorPower = 100, LeftMotorPower = 0,   display_2 = " Off Right Side ";
+   \                     ??Control_Process_16:
+   \   00010C   B2406400.... MOV.W   #0x64, &RightMotorPower
+   \   000112   8243....     MOV.W   #0x0, &LeftMotorPower
+   \   000116   B240........ MOV.W   #`?<Constant " Off Right Side ">`, &display_2
+     90                      break;
+   \   00011C   123C         JMP     ??Control_Process_15
+     91                      
+     92                    case RIGHT_EDGE:         
+     93                    case CENTER:
+     94                    case LEFT_EDGE:
+     95                      RightMotorPower = 80, LeftMotorPower = 80,   display_2 = "     On Line    ";
+   \                     ??Control_Process_17:
+   \   00011E   B2405000.... MOV.W   #0x50, &RightMotorPower
+   \   000124   B2405000.... MOV.W   #0x50, &LeftMotorPower
+   \   00012A   B240........ MOV.W   #`?<Constant "     On Line    ">`, &display_2
+     96                      break;
+   \   000130   083C         JMP     ??Control_Process_15
+     97                      
+     98                    case OFF_LEFT:
+     99                      RightMotorPower = 0, LeftMotorPower = 100,   display_2 = "  Off Left Side ";
+   \                     ??Control_Process_18:
+   \   000132   8243....     MOV.W   #0x0, &RightMotorPower
+   \   000136   B2406400.... MOV.W   #0x64, &LeftMotorPower
+   \   00013C   B240........ MOV.W   #`?<Constant "  Off Left Side ">`, &display_2
+    100                      break;
+    101                    }
+    102                  }
+    103          		
+    104          	if(SecTimer == 60)  //If need to turn around
+   \                     ??Control_Process_15:
+   \   000142   B2903C00.... CMP.W   #0x3c, &SecTimer
+   \   000148   0620         JNE     ??Control_Process_19
+    105          	{
+    106          		SecTimer--;
+   \   00014A   B253....     ADD.W   #0xffff, &SecTimer
+    107          		timedSpinCW(1000);
                  		^
 Warning[Pe223]: function "timedSpinCW" declared implicitly
-   \   0000D4   3C40D007     MOV.W   #0x7d0, R12
-   \   0000D8   ........     CALLA   #timedSpinCW
-     48          	}
-     49                  
-     50          	if(SecTimer == 0)
-   \                     ??Control_Process_7:
-   \   0000DC   8293....     CMP.W   #0x0, &SecTimer
-   \   0000E0   0420         JNE     ??Control_Process_0
-     51          	{
-     52          		RightMotorPower = 0;
-   \   0000E2   8243....     MOV.W   #0x0, &RightMotorPower
-     53          		LeftMotorPower = 0;
-   \   0000E6   8243....     MOV.W   #0x0, &LeftMotorPower
-     54          	}
-     55          }
-   \                     ??Control_Process_0:
-   \   0000EA   1001         RETA
+   \   00014E   3C40E803     MOV.W   #0x3e8, R12
+   \   000152   ........     CALLA   #timedSpinCW
+    108          	}
+    109                  
+    110          	if(SecTimer == 0)
+   \                     ??Control_Process_19:
+   \   000156   8293....     CMP.W   #0x0, &SecTimer
+   \   00015A   0420         JNE     ??Control_Process_1
+    111          	{
+    112          		RightMotorPower = 0;
+   \   00015C   8243....     MOV.W   #0x0, &RightMotorPower
+    113          		LeftMotorPower = 0;
+   \   000160   8243....     MOV.W   #0x0, &LeftMotorPower
+    114          	}
+    115          }
+   \                     ??Control_Process_1:
+   \   000164   1001         RETA
 
    \                                 In  segment DATA16_ID, align 2, align-sorted
    \                     `?<Initializer for OldState>`:
@@ -219,16 +342,22 @@ Warning[Pe223]: function "timedSpinCW" declared implicitly
    \            626C656400  
 
    \                                 In  segment DATA16_C, align 1, align-sorted
-   \                     `?<Constant "       Light    ">`:
-   \   000000   202020202020 DC8 "       Light    "
-   \            204C69676874
+   \                     `?<Constant " Off Right Side ">`:
+   \   000000   204F66662052 DC8 " Off Right Side "
+   \            696768742053
+   \            6964652000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "     On Line    ">`:
+   \   000000   20202020204F DC8 "     On Line    "
+   \            6E204C696E65
    \            2020202000  
 
    \                                 In  segment DATA16_C, align 1, align-sorted
-   \                     `?<Constant "       Dark     ">`:
-   \   000000   202020202020 DC8 "       Dark     "
-   \            204461726B20
-   \            2020202000  
+   \                     `?<Constant "  Off Left Side ">`:
+   \   000000   20204F666620 DC8 "  Off Left Side "
+   \            4C6566742053
+   \            6964652000  
 
    Maximum stack usage in bytes:
 
@@ -244,13 +373,14 @@ Warning[Pe223]: function "timedSpinCW" declared implicitly
 
    Bytes  Function/Label
    -----  --------------
-      17  ?<Constant "       Dark     ">
-      17  ?<Constant "       Light    ">
+      17  ?<Constant "     On Line    ">
+      17  ?<Constant "  Off Left Side ">
+      17  ?<Constant " Off Right Side ">
       17  ?<Constant "Motors  Disabled">
        1  ?<Initializer for IsLight>
        2  ?<Initializer for OldState>
        1  ?<Initializer for WasLight>
-     236  Control_Process
+     358  Control_Process
        1  IsLight
        2  LeftMotorPower
        2  OldState
@@ -260,14 +390,14 @@ Warning[Pe223]: function "timedSpinCW" declared implicitly
        1  WasLight
 
  
- 236 bytes in segment CODE
-  51 bytes in segment DATA16_C
+ 358 bytes in segment CODE
+  68 bytes in segment DATA16_C
    4 bytes in segment DATA16_I
    4 bytes in segment DATA16_ID
    8 bytes in segment DATA16_Z
  
- 236 bytes of CODE  memory
-  55 bytes of CONST memory
+ 358 bytes of CODE  memory
+  72 bytes of CONST memory
   12 bytes of DATA  memory
 
 Errors: none

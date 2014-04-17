@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       28/Mar/2014  12:10:48 #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       15/Apr/2014  14:59:37 #
 # Copyright 1996-2013 IAR Systems AB.                                         #
 #                                                                             #
 #    __rt_version  =  3                                                       #
@@ -10,28 +10,28 @@
 #    __pic         =  no                                                      #
 #    __core        =  430X                                                    #
 #    __data_model  =  small                                                   #
-#    Source file   =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
-#                     er\interrupts.c                                         #
-#    Command line  =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
-#                     er\interrupts.c -lC C:\Users\Christopher\Documents\GitH #
-#                     ub\ece306-linefollower\Debug\List\ -o                   #
-#                     C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
-#                     er\Debug\Obj\ --no_cse --no_unroll --no_inline          #
+#    Source file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\in #
+#                     terrupts.c                                              #
+#    Command line  =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\in #
+#                     terrupts.c -lC C:\Users\Nathan\Documents\GitHub\ece306- #
+#                     linefollower\Debug\List\ -o                             #
+#                     C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\Obj\ --no_cse --no_unroll --no_inline               #
 #                     --no_code_motion --no_tbaa --debug -D__MSP430FR5739__   #
 #                     -e --double=32 --dlib_config "C:\Program Files          #
 #                     (x86)\IAR Systems\Embedded Workbench                    #
 #                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
 #                     --data_model=small -Ol --multiplier=32                  #
 #                     --multiplier_location=4C0 --hw_workaround=CPU40         #
-#    List file     =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
-#                     er\Debug\List\interrupts.lst                            #
-#    Object file   =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
-#                     er\Debug\Obj\interrupts.r43                             #
+#    List file     =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\List\interrupts.lst                                 #
+#    Object file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\Obj\interrupts.r43                                  #
 #                                                                             #
 #                                                                             #
 ###############################################################################
 
-C:\Users\Christopher\Documents\GitHub\ece306-linefollower\interrupts.c
+C:\Users\Nathan\Documents\GitHub\ece306-linefollower\interrupts.c
       1          #include  "msp430.h"
 
    \                                 In  segment DATA16_AN, at 0x700
@@ -54,29 +54,9 @@ C:\Users\Christopher\Documents\GitHub\ece306-linefollower\interrupts.c
    \                     _A_ADC10MCTL0_L:
    \   000000                DS8 2
 
-   \                                 In  segment DATA16_AN, at 0x712
-   \   union <unnamed> _A_ADC10MEM0_L
-   \                     _A_ADC10MEM0_L:
-   \   000000                DS8 2
-
    \                                 In  segment DATA16_AN, at 0x71a
    \   union <unnamed> _A_ADC10IE_L
    \                     _A_ADC10IE_L:
-   \   000000                DS8 2
-
-   \                                 In  segment DATA16_AN, at 0x71e
-   \   union <unnamed> _A_ADC10IV_L
-   \                     _A_ADC10IV_L:
-   \   000000                DS8 2
-
-   \                                 In  segment DATA16_AN, at 0x202
-   \   union <unnamed> _A_PAOUT_L
-   \                     _A_PAOUT_L:
-   \   000000                DS8 2
-
-   \                                 In  segment DATA16_AN, at 0x222
-   \   union <unnamed> _A_PBOUT_L
-   \                     _A_PBOUT_L:
    \   000000                DS8 2
 
    \                                 In  segment DATA16_AN, at 0x238
@@ -92,11 +72,6 @@ C:\Users\Christopher\Documents\GitHub\ece306-linefollower\interrupts.c
    \                                 In  segment DATA16_AN, at 0x23c
    \   union <unnamed> _A_PBIFG_L
    \                     _A_PBIFG_L:
-   \   000000                DS8 2
-
-   \                                 In  segment DATA16_AN, at 0x322
-   \   union <unnamed> _A_PJOUT_L
-   \                     _A_PJOUT_L:
    \   000000                DS8 2
 
    \                                 In  segment DATA16_AN, at 0x340
@@ -117,6 +92,21 @@ C:\Users\Christopher\Documents\GitHub\ece306-linefollower\interrupts.c
    \                                 In  segment DATA16_AN, at 0x360
    \   unsigned short volatile TA0EX0
    \                     TA0EX0:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x380
+   \   unsigned short volatile TA1CTL
+   \                     TA1CTL:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x392
+   \   unsigned short volatile TA1CCR0
+   \                     TA1CCR0:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3a0
+   \   unsigned short volatile TA1EX0
+   \                     TA1EX0:
    \   000000                DS8 2
       2          #include  "functions.h"
       3          #include  "macros.h"
@@ -141,279 +131,122 @@ C:\Users\Christopher\Documents\GitHub\ece306-linefollower\interrupts.c
       8          void Init_Interrupts(void)
    \                     Init_Interrupts:
       9          {
-     10          	P4IFG &= ~SW1;
-   \   000000   D2C33D02     BIC.B   #0x1, &0x23d
-     11          	P4IFG &= ~SW2;
-   \   000004   E2C33D02     BIC.B   #0x2, &0x23d
-     12          	P4IE |= SW1;
-   \   000008   D2D33B02     BIS.B   #0x1, &0x23b
-     13          	P4IE |= SW2;
-   \   00000C   E2D33B02     BIS.B   #0x2, &0x23b
-     14          	P4IES |= SW1 | SW2;
-   \   000010   F2D003003902 BIS.B   #0x3, &0x239
-     15          	
-     16          	TA0CTL |= TASSEL__SMCLK;
-   \   000016   B2D000024003 BIS.W   #0x200, &0x340
-     17          	TA0CTL |= TACLR;
-   \   00001C   A2D24003     BIS.W   #0x4, &0x340
-     18          	TA0CTL |= MC__UP;
-   \   000020   B2D010004003 BIS.W   #0x10, &0x340
-     19          	TA0CTL |= ID__2; //ID__2
-   \   000026   B2D040004003 BIS.W   #0x40, &0x340
-     20          	TA0CTL &= ~TAIE;
-   \   00002C   A2C34003     BIC.W   #0x2, &0x340
-     21          	TA0CTL &= ~TAIFG;
-   \   000030   92C34003     BIC.W   #0x1, &0x340
-     22          	
-     23          	TA0EX0 = TAIDEX_7;
-   \   000034   B24007006003 MOV.W   #0x7, &0x360
+     10          	Serial_Init();
+   \   000000   ........     CALLA   #Serial_Init
+     11          	
+     12          	P4IFG &= ~SW1;
+   \   000004   D2C33D02     BIC.B   #0x1, &0x23d
+     13          	P4IFG &= ~SW2;
+   \   000008   E2C33D02     BIC.B   #0x2, &0x23d
+     14          	P4IE |= SW1;
+   \   00000C   D2D33B02     BIS.B   #0x1, &0x23b
+     15          	P4IE |= SW2;
+   \   000010   E2D33B02     BIS.B   #0x2, &0x23b
+     16          	P4IES |= SW1 | SW2;
+   \   000014   F2D003003902 BIS.B   #0x3, &0x239
+     17          	
+     18          	TA0CTL |= TASSEL__SMCLK;
+   \   00001A   B2D000024003 BIS.W   #0x200, &0x340
+     19          	TA0CTL |= TACLR;
+   \   000020   A2D24003     BIS.W   #0x4, &0x340
+     20          	TA0CTL |= MC__UP;
+   \   000024   B2D010004003 BIS.W   #0x10, &0x340
+     21          	TA0CTL |= ID__2;
+   \   00002A   B2D040004003 BIS.W   #0x40, &0x340
+     22          	TA0CTL &= ~TAIE;
+   \   000030   A2C34003     BIC.W   #0x2, &0x340
+     23          	TA0CTL &= ~TAIFG;
+   \   000034   92C34003     BIC.W   #0x1, &0x340
      24          	
-     25          	TA0CCR0 = TA0_ROLLOVER;//TA0_ROLLOVER; //rollover of 500 => 1ms
-   \   00003A   B240F4015203 MOV.W   #0x1f4, &0x352
-     26          	TA0CCTL0 |= CCIE;
-   \   000040   B2D010004203 BIS.W   #0x10, &0x342
-     27                  
-     28                  /*TA1CTL |= TASSEL__SMCLK;
-     29          	TA1CTL |= TACLR;
-     30          	TA1CTL |= MC__UP;
-     31          	TA1CTL |= ID__2;
-     32          	TA1CTL &= ~TAIE;
-     33          	TA1CTL &= ~TAIFG;
-     34          	
-     35          	TA1EX0 = TAIDEX_7;
-     36          	
-     37          	TA1CCR1 = 2500; //5ms
-     38          	TA1CCTL1 |= CCIE; //On at start
-     39                  */
+     25          	TA0EX0 = TAIDEX_7;
+   \   000038   B24007006003 MOV.W   #0x7, &0x360
+     26          	TA0CCR0 = TA0_ROLLOVER; //1ms
+   \   00003E   B240F4015203 MOV.W   #0x1f4, &0x352
+     27          	TA0CCTL0 |= CCIE; 
+   \   000044   B2D010004203 BIS.W   #0x10, &0x342
+     28                  
+     29                  TA1CTL |= TASSEL__SMCLK;
+   \   00004A   B2D000028003 BIS.W   #0x200, &0x380
+     30          	TA1CTL |= TACLR;
+   \   000050   A2D28003     BIS.W   #0x4, &0x380
+     31          	TA1CTL |= MC__UP;
+   \   000054   B2D010008003 BIS.W   #0x10, &0x380
+     32          	TA1CTL |= ID__2;
+   \   00005A   B2D040008003 BIS.W   #0x40, &0x380
+     33          	TA1CTL &= ~TAIE;
+   \   000060   A2C38003     BIC.W   #0x2, &0x380
+     34          	TA1CTL &= ~TAIFG;
+   \   000064   92C38003     BIC.W   #0x1, &0x380
+     35                  
+     36                  TA1EX0 = TAIDEX_3;
+   \   000068   B2400300A003 MOV.W   #0x3, &0x3a0
+     37                  TA1CCR0 = 100;
+   \   00006E   B24064009203 MOV.W   #0x64, &0x392
+     38                  //TA1CCTL0 |= CCIE;
+     39          		
      40          		
-     41          		
-     42          	//Init ADC
-     43          #define RESET_STATE (0); 
-     44          	ADC10CTL0 = RESET_STATE; // Clear ADC10CTL0
-   \   000046   82430007     MOV.W   #0x0, &0x700
-     45          	ADC10CTL0 |= ADC10SHT_2; // 16 ADC clocks
-   \   00004A   B2D000020007 BIS.W   #0x200, &0x700
-     46          	ADC10CTL0 &= ~ADC10MSC; // Single Sequence
-   \   000050   B2C080000007 BIC.W   #0x80, &0x700
-     47          	ADC10CTL0 |= ADC10ON; // ADC ON - Core Enabled
-   \   000056   B2D010000007 BIS.W   #0x10, &0x700
-     48          	
-     49          	ADC10CTL1 = RESET_STATE; // Clear ADC10CTL1
-   \   00005C   82430207     MOV.W   #0x0, &0x702
-     50          	ADC10CTL1 |= ADC10SHS_0; // ADC10SC bit
-   \   000060   924202070207 MOV.W   &0x702, &0x702
-     51          	ADC10CTL1 |= ADC10SHP; // SAMPCON signal sourced from sampling timer
-   \   000066   B2D000020207 BIS.W   #0x200, &0x702
-     52          	ADC10CTL1 &= ~ADC10ISSH; // The sample-input signal is not inverted.
-   \   00006C   B2C000010207 BIC.W   #0x100, &0x702
-     53          	ADC10CTL1 |= ADC10DIV_0; // ADC10_B clock divider – Divide by 1.
-   \   000072   924202070207 MOV.W   &0x702, &0x702
-     54          	ADC10CTL1 |= ADC10SSEL_0; // MODCLK
-   \   000078   924202070207 MOV.W   &0x702, &0x702
-     55          	ADC10CTL1 |= ADC10CONSEQ_0; // Single-channel, single-conversion
-   \   00007E   924202070207 MOV.W   &0x702, &0x702
-     56          	
-     57          	ADC10CTL2 = RESET_STATE; // Clear ADC10CTL2
-   \   000084   82430407     MOV.W   #0x0, &0x704
-     58          	ADC10CTL2 |= ADC10DIV_0; // Pre-divide by 1
-   \   000088   924204070407 MOV.W   &0x704, &0x704
-     59          	ADC10CTL2 |= ADC10RES; // 10-bit resolution
-   \   00008E   B2D010000407 BIS.W   #0x10, &0x704
-     60          	ADC10CTL2 &= ~ADC10DF; // Binary unsigned
-   \   000094   B2C20407     BIC.W   #0x8, &0x704
-     61          	ADC10CTL2 &= ~ADC10SR; // supports up to approximately 200 ksps
-   \   000098   A2C20407     BIC.W   #0x4, &0x704
-     62          	
-     63          	ADC10MCTL0 = RESET_STATE; // Clear ADC10MCTL0
-   \   00009C   82430A07     MOV.W   #0x0, &0x70a
-     64          	ADC10MCTL0 |= ADC10SREF_0; // V(R+) = AVCC and V(R-) = AVSS
-   \   0000A0   92420A070A07 MOV.W   &0x70a, &0x70a
-     65          	ADC10MCTL0 |= ADC10INCH_3; // Channel A3 Thumb Wheel
-   \   0000A6   B2D003000A07 BIS.W   #0x3, &0x70a
-     66          	ADC10IE |= ADC10IE0; // Enable ADC conversion complete interrupt
-   \   0000AC   92D31A07     BIS.W   #0x1, &0x71a
-     67          }
-   \   0000B0   1001         RETA
-   \   0000B2                REQUIRE _A_PBIFG_L
-   \   0000B2                REQUIRE _A_PBIE_L
-   \   0000B2                REQUIRE _A_PBIES_L
-   \   0000B2                REQUIRE TA0CTL
-   \   0000B2                REQUIRE TA0EX0
-   \   0000B2                REQUIRE TA0CCR0
-   \   0000B2                REQUIRE TA0CCTL0
-   \   0000B2                REQUIRE _A_ADC10CTL0_L
-   \   0000B2                REQUIRE _A_ADC10CTL1_L
-   \   0000B2                REQUIRE _A_ADC10CTL2_L
-   \   0000B2                REQUIRE _A_ADC10MCTL0_L
-   \   0000B2                REQUIRE _A_ADC10IE_L
-     68          
-     69          // ADC10 interrupt service routine
-     70          // ADC_Right_Detector; // A00 ADC10INCH_0 - P1.0
-     71          // ADC_Left_Detector; // A01 ADC10INCH_1 - P1.1
-     72          // ADC_Thumb; // A03 ADC10INCH_3 - P1.3
-     73          // ADC_Temp; // A10 ADC10INCH_10 – Temperature REF module
-     74          // ADC_Bat; // A11 ADC10INCH_11 - Internal
-     75          #pragma vector=ADC10_VECTOR
-
-   \                                 In  segment ISR_CODE, align 2
-     76          __interrupt void ADC10_ISR(void)
-   \                     ADC10_ISR:
-     77          {
-   \   000000   0F12         PUSH.W  R15
-     78          	switch(__even_in_range(ADC10IV,12)) 
-   \   000002   1F421E07     MOV.W   &0x71e, R15
-   \   000006   E00F         ADDA    R15, PC
-   \                     `?<Jumptable for ADC10_ISR>_0`:
-   \   000008   2C3C         JMP     ??ADC10_ISR_1
-   \   00000A   2B3C         JMP     ??ADC10_ISR_1
-   \   00000C   2A3C         JMP     ??ADC10_ISR_1
-   \   00000E   293C         JMP     ??ADC10_ISR_1
-   \   000010   283C         JMP     ??ADC10_ISR_1
-   \   000012   273C         JMP     ??ADC10_ISR_1
-   \   000014   003C         JMP     ??ADC10_ISR_5
-     79          	{
-     80          		case 0: break; // No interrupt
-     81          		case 2: break; // conversion result overflow
-     82          		case 4: break; // conversion time overflow
-     83          		case 6: break; // ADC10HI
-     84          		case 8: break; // ADC10LO
-     85          		case 10: break; // ADC10IN
-     86          		case 12:
-     87                            
-     88                                  ADC10CTL0 &= ~ADC10ENC;
-   \                     ??ADC10_ISR_5:
-   \   000016   A2C30007     BIC.W   #0x2, &0x700
-     89          				
-     90          			switch(AdcChannel)//Put an incrementing break statement to update different channels in turn
-   \   00001A   1F42....     MOV.W   &AdcChannel, R15
-   \   00001E   0F83         SUB.W   #0x0, R15
-   \   000020   0524         JEQ     ??ADC10_ISR_2
-   \   000022   1F83         SUB.W   #0x1, R15
-   \   000024   0B24         JEQ     ??ADC10_ISR_3
-   \   000026   1F83         SUB.W   #0x1, R15
-   \   000028   1224         JEQ     ??ADC10_ISR_4
-   \   00002A   183C         JMP     ??ADC10_ISR_0
-     91          			{
-     92          				case 0: 
-     93          					ADC_LeftIR = ADC10MEM0;
-   \                     ??ADC10_ISR_2:
-   \   00002C   92421207.... MOV.W   &0x712, &ADC_LeftIR
-     94          					ADC10MCTL0 = ADC10INCH_1;
-   \   000032   92430A07     MOV.W   #0x1, &0x70a
-     95          					AdcChannel = 1;
-   \   000036   9243....     MOV.W   #0x1, &AdcChannel
-     96          					break;
-   \   00003A   103C         JMP     ??ADC10_ISR_0
-     97          				case 1:
-     98          					ADC_RightIR = ADC10MEM0;
-   \                     ??ADC10_ISR_3:
-   \   00003C   92421207.... MOV.W   &0x712, &ADC_RightIR
-     99          					ADC10MCTL0 = ADC10INCH_3;
-   \   000042   B24003000A07 MOV.W   #0x3, &0x70a
-    100          					AdcChannel = 2;
-   \   000048   A243....     MOV.W   #0x2, &AdcChannel
-    101          					break;
-   \   00004C   073C         JMP     ??ADC10_ISR_0
-    102          				case 2:
-    103          					ADC_Thumb = ADC10MEM0; 
-   \                     ??ADC10_ISR_4:
-   \   00004E   92421207.... MOV.W   &0x712, &ADC_Thumb
-    104          					ADC10MCTL0 = ADC10INCH_0;
-   \   000054   82430A07     MOV.W   #0x0, &0x70a
-    105          					AdcChannel = 0;
-   \   000058   8243....     MOV.W   #0x0, &AdcChannel
-    106          					break;
-    107          				default:
-    108          					break;
-    109          			}
-    110                                  
-    111                                  ADC10CTL0 |= ADC10ENC | ADC10SC;
-   \                     ??ADC10_ISR_0:
-   \   00005C   B2D003000007 BIS.W   #0x3, &0x700
-    112                                  break;
-    113                                  
-    114          		default: 
-    115          			break;
-    116          	}
-    117          }
-   \                     ??ADC10_ISR_1:
-   \   000062   3F41         POP.W   R15
-   \   000064   0013         RETI
-   \   000066                REQUIRE _A_ADC10CTL0_L
-   \   000066                REQUIRE _A_ADC10MEM0_L
-   \   000066                REQUIRE _A_ADC10MCTL0_L
-   \   000066                REQUIRE _A_ADC10IV_L
-    118          
-    119          #pragma vector=PORT4_VECTOR
-
-   \                                 In  segment ISR_CODE, align 2
-    120          __interrupt void Port_4(void)
-   \                     Port_4:
-    121          {
-    122          	if(P4IFG & SW1)
-   \   000000   D2B33D02     BIT.B   #0x1, &0x23d
-   \   000004   0628         JNC     ??Port_4_0
-    123          	{
-    124          		P4IFG &= ~SW1;
-   \   000006   D2C33D02     BIC.B   #0x1, &0x23d
-    125          		P1OUT |= IR_LED;
-   \   00000A   E2D20202     BIS.B   #0x4, &0x202
-    126          		PJOUT |= LED1;
-   \   00000E   92D32203     BIS.W   #0x1, &0x322
-    127          	}
-    128          			
-    129          	if(P4IFG & SW2)
-   \                     ??Port_4_0:
-   \   000012   E2B33D02     BIT.B   #0x2, &0x23d
-   \   000016   0628         JNC     ??Port_4_1
-    130          	{
-    131          		P4IFG &= ~SW2;
-   \   000018   E2C33D02     BIC.B   #0x2, &0x23d
-    132          		P1OUT &= ~IR_LED;
-   \   00001C   E2C20202     BIC.B   #0x4, &0x202
-    133          		PJOUT &= ~LED1;
-   \   000020   92C32203     BIC.W   #0x1, &0x322
-    134          	}		
-    135          }
-   \                     ??Port_4_1:
-   \   000024   0013         RETI
-   \   000026                REQUIRE _A_PBIFG_L
-   \   000026                REQUIRE _A_PAOUT_L
-   \   000026                REQUIRE _A_PJOUT_L
-    136          
-    137          #pragma vector=TIMER0_A0_VECTOR
-
-   \                                 In  segment ISR_CODE, align 2
-    138          __interrupt void Timer0_A0(void)
-   \                     Timer0_A0:
-    139          {
-    140          	P3OUT ^= TEST_PROBE;
-   \   000000   F2E22202     XOR.B   #0x8, &0x222
-    141          	
-    142                  TimeMsec++;
-   \   000004   9253....     ADD.W   #0x1, &TimeMsec
-    143          		
-    144                  if(MotorTimer > 0)
-   \   000008   9293....     CMP.W   #0x1, &MotorTimer
-   \   00000C   0238         JL      ??Timer0_A0_0
-    145                    MotorTimer--;
-   \   00000E   B253....     ADD.W   #0xffff, &MotorTimer
-    146          }
-   \                     ??Timer0_A0_0:
-   \   000012   0013         RETI
-   \   000014                REQUIRE _A_PBOUT_L
-
-   \                                 In  segment INTVEC, offset 0x40, root
-   \                     `??Port_4??INTVEC 64`:
-   \   000040   ....         DC16    Port_4
-
-   \                                 In  segment INTVEC, offset 0x5a, root
-   \                     `??Timer0_A0??INTVEC 90`:
-   \   00005A   ....         DC16    Timer0_A0
-
-   \                                 In  segment INTVEC, offset 0x5c, root
-   \                     `??ADC10_ISR??INTVEC 92`:
-   \   00005C   ....         DC16    ADC10_ISR
+     41          	//Init ADC
+     42          #define RESET_STATE (0); 
+     43          	ADC10CTL0 = RESET_STATE; // Clear ADC10CTL0
+   \   000074   82430007     MOV.W   #0x0, &0x700
+     44          	ADC10CTL0 |= ADC10SHT_2; // 16 ADC clocks
+   \   000078   B2D000020007 BIS.W   #0x200, &0x700
+     45          	ADC10CTL0 &= ~ADC10MSC; // Single Sequence
+   \   00007E   B2C080000007 BIC.W   #0x80, &0x700
+     46          	ADC10CTL0 |= ADC10ON; // ADC ON - Core Enabled
+   \   000084   B2D010000007 BIS.W   #0x10, &0x700
+     47          	
+     48          	ADC10CTL1 = RESET_STATE; // Clear ADC10CTL1
+   \   00008A   82430207     MOV.W   #0x0, &0x702
+     49          	ADC10CTL1 |= ADC10SHS_0; // ADC10SC bit
+   \   00008E   924202070207 MOV.W   &0x702, &0x702
+     50          	ADC10CTL1 |= ADC10SHP; // SAMPCON signal sourced from sampling timer
+   \   000094   B2D000020207 BIS.W   #0x200, &0x702
+     51          	ADC10CTL1 &= ~ADC10ISSH; // The sample-input signal is not inverted.
+   \   00009A   B2C000010207 BIC.W   #0x100, &0x702
+     52          	ADC10CTL1 |= ADC10DIV_0; // ADC10_B clock divider – Divide by 1.
+   \   0000A0   924202070207 MOV.W   &0x702, &0x702
+     53          	ADC10CTL1 |= ADC10SSEL_0; // MODCLK
+   \   0000A6   924202070207 MOV.W   &0x702, &0x702
+     54          	ADC10CTL1 |= ADC10CONSEQ_0; // Single-channel, single-conversion
+   \   0000AC   924202070207 MOV.W   &0x702, &0x702
+     55          	
+     56          	ADC10CTL2 = RESET_STATE; // Clear ADC10CTL2
+   \   0000B2   82430407     MOV.W   #0x0, &0x704
+     57          	ADC10CTL2 |= ADC10DIV_0; // Pre-divide by 1
+   \   0000B6   924204070407 MOV.W   &0x704, &0x704
+     58          	ADC10CTL2 |= ADC10RES; // 10-bit resolution
+   \   0000BC   B2D010000407 BIS.W   #0x10, &0x704
+     59          	ADC10CTL2 &= ~ADC10DF; // Binary unsigned
+   \   0000C2   B2C20407     BIC.W   #0x8, &0x704
+     60          	ADC10CTL2 &= ~ADC10SR; // supports up to approximately 200 ksps
+   \   0000C6   A2C20407     BIC.W   #0x4, &0x704
+     61          	
+     62          	ADC10MCTL0 = RESET_STATE; // Clear ADC10MCTL0
+   \   0000CA   82430A07     MOV.W   #0x0, &0x70a
+     63          	ADC10MCTL0 |= ADC10SREF_0; // V(R+) = AVCC and V(R-) = AVSS
+   \   0000CE   92420A070A07 MOV.W   &0x70a, &0x70a
+     64          	ADC10MCTL0 |= ADC10INCH_3; // Channel A3 Thumb Wheel
+   \   0000D4   B2D003000A07 BIS.W   #0x3, &0x70a
+     65          	ADC10IE |= ADC10IE0; // Enable ADC conversion complete interrupt
+   \   0000DA   92D31A07     BIS.W   #0x1, &0x71a
+     66          }
+   \   0000DE   1001         RETA
+   \   0000E0                REQUIRE _A_PBIFG_L
+   \   0000E0                REQUIRE _A_PBIE_L
+   \   0000E0                REQUIRE _A_PBIES_L
+   \   0000E0                REQUIRE TA0CTL
+   \   0000E0                REQUIRE TA0EX0
+   \   0000E0                REQUIRE TA0CCR0
+   \   0000E0                REQUIRE TA0CCTL0
+   \   0000E0                REQUIRE TA1CTL
+   \   0000E0                REQUIRE TA1EX0
+   \   0000E0                REQUIRE TA1CCR0
+   \   0000E0                REQUIRE _A_ADC10CTL0_L
+   \   0000E0                REQUIRE _A_ADC10CTL1_L
+   \   0000E0                REQUIRE _A_ADC10CTL2_L
+   \   0000E0                REQUIRE _A_ADC10MCTL0_L
+   \   0000E0                REQUIRE _A_ADC10IE_L
 
    \                                 In  segment DATA16_ID, align 2, align-sorted
    \                     `?<Initializer for sw1Debounce>`:
@@ -422,46 +255,13 @@ C:\Users\Christopher\Documents\GitHub\ece306-linefollower\interrupts.c
    \                                 In  segment DATA16_ID, align 2, align-sorted
    \                     `?<Initializer for sw2Debounce>`:
    \   000000   FFFF         DC16 -1
-    147          
-    148          /*
-    149          #pragma vector=TIMER0_A1_VECTOR
-    150          __interrupt void Timer0_A1(void)
-    151          {
-    152          	P4IE |= SW1 | SW2;
-    153                  PJOUT &= ~LED3;   		 //Turn off debouce LED
-    154            
-    155            
-    156            
-    157                  switch(TA0IV)
-    158          	{
-    159          		case 2: 					//CCR1
-    160          			if( !(P4IE & SW1) ) 	//sw1 was disabled
-    161          				P4IE |= SW1;
-    162          			else if( !(P4IE & SW2) ) //sw2 was disabled
-    163          				P4IE |= SW2;
-    164          			
-    165                            
-    166                                  P4IE |= SW1 | SW2;
-    167          			PJOUT &= ~LED4;   		 //Turn off debouce LED
-    168          			TA0CCTL1 &= ~CCIE; 		 //Turn off this interrupt
-    169          			break;
-    170          			
-    171          		case 4:						//CCR2
-    172          			break;
-    173          			
-    174          		default:
-    175          			break;
-    176          	}
-    177          }*/
 
    Maximum stack usage in bytes:
 
    CSTACK Function
    ------ --------
-      6   ADC10_ISR
       4   Init_Interrupts
-      4   Port_4
-      4   Timer0_A0
+        4   -> Serial_Init
 
 
    Segment part sizes:
@@ -470,44 +270,34 @@ C:\Users\Christopher\Documents\GitHub\ece306-linefollower\interrupts.c
    -----  --------------
        2  ?<Initializer for sw1Debounce>
        2  ?<Initializer for sw2Debounce>
-       2  ??ADC10_ISR??INTVEC 92
-       2  ??Port_4??INTVEC 64
-       2  ??Timer0_A0??INTVEC 90
-     102  ADC10_ISR
-     178  Init_Interrupts
-      38  Port_4
+     224  Init_Interrupts
        2  TA0CCR0
        2  TA0CCTL0
        2  TA0CTL
        2  TA0EX0
-      20  Timer0_A0
+       2  TA1CCR0
+       2  TA1CTL
+       2  TA1EX0
        2  _A_ADC10CTL0_L
        2  _A_ADC10CTL1_L
        2  _A_ADC10CTL2_L
        2  _A_ADC10IE_L
-       2  _A_ADC10IV_L
        2  _A_ADC10MCTL0_L
-       2  _A_ADC10MEM0_L
-       2  _A_PAOUT_L
        2  _A_PBIES_L
        2  _A_PBIE_L
        2  _A_PBIFG_L
-       2  _A_PBOUT_L
-       2  _A_PJOUT_L
        2  sw1Debounce
        2  sw2Debounce
 
  
- 178 bytes in segment CODE
-  34 bytes in segment DATA16_AN
+ 224 bytes in segment CODE
+  30 bytes in segment DATA16_AN
    4 bytes in segment DATA16_I
    4 bytes in segment DATA16_ID
-   6 bytes in segment INTVEC
- 160 bytes in segment ISR_CODE
  
- 338 bytes of CODE  memory
-   4 bytes of CONST memory (+  6 bytes shared)
-   4 bytes of DATA  memory (+ 34 bytes shared)
+ 224 bytes of CODE  memory
+   4 bytes of CONST memory
+   4 bytes of DATA  memory (+ 30 bytes shared)
 
 Errors: none
 Warnings: none

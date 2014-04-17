@@ -1,0 +1,659 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       11/Apr/2014  16:44:22 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\US #
+#                     B.c                                                     #
+#    Command line  =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\US #
+#                     B.c -lC C:\Users\Nathan\Documents\GitHub\ece306-linefol #
+#                     lower\Debug\List\ -o C:\Users\Nathan\Documents\GitHub\e #
+#                     ce306-linefollower\Debug\Obj\ --no_cse --no_unroll      #
+#                     --no_inline --no_code_motion --no_tbaa --debug          #
+#                     -D__MSP430FR5739__ -e --double=32 --dlib_config         #
+#                     "C:\Program Files (x86)\IAR Systems\Embedded Workbench  #
+#                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\List\USB.lst                                        #
+#    Object file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\Obj\USB.r43                                         #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+C:\Users\Nathan\Documents\GitHub\ece306-linefollower\USB.c
+      1          //Include Statements
+      2          #include  "msp430.h"
+      3          #include  "functions.h"
+      4          #include  "macros.h"
+      5          
+      6          
+      7          //// Port J Macros
+      8          //#define GPS_PWR (0x01)
+      9          //#define GPS_RESET (0x02)
+     10          //#define GPS_PWRCNTL (0x04)
+     11          //#define GPS_PWRCHK (0x08)
+     12          
+     13          #include "msp430g2553.h"
+
+  DEFW(   ADC10CTL0         , ADC10CTL0_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",174  Error[Pe101]: 
+          "ADC10CTL0" has already been declared in the current scope (at line
+          207 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   ADC10CTL1         , ADC10CTL1_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",176  Error[Pe101]: 
+          "ADC10CTL1" has already been declared in the current scope (at line
+          209 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  READ_ONLY DEFC( P1IN           , P1IN_)
+            ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",465  Error[Pe101]: 
+          "PAIN_L" has already been declared in the current scope (at line
+          1822 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   P1OUT             , P1OUT_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",467  Error[Pe101]: 
+          "PAOUT_L" has already been declared in the current scope (at line
+          1824 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   P1DIR             , P1DIR_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",469  Error[Pe101]: 
+          "PADIR_L" has already been declared in the current scope (at line
+          1826 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   P1IFG             , P1IFG_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",471  Error[Pe101]: 
+          "PAIFG_L" has already been declared in the current scope (at line
+          1840 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   P1IES             , P1IES_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",473  Error[Pe101]: 
+          "PAIES_L" has already been declared in the current scope (at line
+          1836 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   P1IE              , P1IE_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",475  Error[Pe101]: 
+          "PAIE_L" has already been declared in the current scope (at line
+          1838 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   P1REN             , P1REN_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",481  Error[Pe101]: 
+          "PAREN_L" has already been declared in the current scope (at line
+          1828 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  READ_ONLY DEFC( P2IN           , P2IN_)
+            ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",484  Error[Pe101]: 
+          "PAIN_H" has already been declared in the current scope (at line
+          1822 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   P2OUT             , P2OUT_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",486  Error[Pe101]: 
+          "PAOUT_H" has already been declared in the current scope (at line
+          1824 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   P2DIR             , P2DIR_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",488  Error[Pe101]: 
+          "PADIR_H" has already been declared in the current scope (at line
+          1826 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   P2IFG             , P2IFG_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",490  Error[Pe101]: 
+          "PAIFG_H" has already been declared in the current scope (at line
+          1840 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   P2IES             , P2IES_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",492  Error[Pe101]: 
+          "PAIES_H" has already been declared in the current scope (at line
+          1836 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   P2IE              , P2IE_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",494  Error[Pe101]: 
+          "PAIE_H" has already been declared in the current scope (at line
+          1838 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   P2REN             , P2REN_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",500  Error[Pe101]: 
+          "PAREN_H" has already been declared in the current scope (at line
+          1828 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  READ_ONLY DEFC( P3IN           , P3IN_)
+            ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",508  Error[Pe101]: 
+          "PBIN_L" has already been declared in the current scope (at line
+          1912 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   P3OUT             , P3OUT_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",510  Error[Pe101]: 
+          "PBOUT_L" has already been declared in the current scope (at line
+          1914 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   P3DIR             , P3DIR_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",512  Error[Pe101]: 
+          "PBDIR_L" has already been declared in the current scope (at line
+          1916 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   P3REN             , P3REN_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",518  Error[Pe101]: 
+          "PBREN_L" has already been declared in the current scope (at line
+          1918 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  READ_ONLY DEFW( TA0IV          , TA0IV_)
+                  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",526  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA0IV @ 0x36e" (declared at line 2587 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  READ_ONLY DEFW( TA0IV          , TA0IV_)
+                  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",526  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFW(   TA0CTL            , TA0CTL_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",528  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA0CTL @ 0x340" (declared at line 2571 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   TA0CTL            , TA0CTL_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",528  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFW(   TA0CCTL0          , TA0CCTL0_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",530  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA0CCTL0 @ 0x342" (declared at line 2573 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   TA0CCTL0          , TA0CCTL0_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",530  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFW(   TA0CCTL1          , TA0CCTL1_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",532  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA0CCTL1 @ 0x344" (declared at line 2575 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   TA0CCTL1          , TA0CCTL1_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",532  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFW(   TA0CCTL2          , TA0CCTL2_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",534  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA0CCTL2 @ 0x346" (declared at line 2577 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   TA0CCTL2          , TA0CCTL2_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",534  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFW(   TA0R              , TA0R_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",536  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA0R @ 0x350" (declared at line 2579 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   TA0R              , TA0R_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",536  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFW(   TA0CCR0           , TA0CCR0_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",538  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA0CCR0 @ 0x352" (declared at line 2581 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   TA0CCR0           , TA0CCR0_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",538  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFW(   TA0CCR1           , TA0CCR1_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",540  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA0CCR1 @ 0x354" (declared at line 2583 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   TA0CCR1           , TA0CCR1_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",540  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFW(   TA0CCR2           , TA0CCR2_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",542  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA0CCR2 @ 0x356" (declared at line 2585 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   TA0CCR2           , TA0CCR2_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",542  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  READ_ONLY DEFW( TA1IV          , TA1IV_)
+                  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",648  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA1IV @ 0x3ae" (declared at line 2715 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  READ_ONLY DEFW( TA1IV          , TA1IV_)
+                  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",648  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFW(   TA1CTL            , TA1CTL_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",650  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA1CTL @ 0x380" (declared at line 2699 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   TA1CTL            , TA1CTL_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",650  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFW(   TA1CCTL0          , TA1CCTL0_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",652  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA1CCTL0 @ 0x382" (declared at line 2701 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   TA1CCTL0          , TA1CCTL0_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",652  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFW(   TA1CCTL1          , TA1CCTL1_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",654  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA1CCTL1 @ 0x384" (declared at line 2703 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   TA1CCTL1          , TA1CCTL1_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",654  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFW(   TA1CCTL2          , TA1CCTL2_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",656  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA1CCTL2 @ 0x386" (declared at line 2705 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   TA1CCTL2          , TA1CCTL2_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",656  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFW(   TA1R              , TA1R_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",658  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA1R @ 0x390" (declared at line 2707 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   TA1R              , TA1R_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",658  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFW(   TA1CCR0           , TA1CCR0_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",660  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA1CCR0 @ 0x392" (declared at line 2709 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   TA1CCR0           , TA1CCR0_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",660  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFW(   TA1CCR1           , TA1CCR1_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",662  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA1CCR1 @ 0x394" (declared at line 2711 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   TA1CCR1           , TA1CCR1_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",662  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFW(   TA1CCR2           , TA1CCR2_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",664  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned short volatile TA1CCR2 @ 0x396" (declared at line 2713 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   TA1CCR2           , TA1CCR2_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",664  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFC(   UCA0CTL0          , UCA0CTL0_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",682  Error[Pe101]: 
+          "UCA0CTLW0_H" has already been declared in the current scope (at
+          line 2972 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   UCA0CTL1          , UCA0CTL1_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",684  Error[Pe101]: 
+          "UCA0CTLW0_L" has already been declared in the current scope (at
+          line 2972 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   UCA0BR0           , UCA0BR0_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",686  Error[Pe101]: 
+          "UCA0BRW_L" has already been declared in the current scope (at line
+          2978 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   UCA0BR1           , UCA0BR1_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",688  Error[Pe101]: 
+          "UCA0BRW_H" has already been declared in the current scope (at line
+          2978 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  READ_ONLY DEFC( UCA0RXBUF      , UCA0RXBUF_)
+                  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",694  Error[Pe101]: 
+          "UCA0RXBUF" has already been declared in the current scope (at line
+          2986 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   UCA0TXBUF         , UCA0TXBUF_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",696  Error[Pe101]: 
+          "UCA0TXBUF" has already been declared in the current scope (at line
+          2988 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   UCA0ABCTL         , UCA0ABCTL_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",698  Error[Pe147]: 
+          declaration is incompatible with
+          "unsigned char volatile UCA0ABCTL @ 0x5d0" (declared at line 2990 of
+          "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   UCA0ABCTL         , UCA0ABCTL_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",698  Error[Pe654]: 
+          declaration modifiers are incompatible with previous declaration
+
+  DEFC(   UCA0IRTCTL        , UCA0IRTCTL_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",700  Error[Pe101]: 
+          "UCA0IRCTL_L" has already been declared in the current scope (at
+          line 2992 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   UCA0IRRCTL        , UCA0IRRCTL_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",702  Error[Pe101]: 
+          "UCA0IRCTL_H" has already been declared in the current scope (at
+          line 2992 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   UCB0CTL0          , UCB0CTL0_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",707  Error[Pe101]: 
+          "UCB0CTLW0_H" has already been declared in the current scope (at
+          line 3012 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   UCB0CTL1          , UCB0CTL1_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",709  Error[Pe101]: 
+          "UCB0CTLW0_L" has already been declared in the current scope (at
+          line 3012 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   UCB0BR0           , UCB0BR0_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",711  Error[Pe101]: 
+          "UCB0BRW_L" has already been declared in the current scope (at line
+          3018 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   UCB0BR1           , UCB0BR1_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",713  Error[Pe101]: 
+          "UCB0BRW_H" has already been declared in the current scope (at line
+          3018 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   UCB0STAT          , UCB0STAT_)
+  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",717  Error[Pe101]: 
+          "UCB0STATW_L" has already been declared in the current scope (at
+          line 3022 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  READ_ONLY DEFC( UCB0RXBUF      , UCB0RXBUF_)
+                  ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",719  Error[Pe101]: 
+          "UCB0RXBUF" has already been declared in the current scope (at line
+          3028 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFC(   UCB0TXBUF         , UCB0TXBUF_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",721  Error[Pe101]: 
+          "UCB0TXBUF" has already been declared in the current scope (at line
+          3030 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   UCB0I2CSA         , UCB0I2CSA_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",725  Error[Pe101]: 
+          "UCB0I2CSA" has already been declared in the current scope (at line
+          3044 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+
+  DEFW(   WDTCTL            , WDTCTL_)
+          ^
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\msp430g2553.h",898  Error[Pe101]: 
+          "WDTCTL" has already been declared in the current scope (at line
+          3582 of "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+          6.5\430\inc\msp430fr5739.h")
+     14                                                                 // Hardware-related definitions
+     15          #define UART_TXD 0x02                                  // TXD on P1.1 (Timer0_A.OUT0)
+     16          #define UART_RXD 0x04                                  // RXD on P1.2 (Timer0_A.CCI1A)
+     17          
+     18          #define UART_TBIT_DIV_2 (1000000 / (9600 * 2))         // Conditions for 9600 Baud SW UART, SMCLK = 1MHz
+     19          #define UART_TBIT (1000000 / 9600)
+     20                                                                 // Globals for full-duplex UART communication
+     21          unsigned int txData;                                   // UART internal variable for TX
+     22          unsigned char rxBuffer;                                // Received UART character
+     23          
+     24          void TimerA_UART_tx(unsigned char byte);               // Function prototypes
+     25          void TimerA_UART_print(char *string);
+     26          
+     27          void TimerA_UART_tx(unsigned char byte) {              // Outputs one byte using the Timer_A UART
+     28          
+     29            while (TACCTL0 & CCIE);                              // Ensure last char got TX'd
+     30          
+     31            TA0CCR0 = TAR;                                       // Current state of TA counter
+     32          
+     33            TA0CCR0 += UART_TBIT;                                // One bit time till first bit
+     34          
+     35            TA0CCTL0 = OUTMOD0 + CCIE;                           // Set TXD on EQU0, Int
+     36          
+     37            txData = byte;                                       // Load global variable
+     38          
+     39            txData |= 0x100;                                     // Add mark stop bit to TXData
+     40          
+     41            txData <<= 1;                                        // Add space start bit
+     42          }
+     43          
+     44          void TimerA_UART_print(char *string) {                 // Prints a string using the Timer_A UART
+     45          
+     46            while (*string)
+     47              TimerA_UART_tx(*string++);
+     48          }
+     49          
+     50          #pragma vector = TIMER0_A0_VECTOR                      // Timer_A UART - Transmit Interrupt Handler
+     51          
+     52             __interrupt void Timer_A0_ISR(void) {
+     53          
+     54            static unsigned char txBitCnt = 10;
+     55          
+     56            TA0CCR0 += UART_TBIT;                                // Add Offset to CCRx
+     57          
+     58            if (txBitCnt == 0) {                                 // All bits TXed?
+     59          
+     60              TA0CCTL0 &= ~CCIE;                                 // All bits TXed, disable interrupt
+     61          
+     62              txBitCnt = 10;                                     // Re-load bit counter
+     63            }
+     64            else {
+     65              if (txData & 0x01)
+     66                TA0CCTL0 &= ~OUTMOD2;                            // TX Mark '1'
+     67              else
+     68                TA0CCTL0 |= OUTMOD2;                             // TX Space '0'
+     69            }
+     70            txData >>= 1;                                        // Shift right 1 bit
+     71            txBitCnt--;
+     72          }
+     73          
+     74          #pragma vector = TIMER0_A1_VECTOR                      // Timer_A UART - Receive Interrupt Handler
+     75          
+     76            __interrupt void Timer_A1_ISR(void) {
+     77          
+     78            static unsigned char rxBitCnt = 8;
+     79          
+     80            static unsigned char rxData = 0;
+     81          
+     82            switch (__even_in_range(TA0IV, TA0IV_TAIFG)) {       // Use calculated branching
+     83          
+     84              case TA0IV_TACCR1:                                 // TACCR1 CCIFG - UART RX
+     85          
+     86                   TA0CCR1 += UART_TBIT;                         // Add Offset to CCRx
+     87          
+     88                   if (TA0CCTL1 & CAP) {                         // Capture mode = start bit edge
+     89          
+     90                     TA0CCTL1 &= ~CAP;                           // Switch capture to compare mode
+     91          
+     92                     TA0CCR1 += UART_TBIT_DIV_2;                 // Point CCRx to middle of D0
+     93                   }
+     94                   else {
+     95                     rxData >>= 1;
+     96          
+     97                     if (TA0CCTL1 & SCCI)                        // Get bit waiting in receive latch
+     98                       rxData |= 0x80;
+     99                     rxBitCnt--;
+    100          
+    101                     if (rxBitCnt == 0) {                        // All bits RXed?
+    102          
+    103                       rxBuffer = rxData;                        // Store in global variable
+    104          
+    105                       rxBitCnt = 8;                             // Re-load bit counter
+    106          
+    107                       TA0CCTL1 |= CAP;                          // Switch compare to capture mode
+    108          
+    109                       _BIC_SR(LPM0_EXIT);                       // wake up from low power mode.
+                                      ^
+Error[Pe167]: argument of type "void" is incompatible with parameter of type
+          "unsigned short"
+    110                     }
+    111                   }
+    112                   break;
+    113             }
+    114          }
+
+Errors: 76
+Warnings: none

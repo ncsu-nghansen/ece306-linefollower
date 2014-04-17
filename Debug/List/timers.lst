@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       22/Mar/2014  14:12:01 #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       15/Apr/2014  14:59:38 #
 # Copyright 1996-2013 IAR Systems AB.                                         #
 #                                                                             #
 #    __rt_version  =  3                                                       #
@@ -10,24 +10,27 @@
 #    __pic         =  no                                                      #
 #    __core        =  430X                                                    #
 #    __data_model  =  small                                                   #
-#    Source file   =  K:\ece306\Projects\Project5\timers.c                    #
-#    Command line  =  K:\ece306\Projects\Project5\timers.c -lC                #
-#                     K:\ece306\Projects\Project5\Debug\List\ -o              #
-#                     K:\ece306\Projects\Project5\Debug\Obj\ --no_cse         #
-#                     --no_unroll --no_inline --no_code_motion --no_tbaa      #
-#                     --debug -D__MSP430FR5739__ -e --double=32               #
-#                     --dlib_config "C:\Program Files (x86)\IAR               #
-#                     Systems\Embedded Workbench                              #
+#    Source file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\ti #
+#                     mers.c                                                  #
+#    Command line  =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\ti #
+#                     mers.c -lC C:\Users\Nathan\Documents\GitHub\ece306-line #
+#                     follower\Debug\List\ -o C:\Users\Nathan\Documents\GitHu #
+#                     b\ece306-linefollower\Debug\Obj\ --no_cse --no_unroll   #
+#                     --no_inline --no_code_motion --no_tbaa --debug          #
+#                     -D__MSP430FR5739__ -e --double=32 --dlib_config         #
+#                     "C:\Program Files (x86)\IAR Systems\Embedded Workbench  #
 #                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
 #                     --data_model=small -Ol --multiplier=32                  #
 #                     --multiplier_location=4C0 --hw_workaround=CPU40         #
-#    List file     =  K:\ece306\Projects\Project5\Debug\List\timers.lst       #
-#    Object file   =  K:\ece306\Projects\Project5\Debug\Obj\timers.r43        #
+#    List file     =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\List\timers.lst                                     #
+#    Object file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\Obj\timers.r43                                      #
 #                                                                             #
 #                                                                             #
 ###############################################################################
 
-K:\ece306\Projects\Project5\timers.c
+C:\Users\Nathan\Documents\GitHub\ece306-linefollower\timers.c
       1          /******************************************************************************
       2          Timer Configuration
       3          
@@ -41,48 +44,156 @@ K:\ece306\Projects\Project5\timers.c
      11          #include  "functions.h"
      12          #include  "macros.h"
      13          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x222
+   \   union <unnamed> _A_PBOUT_L
+   \                     _A_PBOUT_L:
+   \   000000                DS8 2
      14          
 
-   \                                 In  segment CODE, align 2
-     15          void Init_Timers(void)
-   \                     Init_Timers:
-     16          {
-     17          	//Init_Timer_A0(); //
-     18          	//Init_Timer_A1(); //
-     19          	//Init_Timer_B0(); //
-     20          	//Init_Timer_B1(); //
-     21          	Init_Timer_B2();   //  Required for provided compiled code to work
-   \   000000   ........     BRA     #Init_Timer_B2
-     22          }
-     23          
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     15          volatile unsigned int TimeMsec = 0;
+   \                     TimeMsec:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     16          volatile unsigned int TimeUsec = 0;
+   \                     TimeUsec:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     17          volatile unsigned int CommTimer = 0;
+   \                     CommTimer:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     18          volatile unsigned int MotorTimer = 0;
+   \                     MotorTimer:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     19          volatile unsigned int DebounceTimer = 0;
+   \                     DebounceTimer:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     20          volatile unsigned int SecTimer = 0;
+   \                     SecTimer:
+   \   000000                DS8 2
+     21          
+     22          #pragma vector=TIMER0_A0_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     23          __interrupt void Timer0_A0(void)
+   \                     Timer0_A0:
+     24          {
+   \   000000   3F15         PUSHM.W #0x4, R15
+     25          	P3OUT ^= TEST_PROBE;
+   \   000002   F2E22202     XOR.B   #0x8, &0x222
+     26                  
+     27          	TimeMsec++;
+   \   000006   9253....     ADD.W   #0x1, &TimeMsec
+     28                  
+     29          	if(MotorTimer > 0)
+   \   00000A   8293....     CMP.W   #0x0, &MotorTimer
+   \   00000E   0224         JEQ     ??Timer0_A0_0
+     30          		MotorTimer--;
+   \   000010   B253....     ADD.W   #0xffff, &MotorTimer
+     31          	if(DebounceTimer > 0)
+   \                     ??Timer0_A0_0:
+   \   000014   8293....     CMP.W   #0x0, &DebounceTimer
+   \   000018   0224         JEQ     ??Timer0_A0_1
+     32          		DebounceTimer--;
+   \   00001A   B253....     ADD.W   #0xffff, &DebounceTimer
+     33          	if(CommTimer > 0)
+   \                     ??Timer0_A0_1:
+   \   00001E   8293....     CMP.W   #0x0, &CommTimer
+   \   000022   0224         JEQ     ??Timer0_A0_2
+     34          		CommTimer--;
+   \   000024   B253....     ADD.W   #0xffff, &CommTimer
+     35                  if(SecTimer > 0 && TimeMsec % 1000 == 0)
+   \                     ??Timer0_A0_2:
+   \   000028   8293....     CMP.W   #0x0, &SecTimer
+   \   00002C   0A24         JEQ     ??Timer0_A0_3
+   \   00002E   1C42....     MOV.W   &TimeMsec, R12
+   \   000032   3E40E803     MOV.W   #0x3e8, R14
+   \   000036   ........     CALLA   #?DivMod16u
+   \   00003A   0E93         CMP.W   #0x0, R14
+   \   00003C   0220         JNE     ??Timer0_A0_3
+     36                          SecTimer--;
+   \   00003E   B253....     ADD.W   #0xffff, &SecTimer
+     37          }
+   \                     ??Timer0_A0_3:
+   \   000042   3C17         POPM.W  #0x4, R15
+   \   000044   0013         RETI
+   \   000046                REQUIRE _A_PBOUT_L
+     38          
+     39          #pragma vector=TIMER1_A0_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     40          __interrupt void Timer1_A0(void)
+   \                     Timer1_A0:
+     41          {
+     42                  TimeUsec += 100;
+   \   000000   B2506400.... ADD.W   #0x64, &TimeUsec
+     43          }
+   \   000006   0013         RETI
+     44          
 
    \                                 In  segment CODE, align 2
-     24          void waitMsec(int time)
+     45          void Init_Timers(void)
+   \                     Init_Timers:
+     46          {
+     47          	//Init_Timer_A0(); //
+     48          	//Init_Timer_A1(); //
+     49          	//Init_Timer_B0(); //
+     50          	//Init_Timer_B1(); //
+     51          	Init_Timer_B2();   //  Required for provided compiled code to work
+   \   000000   ........     BRA     #Init_Timer_B2
+     52          }
+     53          
+
+   \                                 In  segment CODE, align 2
+     54          void waitMsec(int time)
    \                     waitMsec:
-     25          {
-     26          	int lastTime = TimeMsec, timeElapsed = RESET_TIME;
+     55          {
+     56          	int lastTime = TimeMsec, timeElapsed = RESET_TIME;
    \   000000   1F42....     MOV.W   &TimeMsec, R15
    \   000004   0E43         MOV.W   #0x0, R14
    \   000006   063C         JMP     ??waitMsec_1
-     27          	
-     28          	while(timeElapsed < time)
-     29          	{
-     30          		if(lastTime != TimeMsec)
+     57          	
+     58          	while(timeElapsed < time)
+     59          	{
+     60          		if(lastTime != TimeMsec)
    \                     ??waitMsec_0:
    \   000008   1F92....     CMP.W   &TimeMsec, R15
    \   00000C   0324         JEQ     ??waitMsec_1
-     31          		{
-     32          			timeElapsed++;
+     61          		{
+     62          			timeElapsed++;
    \   00000E   1E53         ADD.W   #0x1, R14
-     33          			lastTime = TimeMsec;
+     63          			lastTime = TimeMsec;
    \   000010   1F42....     MOV.W   &TimeMsec, R15
-     34          		}
-     35          	}
+     64          		}
+     65          	}
    \                     ??waitMsec_1:
    \   000014   0E9C         CMP.W   R12, R14
    \   000016   F83B         JL      ??waitMsec_0
-     36          }
+     66          }
    \   000018   1001         RETA
+
+   \                                 In  segment INTVEC, offset 0x52, root
+   \                     `??Timer1_A0??INTVEC 82`:
+   \   000052   ....         DC16    Timer1_A0
+
+   \                                 In  segment INTVEC, offset 0x5a, root
+   \                     `??Timer0_A0??INTVEC 90`:
+   \   00005A   ....         DC16    Timer0_A0
 
    Maximum stack usage in bytes:
 
@@ -90,6 +201,8 @@ K:\ece306\Projects\Project5\timers.c
    ------ --------
       4   Init_Timers
         4   -> Init_Timer_B2
+     12   Timer0_A0
+      4   Timer1_A0
       4   waitMsec
 
 
@@ -97,13 +210,30 @@ K:\ece306\Projects\Project5\timers.c
 
    Bytes  Function/Label
    -----  --------------
+       2  ??Timer0_A0??INTVEC 90
+       2  ??Timer1_A0??INTVEC 82
+       2  CommTimer
+       2  DebounceTimer
        4  Init_Timers
+       2  MotorTimer
+       2  SecTimer
+       2  TimeMsec
+       2  TimeUsec
+      70  Timer0_A0
+       8  Timer1_A0
+       2  _A_PBOUT_L
       26  waitMsec
 
  
  30 bytes in segment CODE
+  2 bytes in segment DATA16_AN
+ 12 bytes in segment DATA16_Z
+  4 bytes in segment INTVEC
+ 78 bytes in segment ISR_CODE
  
- 30 bytes of CODE memory
+ 108 bytes of CODE  memory
+   0 bytes of CONST memory (+ 4 bytes shared)
+  12 bytes of DATA  memory (+ 2 bytes shared)
 
 Errors: none
 Warnings: none

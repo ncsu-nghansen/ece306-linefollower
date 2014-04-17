@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       28/Mar/2014  12:10:51 #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       15/Apr/2014  14:59:38 #
 # Copyright 1996-2013 IAR Systems AB.                                         #
 #                                                                             #
 #    __rt_version  =  3                                                       #
@@ -10,28 +10,27 @@
 #    __pic         =  no                                                      #
 #    __core        =  430X                                                    #
 #    __data_model  =  small                                                   #
-#    Source file   =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
-#                     er\switch.c                                             #
-#    Command line  =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
-#                     er\switch.c -lC C:\Users\Christopher\Documents\GitHub\e #
-#                     ce306-linefollower\Debug\List\ -o                       #
-#                     C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
-#                     er\Debug\Obj\ --no_cse --no_unroll --no_inline          #
-#                     --no_code_motion --no_tbaa --debug -D__MSP430FR5739__   #
-#                     -e --double=32 --dlib_config "C:\Program Files          #
-#                     (x86)\IAR Systems\Embedded Workbench                    #
+#    Source file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\sw #
+#                     itch.c                                                  #
+#    Command line  =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\sw #
+#                     itch.c -lC C:\Users\Nathan\Documents\GitHub\ece306-line #
+#                     follower\Debug\List\ -o C:\Users\Nathan\Documents\GitHu #
+#                     b\ece306-linefollower\Debug\Obj\ --no_cse --no_unroll   #
+#                     --no_inline --no_code_motion --no_tbaa --debug          #
+#                     -D__MSP430FR5739__ -e --double=32 --dlib_config         #
+#                     "C:\Program Files (x86)\IAR Systems\Embedded Workbench  #
 #                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
 #                     --data_model=small -Ol --multiplier=32                  #
 #                     --multiplier_location=4C0 --hw_workaround=CPU40         #
-#    List file     =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
-#                     er\Debug\List\switch.lst                                #
-#    Object file   =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
-#                     er\Debug\Obj\switch.r43                                 #
+#    List file     =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\List\switch.lst                                     #
+#    Object file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\Obj\switch.r43                                      #
 #                                                                             #
 #                                                                             #
 ###############################################################################
 
-C:\Users\Christopher\Documents\GitHub\ece306-linefollower\switch.c
+C:\Users\Nathan\Documents\GitHub\ece306-linefollower\switch.c
       1          /******************************************************************************
       2          Switch Configurations
       3          
@@ -52,64 +51,124 @@ C:\Users\Christopher\Documents\GitHub\ece306-linefollower\switch.c
    \   union <unnamed> _A_PBIN_L
    \                     _A_PBIN_L:
    \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x23c
+   \   union <unnamed> _A_PBIFG_L
+   \                     _A_PBIFG_L:
+   \   000000                DS8 2
      16          
-     17          //Switches_Process
-     18          //DESC: Detects switch toggle (press & release) by polling current states
-     19          //and comparing to records of the past state. On switch toggle, motor forward outputs
-     20          //and LCD readout of motor status are toggled on/off accordingly
-     21          //ARGS: None
-     22          //RET: None
+     17          #pragma vector=PORT4_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     18          __interrupt void Port_4(void)
+   \                     Port_4:
+     19          {
+   \   000000   3F15         PUSHM.W #0x4, R15
+     20          	if(P4IFG & SW1)
+   \   000002   D2B33D02     BIT.B   #0x1, &0x23d
+   \   000006   1028         JNC     ??Port_4_0
+     21          	{
+     22          		P4IFG &= ~SW1;
+   \   000008   D2C33D02     BIC.B   #0x1, &0x23d
+     23          		
+     24          		if(DebounceTimer == 0)
+   \   00000C   8293....     CMP.W   #0x0, &DebounceTimer
+   \   000010   0B20         JNE     ??Port_4_0
+     25          		{
+     26          			LeftDark = ADC_LeftIR;
+   \   000012   9242........ MOV.W   &ADC_LeftIR, &LeftDark
+     27          			RightDark = ADC_RightIR;
+   \   000018   9242........ MOV.W   &ADC_RightIR, &RightDark
+     28          			DebounceTimer = 100;
+   \   00001E   B2406400.... MOV.W   #0x64, &DebounceTimer
+     29          			
+     30          			CalibrateIR();
+   \   000024   ........     CALLA   #CalibrateIR
+     31          		}
+     32          	}
+     33          			
+     34          	if(P4IFG & SW2)
+   \                     ??Port_4_0:
+   \   000028   E2B33D02     BIT.B   #0x2, &0x23d
+   \   00002C   1028         JNC     ??Port_4_1
+     35          	{
+     36          		P4IFG &= ~SW2;
+   \   00002E   E2C33D02     BIC.B   #0x2, &0x23d
+     37          		
+     38          		if(DebounceTimer == 0)
+   \   000032   8293....     CMP.W   #0x0, &DebounceTimer
+   \   000036   0B20         JNE     ??Port_4_1
+     39          		{
+     40          			LeftLight = ADC_LeftIR;
+   \   000038   9242........ MOV.W   &ADC_LeftIR, &LeftLight
+     41          			RightLight = ADC_RightIR;
+   \   00003E   9242........ MOV.W   &ADC_RightIR, &RightLight
+     42          			DebounceTimer = 100;
+   \   000044   B2406400.... MOV.W   #0x64, &DebounceTimer
+     43          			
+     44          			CalibrateIR();
+   \   00004A   ........     CALLA   #CalibrateIR
+     45          		}
+     46          	}		
+     47          }
+   \                     ??Port_4_1:
+   \   00004E   3C17         POPM.W  #0x4, R15
+   \   000050   0013         RETI
+   \   000052                REQUIRE _A_PBIFG_L
+     48          
+     49          //Switches_Process
+     50          //DESC: Detects switch toggle (press & release) by polling current states
+     51          //and comparing to records of the past state. On switch toggle, motor forward outputs
+     52          //and LCD readout of motor status are toggled on/off accordingly
+     53          //ARGS: None
+     54          //RET: None
 
    \                                 In  segment CODE, align 2
-     23          void Switches_Process(void)
+     55          void Switches_Process(void)
    \                     Switches_Process:
-     24          {
-     25          	//            "0123456789abcdef"
-     26          	//display_1 = " Lt Forward Rt  ";
-     27          	//display_2 = "OFF         OFF ";
-     28          	
-     29          	char current_sw1_state = isPressed(SW1);
+     56          {
+     57          	char current_sw1_state = isPressed(SW1);
    \   000000   1C43         MOV.W   #0x1, R12
    \   000002   ........     CALLA   #isPressed
    \   000006   4E4C         MOV.B   R12, R14
-     30          	char current_sw2_state = isPressed(SW2);
+     58          	char current_sw2_state = isPressed(SW2);
    \   000008   2C43         MOV.W   #0x2, R12
    \   00000A   ........     CALLA   #isPressed
-     31          	
-     32          	if ( !Last_SW1_State && current_sw1_state )
+     59          	
+     60          	if ( !Last_SW1_State && current_sw1_state )
    \   00000E   5F42....     MOV.B   &Last_SW1_State, R15
-     33          	{
-     34          		
-     35          	}
-     36          	
-     37          	if ( !Last_SW2_State && current_sw2_state ) 
+     61          	{               
+     62          		
+     63          	}
+     64          	
+     65          	if ( !Last_SW2_State && current_sw2_state ) 
    \   000012   5D42....     MOV.B   &Last_SW2_State, R13
-     38          	{
-     39          		
-     40          	}
-     41          	
-     42          	Last_SW1_State = current_sw1_state;
+     66          	{
+     67          
+     68          	}
+     69          	
+     70          	Last_SW1_State = current_sw1_state;
    \   000016   C24E....     MOV.B   R14, &Last_SW1_State
-     43          	Last_SW2_State = current_sw2_state;
+     71          	Last_SW2_State = current_sw2_state;
    \   00001A   C24C....     MOV.B   R12, &Last_SW2_State
-     44          }
+     72          }
    \   00001E   1001         RETA
-     45          
-     46          //isPressed
-     47          //DESC: Used for polling the current pressed/not pressed status of either switch
-     48          //ARGS: Macro or mask that acts to select the corresponding bit for the desires switch
-     49          //RET: 1 if 'isPressed'; 0 if not 'isPressed'
+     73          
+     74          //isPressed
+     75          //DESC: Used for polling the current pressed/not pressed status of either switch
+     76          //ARGS: Macro or mask that acts to select the corresponding bit for the desires switch
+     77          //RET: 1 if 'isPressed'; 0 if not 'isPressed'
 
    \                                 In  segment CODE, align 2
-     50          char isPressed(int switchNum)
+     78          char isPressed(int switchNum)
    \                     isPressed:
-     51          {
-     52          	if( (switchNum == SW1) || (switchNum == SW2) )
+     79          {
+     80          	if( (switchNum == SW1) || (switchNum == SW2) )
    \   000000   1C93         CMP.W   #0x1, R12
    \   000002   0224         JEQ     ??isPressed_2
    \   000004   2C93         CMP.W   #0x2, R12
    \   000006   0720         JNE     ??isPressed_3
-     53          		return !(P4IN & switchNum);
+     81          		return !(P4IN & switchNum);
    \                     ??isPressed_2:
    \   000008   C2BC2102     BIT.B   R12, &0x221
    \   00000C   0220         JNE     ??isPressed_4
@@ -118,17 +177,23 @@ C:\Users\Christopher\Documents\GitHub\ece306-linefollower\switch.c
    \                     ??isPressed_4:
    \   000012   4C43         MOV.B   #0x0, R12
    \   000014   1001         RETA
-     54          	return 0;
+     82          	return 0;
    \                     ??isPressed_3:
    \   000016   4C43         MOV.B   #0x0, R12
    \   000018   1001         RETA
    \   00001A                REQUIRE _A_PBIN_L
-     55          }
+     83          }
+
+   \                                 In  segment INTVEC, offset 0x40, root
+   \                     `??Port_4??INTVEC 64`:
+   \   000040   ....         DC16    Port_4
 
    Maximum stack usage in bytes:
 
    CSTACK Function
    ------ --------
+     12   Port_4
+       12   -> CalibrateIR
       4   Switches_Process
         4   -> isPressed
       4   isPressed
@@ -138,16 +203,22 @@ C:\Users\Christopher\Documents\GitHub\ece306-linefollower\switch.c
 
    Bytes  Function/Label
    -----  --------------
+       2  ??Port_4??INTVEC 64
+      82  Port_4
       32  Switches_Process
+       2  _A_PBIFG_L
        2  _A_PBIN_L
       26  isPressed
 
  
  58 bytes in segment CODE
-  2 bytes in segment DATA16_AN
+  4 bytes in segment DATA16_AN
+  2 bytes in segment INTVEC
+ 82 bytes in segment ISR_CODE
  
- 58 bytes of CODE memory
-  0 bytes of DATA memory (+ 2 bytes shared)
+ 140 bytes of CODE  memory
+   0 bytes of CONST memory (+ 2 bytes shared)
+   0 bytes of DATA  memory (+ 4 bytes shared)
 
 Errors: none
 Warnings: none

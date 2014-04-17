@@ -26,17 +26,17 @@ void Motors_Process(void)
 	allStop();
 	
 	if(LeftMotorPower > 0)
-		if(TimeMsec % MAX_POWER < LeftMotorPower)
+		if( TimeMsec % MAX_POWER < LeftMotorPower)
 			leftForward();
         if(LeftMotorPower < 0)
-		if(TimeMsec % MAX_POWER < -LeftMotorPower)
+		if( TimeMsec % MAX_POWER < -LeftMotorPower)
 			leftReverse();
 	
 	if(RightMotorPower > 0)
-		if(TimeMsec % MAX_POWER < RightMotorPower)
+		if( TimeMsec % MAX_POWER < RightMotorPower)
 			rightForward();
 	if(RightMotorPower < 0)
-		if(TimeMsec % MAX_POWER < -RightMotorPower)
+		if( TimeMsec % MAX_POWER < -RightMotorPower)
 			rightReverse();
 	
 

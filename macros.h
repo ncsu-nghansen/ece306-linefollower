@@ -1,38 +1,13 @@
-//---------------------------------------------
-//Shared Global Variables
-
-extern char *display_1;
-extern char *display_2;
-volatile extern int ADC_Thumb;
-volatile extern int ADC_LeftIR; 
-volatile extern int ADC_RightIR;
-volatile extern unsigned int TimeMsec;
-volatile extern unsigned int TimeUsec;
-volatile extern unsigned int Time_Sequence;
-extern int AdcChannel;
-
-volatile extern int MotorTimer;
-volatile extern int LeftMotorPower;
-volatile extern int RightMotorPower;
-volatile extern int MotorState;
-
-volatile extern char Last_SW1_State;
-volatile extern char Last_SW2_State;
-
 //-------------------------------------------
 // Main Macros
 
 #define ALWAYS                  (1) // Is always 1
-#define LED1                 (0x01) // LED 1
+//#define LED1                 (0x01) // LED 1
 #define BLINK_LED            (0x01) // Allow LED to Blink
 #define CNTL_STATE_INDEX        (3) // Control States
 #define LCD_LINE_1           (0x80) // Position Cursor at Character 01 of Line 1
 #define LCD_LINE_2           (0xC0) // Position Cursor at Character 01 of Line 2
 #define GPS_ONOFF            (0x08) //
-#define LED1                 (0x01) // LED 1
-#define LED2                 (0x02) // LED 2
-#define LED3                 (0x04) // LED 3
-#define LED4                 (0x08) // LED 4
 
 #define SW1                  (0x01) // Switch 1
 #define SW2                  (0x02) // Switch 2
@@ -97,7 +72,7 @@ volatile extern char Last_SW2_State;
 #define SPI_SIMO (0x40)
 #define RS_LCD (0x80)
 
-// Port 2 Macros 
+// Port 2 Macros
 
 #define USB_TXD (0x01)
 #define USB_RXD (0x02)
@@ -108,7 +83,7 @@ volatile extern char Last_SW2_State;
 #define CPU_RXD (0x40)
 #define UNK_3 (0x80)
 
-// Port 3 Macros 
+// Port 3 Macros
 #define ACEL_X (0x01)  //Does capitalization matter here?
 #define ACEL_Y (0x02)
 #define ACEL_Z (0x04)
@@ -118,7 +93,7 @@ volatile extern char Last_SW2_State;
 #define L_FORWARD (0x40)
 #define L_REVERSE (0x80)
 
-// Port 4 Macros 
+// Port 4 Macros
 #define SW1 (0x01) //Switch 1
 #define SW2 (0x02) //Switch 2
 
@@ -131,6 +106,7 @@ volatile extern char Last_SW2_State;
 //-----------------------------------------------
 // LCD macros
 
+#define DISPLAY_SIZE (16)
 #define NULL ((void *) 0x0)
 
 // Control States
@@ -141,7 +117,7 @@ volatile extern char Last_SW2_State;
 
 // SPI
 #define SPI_CS_LCD           (0x10) // Old NTC - ADC Input
-#define RESET_LCD            (0x20) // 
+#define RESET_LCD            (0x20) //
 #define RS_LCD               (0x80) // SPI RS Command / Data selection
 
 // LCD
@@ -241,6 +217,9 @@ volatile extern char Last_SW2_State;
 #define WAIT_16 (16)
 #define COUNT_1 (1)
 
+//GPS macros
+#define GPS_WAIT (1000)
+
 
 //-----------------------------------------------------------------------------
 //Switch Macros
@@ -254,6 +233,7 @@ volatile extern char Last_SW2_State;
 //-----------------------------------------------------------------------------
 //Interrupt Macros
 #define TA0_ROLLOVER (500)  //gives 1ms tick
+#define TA1_ROLLOVER (1) //gives 1 us tick
 #define START_DEBOUNCE (500)  //gives 500ms debounce
 #define END_DEBOUNCE (0)
 #define DISABLE_DEBOUNCE (-1)

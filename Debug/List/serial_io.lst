@@ -1,0 +1,536 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       15/Apr/2014  14:59:38 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\se #
+#                     rial_io.c                                               #
+#    Command line  =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\se #
+#                     rial_io.c -lC C:\Users\Nathan\Documents\GitHub\ece306-l #
+#                     inefollower\Debug\List\ -o                              #
+#                     C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\Obj\ --no_cse --no_unroll --no_inline               #
+#                     --no_code_motion --no_tbaa --debug -D__MSP430FR5739__   #
+#                     -e --double=32 --dlib_config "C:\Program Files          #
+#                     (x86)\IAR Systems\Embedded Workbench                    #
+#                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\List\serial_io.lst                                  #
+#    Object file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\Obj\serial_io.r43                                   #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+C:\Users\Nathan\Documents\GitHub\ece306-linefollower\serial_io.c
+      1          #include "functions.h"
+      2          #include "macros.h"
+      3          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x5c0
+   \   union <unnamed> _A_UCA0CTLW0_L
+   \                     _A_UCA0CTLW0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5c6
+   \   union <unnamed> _A_UCA0BRW_L
+   \                     _A_UCA0BRW_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5c8
+   \   union <unnamed> _A_UCA0MCTLW_L
+   \                     _A_UCA0MCTLW_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5cc
+   \   union <unnamed> _A_UCA0RXBUF_L
+   \                     _A_UCA0RXBUF_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5ce
+   \   union <unnamed> _A_UCA0TXBUF_L
+   \                     _A_UCA0TXBUF_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5da
+   \   union <unnamed> _A_UCA0IE_L
+   \                     _A_UCA0IE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5de
+   \   unsigned short volatile UCA0IV
+   \                     UCA0IV:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5e0
+   \   union <unnamed> _A_UCA1CTLW0_L
+   \                     _A_UCA1CTLW0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5e6
+   \   union <unnamed> _A_UCA1BRW_L
+   \                     _A_UCA1BRW_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5e8
+   \   union <unnamed> _A_UCA1MCTLW_L
+   \                     _A_UCA1MCTLW_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5ec
+   \   union <unnamed> _A_UCA1RXBUF_L
+   \                     _A_UCA1RXBUF_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5ee
+   \   union <unnamed> _A_UCA1TXBUF_L
+   \                     _A_UCA1TXBUF_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5fa
+   \   union <unnamed> _A_UCA1IE_L
+   \                     _A_UCA1IE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5fe
+   \   unsigned short volatile UCA1IV
+   \                     UCA1IV:
+   \   000000                DS8 2
+      4          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      5          char UsbRx[128];
+   \                     UsbRx:
+   \   000000                DS8 128
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      6          int usbRx_R = 0, usbRx_W = 0;
+   \                     usbRx_R:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     usbRx_W:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      7          char UsbTx[128];
+   \                     UsbTx:
+   \   000000                DS8 128
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      8          int usbTx_R = 0, usbTx_W = 0;
+   \                     usbTx_R:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     usbTx_W:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      9          char SerialRx[128];
+   \                     SerialRx:
+   \   000000                DS8 128
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     10          int serialRx_R = 0, serialRx_W = 0;
+   \                     serialRx_R:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     serialRx_W:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     11          char SerialTx[128];
+   \                     SerialTx:
+   \   000000                DS8 128
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     12          int serialTx_R = 0, serialTx_W = 0;
+   \                     serialTx_R:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+   \                     serialTx_W:
+   \   000000                DS8 2
+     13          
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     14          char GpsCounter = 0;
+   \                     GpsCounter:
+   \   000000                DS8 1
+     15          
+     16          
+     17          
+     18          #pragma vector=USCI_A0_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     19          __interrupt void USCI_A0_ISR(void)
+   \                     USCI_A0_ISR:
+     20          {
+   \   000000   3F15         PUSHM.W #0x4, R15
+     21          	switch(__even_in_range(UCA0IV,0x08))
+   \   000002   1F42DE05     MOV.W   &0x5de, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for USCI_A0_ISR>_0`:
+   \   000008   143C         JMP     ??USCI_A0_ISR_1
+   \   00000A   033C         JMP     ??USCI_A0_ISR_2
+   \   00000C   123C         JMP     ??USCI_A0_ISR_1
+   \   00000E   113C         JMP     ??USCI_A0_ISR_1
+   \   000010   103C         JMP     ??USCI_A0_ISR_1
+     22          	{
+     23          		case 0: // Vector 0 - no interrupt
+     24          			break;
+     25          		case 2: // Vector 2 - RXIFG			
+     26          			UsbRx[usbRx_W++] = UCA0RXBUF;
+   \                     ??USCI_A0_ISR_2:
+   \   000012   1E42CC05     MOV.W   &0x5cc, R14
+   \   000016   1F42....     MOV.W   &usbRx_W, R15
+   \   00001A   CF4E....     MOV.B   R14, UsbRx(R15)
+   \   00001E   9253....     ADD.W   #0x1, &usbRx_W
+     27          			usbRx_W %= sizeof UsbRx;
+   \   000022   1C42....     MOV.W   &usbRx_W, R12
+   \   000026   3E408000     MOV.W   #0x80, R14
+   \   00002A   ........     CALLA   #?DivMod16u
+   \   00002E   824E....     MOV.W   R14, &usbRx_W
+     28          			break;
+     29          		case 4: // Vector 4 – TXIFG
+     30          			break;
+     31          		default: 
+     32          			break;
+     33          	}
+     34          }
+   \                     ??USCI_A0_ISR_1:
+   \   000032   3C17         POPM.W  #0x4, R15
+   \   000034   0013         RETI
+   \   000036                REQUIRE _A_UCA0RXBUF_L
+   \   000036                REQUIRE UCA0IV
+     35          
+     36          #pragma vector=USCI_A1_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     37          __interrupt void USCI_A1_ISR(void)
+   \                     USCI_A1_ISR:
+     38          {
+   \   000000   3F15         PUSHM.W #0x4, R15
+     39          	switch(__even_in_range(UCA1IV,0x08))
+   \   000002   1F42FE05     MOV.W   &0x5fe, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for USCI_A1_ISR>_0`:
+   \   000008   1A3C         JMP     ??USCI_A1_ISR_1
+   \   00000A   033C         JMP     ??USCI_A1_ISR_2
+   \   00000C   183C         JMP     ??USCI_A1_ISR_1
+   \   00000E   173C         JMP     ??USCI_A1_ISR_1
+   \   000010   163C         JMP     ??USCI_A1_ISR_1
+     40          	{
+     41          		case 0: // Vector 0 - no interrupt
+     42          			break;
+     43          		case 2: // Vector 2 - RXIFG			
+     44          			SerialRx[serialRx_W] = UCA1RXBUF;
+   \                     ??USCI_A1_ISR_2:
+   \   000012   1E42EC05     MOV.W   &0x5ec, R14
+   \   000016   1F42....     MOV.W   &serialRx_W, R15
+   \   00001A   CF4E....     MOV.B   R14, SerialRx(R15)
+     45          			writeUsb(SerialRx[serialRx_W]); //Echo to COM
+   \   00001E   1F42....     MOV.W   &serialRx_W, R15
+   \   000022   5C4F....     MOV.B   SerialRx(R15), R12
+   \   000026   ........     CALLA   #writeUsb
+     46          			/*
+     47          			if(SerialRx[serialRx_W] == '$')
+     48          			{
+     49          			  if(GpsCounter == 0)
+     50          				GpsCounter = 64;
+     51          			  else
+     52          				GpsPacketChk();
+     53          			}
+     54                                   */ 
+     55          			serialRx_W++;
+   \   00002A   9253....     ADD.W   #0x1, &serialRx_W
+     56          			serialRx_W %= sizeof SerialRx;     
+   \   00002E   1C42....     MOV.W   &serialRx_W, R12
+   \   000032   3E408000     MOV.W   #0x80, R14
+   \   000036   ........     CALLA   #?DivMod16u
+   \   00003A   824E....     MOV.W   R14, &serialRx_W
+     57          			break;
+     58          		case 4: // Vector 4 – TXIFG
+     59          			break;
+     60          		default: 
+     61          			break;
+     62          	}
+     63          }
+   \                     ??USCI_A1_ISR_1:
+   \   00003E   3C17         POPM.W  #0x4, R15
+   \   000040   0013         RETI
+   \   000042                REQUIRE _A_UCA1RXBUF_L
+   \   000042                REQUIRE UCA1IV
+     64          
+
+   \                                 In  segment CODE, align 2
+     65          void Serial_Init(void)
+   \                     Serial_Init:
+     66          {
+     67                  for(int i = 0; i < sizeof UsbRx; i++)
+   \   000000   0F43         MOV.W   #0x0, R15
+   \   000002   093C         JMP     ??Serial_Init_1
+     68          		{
+     69          			UsbRx[i] = 0;
+   \                     ??Serial_Init_0:
+   \   000004   CF43....     MOV.B   #0x0, UsbRx(R15)
+     70          			UsbTx[i] = 0;
+   \   000008   CF43....     MOV.B   #0x0, UsbTx(R15)
+     71          			SerialRx[i] = 0;
+   \   00000C   CF43....     MOV.B   #0x0, SerialRx(R15)
+     72          			SerialTx[i] = 0;
+   \   000010   CF43....     MOV.B   #0x0, SerialTx(R15)
+     73          		}
+   \   000014   1F53         ADD.W   #0x1, R15
+   \                     ??Serial_Init_1:
+   \   000016   3F908000     CMP.W   #0x80, R15
+   \   00001A   F42B         JNC     ??Serial_Init_0
+     74                  
+     75          		// Configure UART 0
+     76          		UCA0CTLW0 = 0; // Use word register
+   \   00001C   8243C005     MOV.W   #0x0, &0x5c0
+     77          		UCA0CTLW0 |= UCSSEL__SMCLK; // Set SMCLK as fBRCLK
+   \   000020   B2D08000C005 BIS.W   #0x80, &0x5c0
+     78          		UCA0CTLW0 |= UCSWRST; // Set Software reset enable
+   \   000026   92D3C005     BIS.W   #0x1, &0x5c0
+     79          		UCA0BRW = 52 ; // 9,600 baud
+   \   00002A   B2403400C605 MOV.W   #0x34, &0x5c6
+     80          		UCA0MCTLW = 0x4911 ;
+   \   000030   B2401149C805 MOV.W   #0x4911, &0x5c8
+     81          		UCA0CTL1 &= ~UCSWRST; // Release from reset
+   \   000036   D2C3C005     BIC.B   #0x1, &0x5c0
+     82          		UCA0IE |= UCRXIE; // Enable RX interrupt
+   \   00003A   92D3DA05     BIS.W   #0x1, &0x5da
+     83          
+     84          		// Configure UART 1
+     85          		UCA1CTLW0 = 0; // Use word register
+   \   00003E   8243E005     MOV.W   #0x0, &0x5e0
+     86          		UCA1CTLW0 |= UCSSEL__SMCLK; // Set SMCLK as fBRCLK
+   \   000042   B2D08000E005 BIS.W   #0x80, &0x5e0
+     87          		UCA1CTLW0 |= UCSWRST; // Set Software reset enable
+   \   000048   92D3E005     BIS.W   #0x1, &0x5e0
+     88          		UCA1BRW = 104 ; // 4800 baud	
+   \   00004C   B2406800E605 MOV.W   #0x68, &0x5e6
+     89          		UCA1MCTLW = 0xD621; // UCA0MCTLW = UCSx | UCFx | UCOS16 = 0xD600 | 0x0020 | 0x0001;
+   \   000052   B24021D6E805 MOV.W   #0xd621, &0x5e8
+     90          		UCA1CTL1 &= ~UCSWRST; // Release from reset
+   \   000058   D2C3E005     BIC.B   #0x1, &0x5e0
+     91          		UCA1IE |= UCRXIE; // Enable RX interrupt
+   \   00005C   92D3FA05     BIS.W   #0x1, &0x5fa
+     92          }
+   \   000060   1001         RETA
+   \   000062                REQUIRE _A_UCA0CTLW0_L
+   \   000062                REQUIRE _A_UCA0BRW_L
+   \   000062                REQUIRE _A_UCA0MCTLW_L
+   \   000062                REQUIRE _A_UCA0IE_L
+   \   000062                REQUIRE _A_UCA1CTLW0_L
+   \   000062                REQUIRE _A_UCA1BRW_L
+   \   000062                REQUIRE _A_UCA1MCTLW_L
+   \   000062                REQUIRE _A_UCA1IE_L
+     93          
+
+   \                                 In  segment CODE, align 2
+     94          void writeUsb(char c)
+   \                     writeUsb:
+     95          {
+   \   000000   0A12         PUSH.W  R10
+   \   000002   4A4C         MOV.B   R12, R10
+     96                  usbTx_W %= sizeof UsbTx;
+   \   000004   1C42....     MOV.W   &usbTx_W, R12
+   \   000008   3E408000     MOV.W   #0x80, R14
+   \   00000C   ........     CALLA   #?DivMod16u
+   \   000010   824E....     MOV.W   R14, &usbTx_W
+     97            
+     98                  UsbTx[usbTx_W++] = c;
+   \   000014   1F42....     MOV.W   &usbTx_W, R15
+   \   000018   CF4A....     MOV.B   R10, UsbTx(R15)
+   \   00001C   9253....     ADD.W   #0x1, &usbTx_W
+     99                  UCA0TXBUF = c;
+   \   000020   4A4A         MOV.B   R10, R10
+   \   000022   824ACE05     MOV.W   R10, &0x5ce
+    100          }
+   \   000026   3A41         POP.W   R10
+   \   000028   1001         RETA
+   \   00002A                REQUIRE _A_UCA0TXBUF_L
+    101          
+
+   \                                 In  segment CODE, align 2
+    102          char readUsb(void)
+   \                     readUsb:
+    103          {
+    104          	usbRx_R %= sizeof UsbRx;
+   \   000000   1C42....     MOV.W   &usbRx_R, R12
+   \   000004   3E408000     MOV.W   #0x80, R14
+   \   000008   ........     CALLA   #?DivMod16u
+   \   00000C   824E....     MOV.W   R14, &usbRx_R
+    105            
+    106                  if(usbRx_R != usbRx_W)
+   \   000010   9292........ CMP.W   &usbRx_W, &usbRx_R
+   \   000016   0924         JEQ     ??readUsb_0
+    107          		return UsbRx[usbRx_R++];
+   \   000018   1F42....     MOV.W   &usbRx_R, R15
+   \   00001C   0E4F         MOV.W   R15, R14
+   \   00001E   1E53         ADD.W   #0x1, R14
+   \   000020   824E....     MOV.W   R14, &usbRx_R
+   \   000024   5C4F....     MOV.B   UsbRx(R15), R12
+   \   000028   1001         RETA
+    108          	else
+    109          		return 0xFF;
+   \                     ??readUsb_0:
+   \   00002A   7C43         MOV.B   #0xff, R12
+   \   00002C   1001         RETA
+    110          }
+    111          
+
+   \                                 In  segment CODE, align 2
+    112          void writeSerial(char c)
+   \                     writeSerial:
+    113          {
+   \   000000   0A12         PUSH.W  R10
+   \   000002   4A4C         MOV.B   R12, R10
+    114          	serialTx_W %= sizeof SerialTx;
+   \   000004   1C42....     MOV.W   &serialTx_W, R12
+   \   000008   3E408000     MOV.W   #0x80, R14
+   \   00000C   ........     CALLA   #?DivMod16u
+   \   000010   824E....     MOV.W   R14, &serialTx_W
+    115            
+    116                  SerialTx[serialTx_W++] = c;
+   \   000014   1F42....     MOV.W   &serialTx_W, R15
+   \   000018   CF4A....     MOV.B   R10, SerialTx(R15)
+   \   00001C   9253....     ADD.W   #0x1, &serialTx_W
+    117                  UCA1TXBUF = c;
+   \   000020   4A4A         MOV.B   R10, R10
+   \   000022   824AEE05     MOV.W   R10, &0x5ee
+    118          }
+   \   000026   3A41         POP.W   R10
+   \   000028   1001         RETA
+   \   00002A                REQUIRE _A_UCA1TXBUF_L
+    119          
+
+   \                                 In  segment CODE, align 2
+    120          char readSerial(void)
+   \                     readSerial:
+    121          {
+    122                  serialRx_R %= sizeof SerialRx;
+   \   000000   1C42....     MOV.W   &serialRx_R, R12
+   \   000004   3E408000     MOV.W   #0x80, R14
+   \   000008   ........     CALLA   #?DivMod16u
+   \   00000C   824E....     MOV.W   R14, &serialRx_R
+    123            
+    124          	if(serialRx_R != serialRx_W)
+   \   000010   9292........ CMP.W   &serialRx_W, &serialRx_R
+   \   000016   0924         JEQ     ??readSerial_0
+    125          		return SerialRx[serialRx_R++];
+   \   000018   1F42....     MOV.W   &serialRx_R, R15
+   \   00001C   0E4F         MOV.W   R15, R14
+   \   00001E   1E53         ADD.W   #0x1, R14
+   \   000020   824E....     MOV.W   R14, &serialRx_R
+   \   000024   5C4F....     MOV.B   SerialRx(R15), R12
+   \   000028   1001         RETA
+    126          	else
+    127          		return 0xFF;
+   \                     ??readSerial_0:
+   \   00002A   7C43         MOV.B   #0xff, R12
+   \   00002C   1001         RETA
+    128          }
+
+   \                                 In  segment INTVEC, offset 0x56, root
+   \                     `??USCI_A1_ISR??INTVEC 86`:
+   \   000056   ....         DC16    USCI_A1_ISR
+
+   \                                 In  segment INTVEC, offset 0x60, root
+   \                     `??USCI_A0_ISR??INTVEC 96`:
+   \   000060   ....         DC16    USCI_A0_ISR
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Serial_Init
+     12   USCI_A0_ISR
+     12   USCI_A1_ISR
+       12   -> writeUsb
+      4   readSerial
+      4   readUsb
+      6   writeSerial
+      6   writeUsb
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  ??USCI_A0_ISR??INTVEC 96
+       2  ??USCI_A1_ISR??INTVEC 86
+       1  GpsCounter
+     128  SerialRx
+     128  SerialTx
+      98  Serial_Init
+       2  UCA0IV
+       2  UCA1IV
+      54  USCI_A0_ISR
+      66  USCI_A1_ISR
+     128  UsbRx
+     128  UsbTx
+       2  _A_UCA0BRW_L
+       2  _A_UCA0CTLW0_L
+       2  _A_UCA0IE_L
+       2  _A_UCA0MCTLW_L
+       2  _A_UCA0RXBUF_L
+       2  _A_UCA0TXBUF_L
+       2  _A_UCA1BRW_L
+       2  _A_UCA1CTLW0_L
+       2  _A_UCA1IE_L
+       2  _A_UCA1MCTLW_L
+       2  _A_UCA1RXBUF_L
+       2  _A_UCA1TXBUF_L
+      46  readSerial
+      46  readUsb
+       2  serialRx_R
+       2  serialRx_W
+       2  serialTx_R
+       2  serialTx_W
+       2  usbRx_R
+       2  usbRx_W
+       2  usbTx_R
+       2  usbTx_W
+      42  writeSerial
+      42  writeUsb
+
+ 
+ 274 bytes in segment CODE
+  28 bytes in segment DATA16_AN
+ 529 bytes in segment DATA16_Z
+   4 bytes in segment INTVEC
+ 120 bytes in segment ISR_CODE
+ 
+ 394 bytes of CODE  memory
+   0 bytes of CONST memory (+  4 bytes shared)
+ 529 bytes of DATA  memory (+ 28 bytes shared)
+
+Errors: none
+Warnings: none

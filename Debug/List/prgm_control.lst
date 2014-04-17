@@ -1,0 +1,274 @@
+###############################################################################
+#                                                                             #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       15/Apr/2014  16:21:59 #
+# Copyright 1996-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    __rt_version  =  3                                                       #
+#    __double_size =  32                                                      #
+#    __reg_r4      =  free                                                    #
+#    __reg_r5      =  free                                                    #
+#    __pic         =  no                                                      #
+#    __core        =  430X                                                    #
+#    __data_model  =  small                                                   #
+#    Source file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\pr #
+#                     gm_control.c                                            #
+#    Command line  =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\pr #
+#                     gm_control.c -lC C:\Users\Nathan\Documents\GitHub\ece30 #
+#                     6-linefollower\Debug\List\ -o                           #
+#                     C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\Obj\ --no_cse --no_unroll --no_inline               #
+#                     --no_code_motion --no_tbaa --debug -D__MSP430FR5739__   #
+#                     -e --double=32 --dlib_config "C:\Program Files          #
+#                     (x86)\IAR Systems\Embedded Workbench                    #
+#                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
+#                     --data_model=small -Ol --multiplier=32                  #
+#                     --multiplier_location=4C0 --hw_workaround=CPU40         #
+#    List file     =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\List\prgm_control.lst                               #
+#    Object file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\Obj\prgm_control.r43                                #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+C:\Users\Nathan\Documents\GitHub\ece306-linefollower\prgm_control.c
+      1          #include  "msp430.h"
+      2          #include  "functions.h"
+      3          #include  "macros.h"
+      4          
+      5          
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      6          volatile int LeftMotorPower = 0;
+   \                     LeftMotorPower:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      7          volatile int RightMotorPower = 0;
+   \                     RightMotorPower:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+      8          int ProgramState = 0;
+   \                     ProgramState:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_I, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+      9          int OldState = -1;
+   \                     OldState:
+   \   000000                DS8 2
+   \   000002                REQUIRE `?<Initializer for OldState>`
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     10          volatile int StateTransitions = 0;
+   \                     StateTransitions:
+   \   000000                DS8 2
+     11          
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     12          char IsLight = 1;
+   \                     IsLight:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for IsLight>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     13          char WasLight = 1;
+   \                     WasLight:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for WasLight>`
+     14          
+
+   \                                 In  segment CODE, align 2
+     15          void Control_Process(void)
+   \                     Control_Process:
+     16          {
+     17          	if(ADC_Thumb > 200)  //Disables motors while calibrating
+   \   000000   B290C900.... CMP.W   #0xc9, &ADC_Thumb
+   \   000006   0D38         JL      ??Control_Process_1
+     18          	{
+     19          		LeftMotorPower = 0;
+   \   000008   8243....     MOV.W   #0x0, &LeftMotorPower
+     20          		RightMotorPower = 0;
+   \   00000C   8243....     MOV.W   #0x0, &RightMotorPower
+     21          		MotorTimer = 0;
+   \   000010   8243....     MOV.W   #0x0, &MotorTimer
+     22                          SecTimer = 180;
+   \   000014   B240B400.... MOV.W   #0xb4, &SecTimer
+     23          		
+     24          		//          "0123456789abcdef"   
+     25          		display_2 = "Motors  Disabled";
+   \   00001A   B240........ MOV.W   #`?<Constant "Motors  Disabled">`, &display_2
+     26          		
+     27          		return;
+   \   000020   1001         RETA
+     28          	}
+     29          
+     30          	if(MotorTimer == 0)
+   \                     ??Control_Process_1:
+   \   000022   8293....     CMP.W   #0x0, &MotorTimer
+   \   000026   5020         JNE     ??Control_Process_2
+     31          	{
+     32          		if(IsRightIrLight() && IsLeftIrLight()) //Quickly turn left when off line
+   \   000028   ........     CALLA   #IsRightIrLight
+   \   00002C   4C93         CMP.B   #0x0, R12
+   \   00002E   0F24         JEQ     ??Control_Process_3
+   \   000030   ........     CALLA   #IsLeftIrLight
+   \   000034   4C93         CMP.B   #0x0, R12
+   \   000036   0B24         JEQ     ??Control_Process_3
+     33          			RightMotorPower = 100, LeftMotorPower = 0, display_2 = "       Light    ", display_1 = "       Light    ";
+   \   000038   B2406400.... MOV.W   #0x64, &RightMotorPower
+   \   00003E   8243....     MOV.W   #0x0, &LeftMotorPower
+   \   000042   B240........ MOV.W   #`?<Constant "       Light    ">`, &display_2
+   \   000048   B240........ MOV.W   #`?<Constant "       Light    ">`, &display_1
+     34          		if(IsRightIrLight() && !IsLeftIrLight()) //Slowly turn left when on edge
+   \                     ??Control_Process_3:
+   \   00004E   ........     CALLA   #IsRightIrLight
+   \   000052   4C93         CMP.B   #0x0, R12
+   \   000054   1024         JEQ     ??Control_Process_4
+   \   000056   ........     CALLA   #IsLeftIrLight
+   \   00005A   4C93         CMP.B   #0x0, R12
+   \   00005C   0C20         JNE     ??Control_Process_4
+     35          			RightMotorPower = 80, LeftMotorPower = 50, display_2 = "       Light    ", display_1 = "       Dark     ";
+   \   00005E   B2405000.... MOV.W   #0x50, &RightMotorPower
+   \   000064   B2403200.... MOV.W   #0x32, &LeftMotorPower
+   \   00006A   B240........ MOV.W   #`?<Constant "       Light    ">`, &display_2
+   \   000070   B240........ MOV.W   #`?<Constant "       Dark     ">`, &display_1
+     36          		if(!IsRightIrLight() && !IsLeftIrLight()) //Slowly turn right when on line
+   \                     ??Control_Process_4:
+   \   000076   ........     CALLA   #IsRightIrLight
+   \   00007A   4C93         CMP.B   #0x0, R12
+   \   00007C   1020         JNE     ??Control_Process_5
+   \   00007E   ........     CALLA   #IsLeftIrLight
+   \   000082   4C93         CMP.B   #0x0, R12
+   \   000084   0C20         JNE     ??Control_Process_5
+     37          			RightMotorPower = 50, LeftMotorPower = 80, display_2 = "       Dark     ", display_1 = "       Dark     ";
+   \   000086   B2403200.... MOV.W   #0x32, &RightMotorPower
+   \   00008C   B2405000.... MOV.W   #0x50, &LeftMotorPower
+   \   000092   B240........ MOV.W   #`?<Constant "       Dark     ">`, &display_2
+   \   000098   B240........ MOV.W   #`?<Constant "       Dark     ">`, &display_1
+     38          		if(!IsRightIrLight() && IsLeftIrLight()) //Quickly turn right when on far edge
+   \                     ??Control_Process_5:
+   \   00009E   ........     CALLA   #IsRightIrLight
+   \   0000A2   4C93         CMP.B   #0x0, R12
+   \   0000A4   0F20         JNE     ??Control_Process_6
+   \   0000A6   ........     CALLA   #IsLeftIrLight
+   \   0000AA   4C93         CMP.B   #0x0, R12
+   \   0000AC   0B24         JEQ     ??Control_Process_6
+     39          			RightMotorPower = 0, LeftMotorPower = 100, display_2 = "       Dark     ", display_1 = "       Light    ";
+   \   0000AE   8243....     MOV.W   #0x0, &RightMotorPower
+   \   0000B2   B2406400.... MOV.W   #0x64, &LeftMotorPower
+   \   0000B8   B240........ MOV.W   #`?<Constant "       Dark     ">`, &display_2
+   \   0000BE   B240........ MOV.W   #`?<Constant "       Light    ">`, &display_1
+     40          
+     41          		MotorTimer = 1;
+   \                     ??Control_Process_6:
+   \   0000C4   9243....     MOV.W   #0x1, &MotorTimer
+     42          	}
+     43          		
+     44          	if(SecTimer == 90)  //If need to turn around
+   \                     ??Control_Process_2:
+   \   0000C8   B2905A00.... CMP.W   #0x5a, &SecTimer
+   \   0000CE   0620         JNE     ??Control_Process_7
+     45          	{
+     46          		SecTimer--;
+   \   0000D0   B253....     ADD.W   #0xffff, &SecTimer
+     47          		timedSpinCW(2000);
+                 		^
+Warning[Pe223]: function "timedSpinCW" declared implicitly
+   \   0000D4   3C40D007     MOV.W   #0x7d0, R12
+   \   0000D8   ........     CALLA   #timedSpinCW
+     48          	}
+     49                  
+     50          	if(SecTimer == 0)
+   \                     ??Control_Process_7:
+   \   0000DC   8293....     CMP.W   #0x0, &SecTimer
+   \   0000E0   0420         JNE     ??Control_Process_0
+     51          	{
+     52          		RightMotorPower = 0;
+   \   0000E2   8243....     MOV.W   #0x0, &RightMotorPower
+     53          		LeftMotorPower = 0;
+   \   0000E6   8243....     MOV.W   #0x0, &LeftMotorPower
+     54          	}
+     55          }
+   \                     ??Control_Process_0:
+   \   0000EA   1001         RETA
+
+   \                                 In  segment DATA16_ID, align 2, align-sorted
+   \                     `?<Initializer for OldState>`:
+   \   000000   FFFF         DC16 -1
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for IsLight>`:
+   \   000000   01           DC8 1
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for WasLight>`:
+   \   000000   01           DC8 1
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Motors  Disabled">`:
+   \   000000   4D6F746F7273 DC8 "Motors  Disabled"
+   \            202044697361
+   \            626C656400  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "       Light    ">`:
+   \   000000   202020202020 DC8 "       Light    "
+   \            204C69676874
+   \            2020202000  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "       Dark     ">`:
+   \   000000   202020202020 DC8 "       Dark     "
+   \            204461726B20
+   \            2020202000  
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Control_Process
+        4   -> IsLeftIrLight
+        4   -> IsRightIrLight
+        4   -> timedSpinCW
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      17  ?<Constant "       Dark     ">
+      17  ?<Constant "       Light    ">
+      17  ?<Constant "Motors  Disabled">
+       1  ?<Initializer for IsLight>
+       2  ?<Initializer for OldState>
+       1  ?<Initializer for WasLight>
+     236  Control_Process
+       1  IsLight
+       2  LeftMotorPower
+       2  OldState
+       2  ProgramState
+       2  RightMotorPower
+       2  StateTransitions
+       1  WasLight
+
+ 
+ 236 bytes in segment CODE
+  51 bytes in segment DATA16_C
+   4 bytes in segment DATA16_I
+   4 bytes in segment DATA16_ID
+   8 bytes in segment DATA16_Z
+ 
+ 236 bytes of CODE  memory
+  55 bytes of CONST memory
+  12 bytes of DATA  memory
+
+Errors: none
+Warnings: 1

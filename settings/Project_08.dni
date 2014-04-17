@@ -1,5 +1,5 @@
 [DebugChecksum]
-Checksum=1165261968
+Checksum=595981202
 [Stack]
 FillEnabled=0
 OverflowWarningsEnabled=1
@@ -53,6 +53,7 @@ Category=_ 0
 LoggingEnabled=_ 0
 LogFile=_ ""
 [Aliases]
-A0=_ "D:\NCSU\Current\Software Tools\Code Master\Homework_01\timersB2.c" ""
-Count=1
+A0=_ "C:\Users\Christopher\Documents\GitHub\ece306-linefollower\LCD.c" ""
+A1=_ "D:\NCSU\Current\Software Tools\Code Master\Homework_01\timersB2.c" ""
+Count=2
 SuppressDialog=1

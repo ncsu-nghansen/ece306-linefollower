@@ -1,6 +1,6 @@
 ###############################################################################
 #                                                                             #
-# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       28/Mar/2014  12:10:48 #
+# IAR C/C++ Compiler V5.60.5.50814/W32 for MSP430       15/Apr/2014  14:59:38 #
 # Copyright 1996-2013 IAR Systems AB.                                         #
 #                                                                             #
 #    __rt_version  =  3                                                       #
@@ -10,28 +10,28 @@
 #    __pic         =  no                                                      #
 #    __core        =  430X                                                    #
 #    __data_model  =  small                                                   #
-#    Source file   =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
-#                     er\motor_control.c                                      #
-#    Command line  =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
-#                     er\motor_control.c -lC C:\Users\Christopher\Documents\G #
-#                     itHub\ece306-linefollower\Debug\List\ -o                #
-#                     C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
-#                     er\Debug\Obj\ --no_cse --no_unroll --no_inline          #
+#    Source file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\mo #
+#                     tor_control.c                                           #
+#    Command line  =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\mo #
+#                     tor_control.c -lC C:\Users\Nathan\Documents\GitHub\ece3 #
+#                     06-linefollower\Debug\List\ -o                          #
+#                     C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\Obj\ --no_cse --no_unroll --no_inline               #
 #                     --no_code_motion --no_tbaa --debug -D__MSP430FR5739__   #
 #                     -e --double=32 --dlib_config "C:\Program Files          #
 #                     (x86)\IAR Systems\Embedded Workbench                    #
 #                     6.5\430\LIB\DLIB\dl430xsfn.h" --core=430X               #
 #                     --data_model=small -Ol --multiplier=32                  #
 #                     --multiplier_location=4C0 --hw_workaround=CPU40         #
-#    List file     =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
-#                     er\Debug\List\motor_control.lst                         #
-#    Object file   =  C:\Users\Christopher\Documents\GitHub\ece306-linefollow #
-#                     er\Debug\Obj\motor_control.r43                          #
+#    List file     =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\List\motor_control.lst                              #
+#    Object file   =  C:\Users\Nathan\Documents\GitHub\ece306-linefollower\De #
+#                     bug\Obj\motor_control.r43                               #
 #                                                                             #
 #                                                                             #
 ###############################################################################
 
-C:\Users\Christopher\Documents\GitHub\ece306-linefollower\motor_control.c
+C:\Users\Nathan\Documents\GitHub\ece306-linefollower\motor_control.c
       1          /******************************************************************************
       2          Main
       3          
@@ -60,8 +60,8 @@ C:\Users\Christopher\Documents\GitHub\ece306-linefollower\motor_control.c
    \                     Motors_Process:
      19          {
      20          	if(MotorTimer <= RESET_TIME)
-   \   000000   9293....     CMP.W   #0x1, &MotorTimer
-   \   000004   0234         JGE     ??Motors_Process_1
+   \   000000   8293....     CMP.W   #0x0, &MotorTimer
+   \   000004   0220         JNE     ??Motors_Process_1
      21          	{
      22          		allStop();
    \   000006   ........     BRA     #allStop
@@ -75,7 +75,7 @@ C:\Users\Christopher\Documents\GitHub\ece306-linefollower\motor_control.c
      28          	if(LeftMotorPower > 0)
    \   00000E   9293....     CMP.W   #0x1, &LeftMotorPower
    \   000012   0B38         JL      ??Motors_Process_2
-     29          		if(TimeMsec % MAX_POWER < LeftMotorPower)
+     29          		if( TimeMsec % MAX_POWER < LeftMotorPower)
                  		^
 Warning[Pa082]: undefined behavior: the order of volatile accesses is
           undefined in this statement
@@ -90,7 +90,7 @@ Warning[Pa082]: undefined behavior: the order of volatile accesses is
    \                     ??Motors_Process_2:
    \   00002A   8293....     CMP.W   #0x0, &LeftMotorPower
    \   00002E   0E34         JGE     ??Motors_Process_3
-     32          		if(TimeMsec % MAX_POWER < -LeftMotorPower)
+     32          		if( TimeMsec % MAX_POWER < -LeftMotorPower)
                  		^
 Warning[Pa082]: undefined behavior: the order of volatile accesses is
           undefined in this statement
@@ -109,7 +109,7 @@ Warning[Pa082]: undefined behavior: the order of volatile accesses is
    \                     ??Motors_Process_3:
    \   00004C   9293....     CMP.W   #0x1, &RightMotorPower
    \   000050   0B38         JL      ??Motors_Process_4
-     36          		if(TimeMsec % MAX_POWER < RightMotorPower)
+     36          		if( TimeMsec % MAX_POWER < RightMotorPower)
                  		^
 Warning[Pa082]: undefined behavior: the order of volatile accesses is
           undefined in this statement
@@ -124,7 +124,7 @@ Warning[Pa082]: undefined behavior: the order of volatile accesses is
    \                     ??Motors_Process_4:
    \   000068   8293....     CMP.W   #0x0, &RightMotorPower
    \   00006C   0E34         JGE     ??Motors_Process_0
-     39          		if(TimeMsec % MAX_POWER < -RightMotorPower)
+     39          		if( TimeMsec % MAX_POWER < -RightMotorPower)
                  		^
 Warning[Pa082]: undefined behavior: the order of volatile accesses is
           undefined in this statement

@@ -2015,7 +2015,13 @@
     </settings>
   </configuration>
   <file>
+    <name>$PROJ_DIR$\adc.c</name>
+  </file>
+  <file>
     <name>$PROJ_DIR$\clocks.c</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\gps.c</name>
   </file>
   <file>
     <name>$PROJ_DIR$\init.c</name>
@@ -2027,9 +2033,6 @@
     <name>$PROJ_DIR$\LCD.c</name>
   </file>
   <file>
-    <name>$PROJ_DIR$\LED.c</name>
-  </file>
-  <file>
     <name>$PROJ_DIR$\main.c</name>
   </file>
   <file>
@@ -2039,7 +2042,13 @@
     <name>$PROJ_DIR$\ports.c</name>
   </file>
   <file>
+    <name>$PROJ_DIR$\prgm_control.c</name>
+  </file>
+  <file>
     <name>$PROJ_DIR$\readme.txt</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\serial_io.c</name>
   </file>
   <file>
     <name>$PROJ_DIR$\switch.c</name>

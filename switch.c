@@ -14,6 +14,38 @@ Nathan Hansen, 7 Feb 2014, Built with IAR Embedded Workbench Version: 5.60.5
 #include  "macros.h"
 #include  "msp430.h"
 
+#pragma vector=PORT4_VECTOR
+__interrupt void Port_4(void)
+{
+	if(P4IFG & SW1)
+	{
+		P4IFG &= ~SW1;
+		
+		if(DebounceTimer == 0)
+		{
+			LeftDark = ADC_LeftIR;
+			RightDark = ADC_RightIR;
+			DebounceTimer = 100;
+			
+			CalibrateIR();
+		}
+	}
+			
+	if(P4IFG & SW2)
+	{
+		P4IFG &= ~SW2;
+		
+		if(DebounceTimer == 0)
+		{
+			LeftLight = ADC_LeftIR;
+			RightLight = ADC_RightIR;
+			DebounceTimer = 100;
+			
+			CalibrateIR();
+		}
+	}		
+}
+
 //Switches_Process
 //DESC: Detects switch toggle (press & release) by polling current states
 //and comparing to records of the past state. On switch toggle, motor forward outputs
@@ -22,21 +54,17 @@ Nathan Hansen, 7 Feb 2014, Built with IAR Embedded Workbench Version: 5.60.5
 //RET: None
 void Switches_Process(void)
 {
-	//            "0123456789abcdef"
-	//display_1 = " Lt Forward Rt  ";
-	//display_2 = "OFF         OFF ";
-	
 	char current_sw1_state = isPressed(SW1);
 	char current_sw2_state = isPressed(SW2);
 	
 	if ( !Last_SW1_State && current_sw1_state )
-	{
+	{               
 		
 	}
 	
 	if ( !Last_SW2_State && current_sw2_state ) 
 	{
-		
+
 	}
 	
 	Last_SW1_State = current_sw1_state;

@@ -1,4 +1,4 @@
-"D:\Jim\NCSU\Current\Software Tools\Code Master\Homework_01\adc.c"
+"C:\Users\Nathan\Documents\GitHub\ece306-linefollower\adc.c"
 -std=c99
 -ferror-limit=100
 -I
@@ -200,8 +200,8 @@ C:\Program Files (x86)\IAR Systems\Embedded Workbench 6.5\430\inc\dlib\c
 -D__PLAIN_INT_BITFIELD_IS_SIGNED__=1
 -D__HAS_LOCATED_DECLARATION__=1
 -D__IAR_COMPILERBASE__=593416
--D__DATE__="Jan  6 2014"
--D__TIME__="22:36:40"
+-D__DATE__="Apr 15 2014"
+-D__TIME__="15:17:06"
 -D__STDC__=1
 -D__STDC_VERSION__=199901L
 -D__STDC_HOSTED__=1
